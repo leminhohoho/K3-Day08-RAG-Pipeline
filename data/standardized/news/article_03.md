@@ -1,101 +1,51 @@
-# Thông tin đào tạo đại học tại VNU-USSH
+# Chương trình đào tạo chuẩn tại VNU-USSH
 
-**Nguồn:** https://ussh.vnu.edu.vn/vi/dao-tao/dao-tao-dai-hoc/dao-tao-dai-hoc-20685.html
-
-**Ngày đăng trên website:** 24/11/2020
-
-**Ngày chuẩn hóa:** 04/08/2026
-
-**Loại tài liệu:** Nội dung website USSH được chuẩn hóa chi tiết cho RAG
-
-> Lưu ý: Đây là bản diễn giải chi tiết, giữ các dữ kiện và ý chính của nguồn nhưng không sao chép nguyên văn toàn bộ bài viết.
+**Source:** https://ussh.vnu.edu.vn/vi/dao-tao/chuong-trinh-dao-tao-chuan/chuong-trinh-dao-tao-chuan-20666.html
+**Document ID:** ussh-undergraduate-programs
+**Type:** news
+**Language:** vi
+**Organization:** Trường Đại học Khoa học Xã hội và Nhân văn, ĐHQGHN
+**Scope:** Danh mục chương trình đào tạo đại học chuẩn tại VNU-USSH
+**Published:** 2026-05-05
+**Crawled:** 2026-08-04T14:24:50+07:00
+**Content Kind:** source_extract
+**Status:** official-source-extract
+**Crawl Backend:** crawl4ai
+**Content Selector:** #news-bodyhtml
+**Raw Content Hash:** 2eb3beccafae278c031621ec98bd8fa80b3a507a4075938256fde8a5be056500
+**Landing Content Hash:** 2eb3beccafae278c031621ec98bd8fa80b3a507a4075938256fde8a5be056500
+**Original File:** article_03.json
+**Source SHA256:** fc90c0002a631d80f9a3c2160a2c493ef92eef3ea0d5237da332120a0f70f621
+**Content Hash:** 7135a57e2f0abe6bdd19d1b482f13cfae08b0cad792629663e65e4fbe7fd3f9b
 
 ---
 
-# Thông tin đào tạo đại học tại VNU-USSH
-
-## Vai trò của trang đào tạo đại học
-
-Trang “Đào tạo đại học” của Trường Đại học Khoa học Xã hội và Nhân văn là trang điều hướng tới các nhóm thông tin chính về chương trình đào tạo. Người học có thể tiếp cận chương trình chuẩn, chương trình chất lượng cao, đào tạo ngành thứ hai và kế hoạch đào tạo.
-
-Trang này không trình bày toàn bộ nội dung của từng chương trình trong một bài duy nhất. Thay vào đó, nó liên kết tới các trang ngành học và tài liệu chi tiết như mục tiêu đào tạo, chuẩn đầu ra, khung chương trình, học phần và định hướng nghề nghiệp.
-
-## Các loại hình đào tạo được giới thiệu
-
-### Chương trình đào tạo chuẩn
-
-Đây là nhóm chương trình cử nhân chính quy thuộc các lĩnh vực khoa học xã hội, nhân văn, báo chí – truyền thông, quản lý, thông tin và dịch vụ. Mỗi chương trình được xây dựng để cung cấp kiến thức cơ sở, kiến thức ngành, kỹ năng nghiên cứu, năng lực nghề nghiệp và khả năng học tập suốt đời.
-
-### Chương trình chất lượng cao
-
-Trang đào tạo có khu vực riêng dành cho các chương trình chất lượng cao. Các chương trình này thường được tổ chức theo yêu cầu nâng cao về ngoại ngữ, phương pháp học tập, học liệu, hoạt động thực hành và môi trường học thuật. Thông tin áp dụng có thể thay đổi theo từng giai đoạn tuyển sinh, vì vậy người học cần đối chiếu thông báo chính thức của trường.
-
-### Đào tạo ngành thứ hai
-
-Sinh viên có thể tìm hiểu cơ hội học thêm ngành thứ hai theo quy định của Đại học Quốc gia Hà Nội và kế hoạch của trường. Việc đăng ký phụ thuộc vào điều kiện học tập, tiến độ tích lũy, chỉ tiêu và khả năng tổ chức của đơn vị đào tạo.
-
-### Kế hoạch đào tạo
-
-Kế hoạch đào tạo cung cấp thông tin về tiến trình học tập, các học kỳ, thời điểm đăng ký học phần, thực tập, khóa luận hoặc học phần thay thế. Đây là nguồn tham chiếu quan trọng để sinh viên xây dựng lộ trình cá nhân và theo dõi yêu cầu tốt nghiệp.
-
-## Danh mục chương trình cử nhân
-
-Theo hệ thống thông tin đào tạo và tuyển sinh của trường, các chương trình đại học bao gồm:
-
-1. **Báo chí** – đào tạo kiến thức và kỹ năng về báo chí, truyền thông, sản xuất nội dung, báo chí số và các hướng ứng dụng dữ liệu, công nghệ.
-2. **Chính trị học** – nghiên cứu hệ thống chính trị, quản trị quốc gia, chính sách và truyền thông chính trị.
-3. **Công tác xã hội** – trang bị năng lực hỗ trợ cá nhân, nhóm và cộng đồng, tổ chức dịch vụ xã hội và can thiệp xã hội.
-4. **Điện ảnh và nghệ thuật đại chúng** – tập trung vào lý luận, lịch sử, phê bình, biên kịch, sản xuất và phân phối sản phẩm điện ảnh – nghệ thuật.
-5. **Đông Nam Á học** – nghiên cứu khu vực Đông Nam Á về lịch sử, văn hóa, xã hội, chính trị và quan hệ quốc tế.
-6. **Đông phương học** – đào tạo kiến thức khu vực học, trong đó có các hướng như Trung Quốc học và Ấn Độ học.
-7. **Hán Nôm** – nghiên cứu di sản văn bản Hán Nôm, ngôn ngữ, văn hóa và tư liệu cổ.
-8. **Hàn Quốc học** – cung cấp kiến thức liên ngành về Hàn Quốc, ngôn ngữ, lịch sử, kinh tế, văn hóa và xã hội.
-9. **Khoa học quản lý** – nghiên cứu lý thuyết và công cụ quản lý, chính sách, nhân lực, tổ chức và đổi mới sáng tạo.
-10. **Lịch sử** – đào tạo nền tảng lịch sử Việt Nam, lịch sử thế giới, phương pháp sử học và các lĩnh vực ứng dụng.
-11. **Lưu trữ học** – tập trung vào quản lý tài liệu, hồ sơ, lưu trữ số và nghiệp vụ lưu trữ.
-12. **Ngôn ngữ học** – nghiên cứu cấu trúc, chức năng và ứng dụng của ngôn ngữ trong xã hội và công nghệ.
-13. **Nhân học** – nghiên cứu con người, văn hóa, cộng đồng và biến đổi xã hội thông qua các phương pháp điền dã.
-14. **Nhật Bản học** – đào tạo kiến thức liên ngành về Nhật Bản, ngôn ngữ, lịch sử, văn hóa và kinh tế.
-15. **Quan hệ công chúng** – phát triển năng lực xây dựng chiến lược truyền thông, quản trị danh tiếng, sự kiện và nội dung.
-16. **Quản lý thông tin** – trang bị kiến thức về dữ liệu, nội dung số, hệ thống thông tin, quản trị tri thức và chuyển đổi số.
-17. **Quản trị dịch vụ du lịch và lữ hành** – đào tạo quản trị lữ hành, sự kiện, sản phẩm và kinh tế du lịch.
-18. **Quản trị khách sạn** – phát triển năng lực quản trị dịch vụ lưu trú, vận hành và trải nghiệm khách hàng.
-19. **Quản trị văn phòng** – tập trung vào tổ chức công việc văn phòng, quản trị hành chính, quy trình và công nghệ văn phòng.
-20. **Quốc tế học** – nghiên cứu quan hệ quốc tế, khu vực học, phát triển quốc tế và các vấn đề toàn cầu.
-21. **Tâm lý học** – đào tạo kiến thức về hành vi, nhận thức, phát triển, tham vấn, lâm sàng và tâm lý tổ chức.
-22. **Thông tin – Thư viện** – phát triển kỹ năng tổ chức, khai thác và cung cấp thông tin; thư viện số và dịch vụ tri thức.
-23. **Tôn giáo học** – nghiên cứu tôn giáo dưới góc độ lịch sử, văn hóa, xã hội và chính sách.
-24. **Triết học** – đào tạo tư duy lý luận, lịch sử triết học, logic và phương pháp phân tích các vấn đề nền tảng.
-25. **Văn hóa học** – nghiên cứu văn hóa, di sản, công nghiệp văn hóa, truyền thông và đời sống đương đại.
-26. **Văn học** – nghiên cứu lịch sử, lý luận, phê bình và sáng tác – tiếp nhận văn học.
-27. **Việt Nam học** – cung cấp kiến thức liên ngành về Việt Nam, phù hợp với nghiên cứu, văn hóa, du lịch và giao lưu quốc tế.
-28. **Xã hội học** – nghiên cứu cấu trúc xã hội, hành vi, nhóm xã hội, phát triển và chính sách xã hội.
-29. **Truyền thông đa phương tiện** – kết hợp truyền thông, sản xuất nội dung số, thiết kế trải nghiệm và công nghệ truyền thông.
-
-## Cấu trúc thông tin của một chương trình đào tạo
-
-Khi truy cập trang của từng ngành, người học thường cần quan tâm các nhóm thông tin sau:
-
-- Mục tiêu chung và mục tiêu cụ thể.
-- Chuẩn đầu ra về kiến thức, kỹ năng, ngoại ngữ, công nghệ và năng lực nghề nghiệp.
-- Tổng số tín chỉ và cơ cấu khối kiến thức.
-- Học phần chung, học phần cơ sở, học phần ngành và chuyên ngành.
-- Học phần tự chọn, thực tập, thực tế và khóa luận tốt nghiệp.
-- Các hướng chuyên ngành hoặc định hướng nghề nghiệp.
-- Vị trí việc làm sau tốt nghiệp và khả năng học tiếp ở bậc cao hơn.
-
-## Đặc điểm liên ngành và định hướng ứng dụng
-
-Danh mục chương trình cho thấy trường kết hợp các ngành khoa học cơ bản truyền thống với những lĩnh vực ứng dụng như truyền thông số, quản trị dữ liệu, du lịch, quản lý, công tác xã hội và tâm lý. Nhiều ngành có thể giao thoa với công nghệ, dữ liệu, trí tuệ nhân tạo và chuyển đổi số, nhưng vẫn giữ nền tảng phân tích con người, xã hội, văn hóa và chính sách.
-
-## Hướng dẫn sử dụng thông tin
-
-Sinh viên và thí sinh nên dùng trang đào tạo để xác định ngành phù hợp, sau đó mở trang chi tiết của chương trình để kiểm tra phiên bản khung đào tạo đang áp dụng. Thông tin tuyển sinh, tổ hợp môn, chỉ tiêu và phương thức xét tuyển cần được đối chiếu với đề án tuyển sinh của đúng năm đăng ký.
-
-## Câu hỏi hệ thống RAG có thể trả lời
-
-- VNU-USSH đang đào tạo những ngành đại học nào?
-- Chương trình đào tạo chuẩn và chất lượng cao khác nhau ở điểm nào?
-- Trường có đào tạo ngành thứ hai không?
-- Ngành nào phù hợp với truyền thông, dữ liệu, quản lý, du lịch hoặc nghiên cứu xã hội?
-- Khi tìm hiểu một chương trình, sinh viên cần kiểm tra các thông tin gì?
+- [Ngành Báo chí](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-bao-chi/nganh-bao-chi-23783.html)
+- [Ngành Chính trị học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-chinh-tri-hoc/nganh-chinh-tri-hoc-23784.html)
+- [Ngành Công tác xã hội](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-cong-tac-xa-hoi/nganh-cong-tac-xa-hoi-23785.html)
+- [Ngành Đông Nam Á học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-dong-nam-a-hoc/nganh-dong-nam-a-hoc-23787.html)
+- [Ngành Đông phương học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-dong-phuong-hoc/nganh-dong-phuong-hoc-23788.html)
+- [Ngành Hàn Quốc học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-han-quoc-hoc/nganh-han-quoc-hoc-23790.html)
+- [Ngành Hán Nôm](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-han-nom/nganh-han-nom-23789.html)
+- [Ngành Khoa học Quản lý](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-khoa-hoc-quan-ly/nganh-khoa-hoc-quan-ly-23791.html)
+- [Ngành Lịch sử](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-lich-su/nganh-lich-su-23792.html)
+- [Ngành Lưu trữ học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-luu-tru-hoc/nganh-luu-tru-hoc-23793.html)
+- [Ngành Ngôn ngữ học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-ngon-ngu-hoc/nganh-ngon-ngu-hoc-23794.html)
+- [Ngành Nhân học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-nhan-hoc/nganh-nhan-hoc-23795.html)
+- [Ngành Nhật Bản học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-nhat-ban-hoc/nganh-nhat-ban-hoc-23796.html)
+- [Ngành Quan hệ Công chúng](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-quan-he-cong-chung/nganh-quan-he-cong-chung-23798.html)
+- [Ngành QTDV Du lịch & Lữ hành](https://ussh.vnu.edu.vn/vi/dao-tao/qtdv-du-lich-va-lu-hanh/nganh-quan-tri-dich-vu-du-lich-va-lu-hanh-23797.html)
+- [Ngành Quản trị khách sạn](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-quan-tri-khach-san/nganh-quan-tri-khach-san-23800.html)
+- [Ngành Quản trị văn phòng](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-quan-tri-van-phong/nganh-quan-tri-van-phong-23801.html)
+- [Ngành Quản lý thông tin](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-quan-ly-thong-tin-126/nganh-quan-ly-thong-tin-23799.html)
+- [Ngành Quốc tế học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-quoc-te-hoc/nganh-quoc-te-hoc-23802.html)
+- [Ngành Tâm lý học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-tam-ly-hoc/nganh-tam-ly-hoc-23803.html)
+- [Ngành Thông tin-Thư viện](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-thong-tin-hoc/nganh-thong-tin-thu-vien-23804.html)
+- [Ngành Tôn giáo học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-ton-giao-hoc/nganh-ton-giao-hoc-23805.html)
+- [Ngành Triết học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-triet-hoc/nganh-triet-hoc-23806.html)
+- [Ngành Truyền thông đa phương tiện](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-truyen-thong-da-phuong-tien/nganh-truyen-thong-da-phuong-tien-23530.html)
+- [Ngành Văn hoá học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-van-hoa-hoc/nganh-van-hoa-hoc-23807.html)
+- [Ngành Văn học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-van-hoc/nganh-van-hoc-23808.html)
+- [Ngành Việt Nam học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-viet-nam-hoc/nganh-viet-nam-hoc-23809.html)
+- [Ngành Xã hội học](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-xa-hoi-hoc/nganh-xa-hoi-hoc-23810.html)
+- [Ngành Lý luận, lịch sử và phê bình điện ảnh, truyền hình](https://ussh.vnu.edu.vn/vi/dao-tao/nganh-dien-anh-va-nghe-thuat-dai-chung/nganh-dien-anh-va-nghe-thuat-dai-chung-23786.html)

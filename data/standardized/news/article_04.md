@@ -1,192 +1,264 @@
 # Thông tin tuyển sinh đại học chính quy năm 2026
 
-**Nguồn:** https://ussh.vnu.edu.vn/vi/news/dao-tao/thong-tin-tuyen-sinh-dai-hoc-chinh-quy-nam-2026-24126.html
-
-**Ngày đăng trên website:** 01/06/2026
-
-**Ngày chuẩn hóa:** 04/08/2026
-
-**Loại tài liệu:** Nội dung website USSH được chuẩn hóa chi tiết cho RAG
-
-> Lưu ý: Đây là bản diễn giải chi tiết, giữ các dữ kiện và ý chính của nguồn nhưng không sao chép nguyên văn toàn bộ bài viết.
+**Source:** https://ussh.vnu.edu.vn/vi/news/dao-tao/thong-tin-tuyen-sinh-dai-hoc-chinh-quy-nam-2026-24126.html
+**Document ID:** ussh-undergraduate-admissions-2026
+**Type:** news
+**Language:** vi
+**Organization:** Trường Đại học Khoa học Xã hội và Nhân văn, ĐHQGHN
+**Scope:** Tuyển sinh đại học chính quy năm 2026
+**Published:** 2026-06-01
+**Crawled:** 2026-08-04T14:24:52+07:00
+**Content Kind:** source_extract
+**Status:** official-source-extract
+**Crawl Backend:** crawl4ai
+**Content Selector:** #news-bodyhtml
+**Raw Content Hash:** 3387c6f0b3455596de34318fa99532e900570cdbfe7ea45318295ac0cd4ceca8
+**Landing Content Hash:** 3387c6f0b3455596de34318fa99532e900570cdbfe7ea45318295ac0cd4ceca8
+**Original File:** article_04.json
+**Source SHA256:** 43d26e82ccdf533d37a624c44c90c804ad92758e820d78371b91678689ae30bf
+**Content Hash:** 9861760fed3f4b919ed72e6bae48a639d222531494e82816ff459b144aed85a4
 
 ---
 
-# Thông tin tuyển sinh đại học chính quy năm 2026
+## I. THÔNG TIN CHUNG
+### 1. Tên cơ sở đào tạo
 
-## Thông tin chung
+Trường Đại học Khoa học Xã hội và Nhân văn (ĐHKHXH&NV).
+### 2. Mã cơ sở đào tạo trong tuyển sinh
+### 3. Địa chỉ các trụ sở
 
-Cơ sở đào tạo là Trường Đại học Khoa học Xã hội và Nhân văn, Đại học Quốc gia Hà Nội. Trụ sở chính tại số 336 Nguyễn Trãi, phường Thanh Xuân, thành phố Hà Nội. Nhà trường công khai thông tin tuyển sinh trên website chính và cổng tuyển sinh chuyên biệt. Số điện thoại tư vấn tuyển sinh được công bố là **0886 058 254**.
+(trụ sở chính, trụ sở cùng tỉnh/TP trực thuộc Trung ương và phân hiệu): Số 336 Nguyễn Trãi, phường Thanh Xuân, thành phố Hà Nội.
+### 4. Địa chỉ trang thông tin điện tử
+- Trang thông tin của Trường ĐHKHXH&NV:
++[ https://ussh.vnu.edu.vn](https://ussh.vnu.edu.vn)
++ <https://tuyensinh.ussh.edu.vn>
+### 5. Địa chỉ công khai quy chế tuyển sinh; thông tin, quy chế thi tuyển sinh
++[ https://ussh.vnu.edu.vn](https://ussh.vnu.edu.vn) +[ https://tuyensinh.ussh.edu.vn](https://tuyensinh.ussh.edu.vn)
+### 6. Số điện thoại liên hệ tuyển sinh
 
-Tài liệu tuyển sinh năm 2026 quy định đối tượng, điều kiện dự tuyển, phương thức xét tuyển, danh mục ngành, chỉ tiêu, tổ hợp, điểm cộng khuyến khích và quy trình đăng ký.
+[0886058254](tel:0886058254).
+### 7. Địa chỉ công khai các thông tin về hoạt động của cơ sở đào tạo
 
-## Đối tượng dự tuyển
+<https://ussh.vnu.edu.vn>
+## II. TUYỂN SINH ĐÀO TẠO ĐẠI HỌC
+### 1. Đối tượng, điều kiện dự tuyển
+- Người tốt nghiệp trung học phổ thông (THPT) của Việt Nam hoặc có bằng tốt nghiệp của nước ngoài được công nhận trình độ tương đương.
+- Người có bằng tốt nghiệp trung cấp ngành nghề cùng nhóm ngành dự tuyển và đã hoàn thành đủ yêu cầu khối lượng kiến thức văn hóa bậc THPT theo quy định của pháp luật _(sau đây gọi chung là tốt nghiệp THPT)._ _**1.2 Điều kiện dự tuyển chung:**_
+- Đạt ngưỡng đầu vào theo quy định.
+- Có đủ sức khoẻ để học tập theo quy định hiện hành.
+- Có đủ thông tin cá nhân, hồ sơ dự tuyển theo quy định.
+- Đối với thí sinh khuyết tật nặng bị suy giảm khả năng học tập có nguyện vọng được đăng ký dự tuyển nhưng không có khả năng dự tuyển theo phương thức tuyển sinh bình thường, Hội đồng tuyển sinh sẽ xem xét vào các ngành/CTĐT phù hợp với điều kiện sức khỏe của thí sinh.
+******2. Mô tả phương thức tuyển sinh 4 **(thi tuyển, xét tuyển hoặc kết hợp thi tuyển và xét tuyển...) Trường ĐHKHXH&NV, Đại học Quốc gia Hà Nội (ĐHQGHN) tuyển sinh theo**03 phương thức xét tuyển:** (1) Phương thức 1 (mã phương thức: **301)** : Xét tuyển thẳng và ưu tiên xét tuyển theo Quy chế tuyển sinh hiện hành của Bộ Giáo dục và Đào tạo (GDĐT);
+(2) Phương thức 2 (mã phương thức: **401)** : Xét tuyển kết quả thi đánh giá năng lực (HSA) còn hiệu lực của ĐHQGHN;
+(3) Phương thức 3 (mã phương thức: **100**): Xét tuyển kết quả thi tốt nghiệp THPT năm 2026.
+_(* Trường ĐHKHXH &NV cộng điểm khuyến khích với phương thức 401 và phương thức 100 với một số đối tượng quy định tại **mục 5.2**)._ _**_2.1 Phương thức 301_ : Xét tuyển thẳng và ưu tiên xét tuyển theo Quy chế tuyển sinh hiện hành của Bộ Giáo dục và Đào tạo**_
+a) Anh hùng lao động, Anh hùng lực lượng vũ trang nhân dân, Chiến sĩ thi đua toàn quốc.
+b) Thí sinh đạt giải nhất, nhì, ba trong kỳ thi chọn học sinh giỏi quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia _(các môn đạt giải được xét tuyển vào các ngành/CTĐT quy định tại**Phụ lục 01)**_ , được xét tuyển thẳng vào chương trình đào tạo phù hợp với môn thi đạt giải. Thời gian đạt giải không quá 03 năm tính tới thời điểm xét tuyển thẳng _._
+c) Thí sinh đạt giải nhất, nhì, ba kỳ thi khoa học, kỹ thuật cấp quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia _(các môn đạt giải được xét tuyển vào các ngành/CTĐT quy định tại**Phụ lục 01)**_ và đạt ngưỡng đảm bảo chất lượng đầu vào của chương trình đào tạo được ưu tiên xét tuyển vào chương trình đào tạo phù hợp. Thời gian đạt giải không quá 03 năm tính tới thời điểm xét tuyển.
+d) Thí sinh là người khuyết tật nặng có giấy xác nhận khuyết tật của cơ quan có thẩm quyền cấp theo quy định nhưng không có khả năng dự tuyển theo phương thức tuyển sinh bình thường; có khả năng theo học một số chương trình đào tạo do Trường ĐHKHXH&NV quy định _(tại**Phụ lục 02**)_ và do Hội đồng tuyển sinh quyết định.
+e) Thí sinh là người dân tộc thiểu số rất ít người theo quy định hiện hành của Chính phủ; các ngành/CTĐT thí sinh được đăng ký xét tuyển do Trường ĐHKHXH&NV quy định _(tại**Phụ lục 02**)_.
+f) Thí sinh là người nước ngoài đã đạt chuẩn năng lực ngôn ngữ theo yêu cầu của chương trình đào tạo phù hợp với quy định của Bộ GDĐT.
+*_Trường ĐHKHXH &NV chỉ xét tuyển thẳng và ưu tiên xét tuyển đối với thí sinh tốt nghiệp THPT năm 2026 đối với thí sinh thuộc các điểm a, b, c, d, e._ _**_2.2 Phương thức 401_ : Xét tuyển kết quả thi đánh giá năng lực (HSA) còn hiệu lực của Đại học Quốc gia Hà Nội**_ Thí sinh có điểm thi HSA còn hạn sử dụng tính đến ngày hết hạn nộp hồ sơ đăng ký trên cổng đăng ký của Trường ĐHKHXH&NV (thời hạn sử dụng 02 năm kể từ ngày dự thi).
+Bài thi HSA được Trường ĐHKHXH&NV chấp nhận trong xét tuyển là bài thi gồm 3 phần: Phần 1: Toán học và xử lý số liệu (Tư duy định lượng); Phần 2: Văn học - Ngôn ngữ (Tư duy định tính); Phần 3: Tiếng Anh _(tức mã Q21)_.
+Thang điểm xét tuyển: Xét tuyển theo thang điểm 150, sau đó quy về thang 30 theo công thức sẽ được Trường ĐHKHXH&NV công bố sau (thí sinh tham khảo Bảng quy đổi điểm trúng tuyển theo HSA về điểm trúng tuyển theo điểm thi tốt nghiệp THPT năm 2025, địa chỉ tra cứu: https://idt.vnu.edu.vn/do-luong-va-danh-gia) và cộng điểm khuyến khích (nếu có) và ưu tiên (nếu có) theo quy định.
+**Tổng điểm đạt được =** Điểm HSA quy đổi về 30 + điểm khuyến khích (nếu có).
+Tổng điểm đạt được cao nhất là 30 điểm.
+**Điểm khuyến khích** : xem chi tiết tại _**mục 5.2. Điểm cộng khuyến khích.**_ **Điểm xét tuyển** = Tổng điểm đạt được + điểm ưu tiên (đối tượng, khu vực nếu có).
+_Thí sinh được hưởng chính sách ưu tiên khu vực theo quy định trong năm tốt nghiệp THPT (hoặc trung cấp) và một năm kế tiếp. (Thí sinh tốt nghiệp từ năm 2024 trở về trước không được cộng điểm ưu tiên khu vực);_ _Điểm ưu tiên đối với thí sinh có tổng điểm đạt được từ 22.5 trở lên (khi quy đổi về điểm theo thang 30 và tổng điểm 3 môn tối đa là 30) được xác định theo công thức sau:_ **Điểm ưu tiên** = [(30 – Tổng điểm đạt được)/7,5] × Mức điểm ưu tiên (khu vực, đối tượng nếu có).
+_**_2.3. Phương thức 100_ : Xét tuyển kết quả thi tốt nghiệp THPT năm 2026**_ Thí sinh đăng ký xét tuyển theo hướng dẫn của Bộ GDĐT, thí sinh có chứng chỉ ngoại ngữ _(quy định tại**Phụ lục 03**)_ được quy đổi thành điểm thi môn ngoại ngữ trong tổ hợp đăng ký xét tuyển (nếu có nguyện vọng). Bảng quy đổi điểm ngoại ngữ ở phụ lục kèm theo _(quy định tại**Phụ lục 04**)_.
+Chứng chỉ ngoại ngữ quốc tế đăng ký quy đổi phải còn hạn sử dụng tính đến ngày hết hạn nộp hồ sơ đăng ký trên cổng đăng ký của Trường ĐHKHXH&NV (thời hạn sử dụng 02 năm kể từ ngày dự thi); không quy đổi với các chứng chỉ có hình thức thi online/thi tại nhà (home edition).
+Tổ hợp xét tuyển vào các ngành/CTĐT của Trường ĐHKHXH&NV năm 2026:
+| **TT** | **Mã xét tuyển** | **Tên ngành/CTĐT xét tuyển** | **Mã ngành, nhóm ngành** | **Tổ hợp** |
+| --- | --- | --- | --- | --- |
+| 1 | QHX01 | Báo chí | 7320101 | D01, D09, D10, D11, D14, D15, A01 |
+| 2 | QHX02 | Chính trị học | 7310201 | D01, D09, D10, D11, D14, D15, C00 |
+| 3 | QHX03 | Công tác xã hội | 7760101 | D01, D09, D10, D11, D14, D15, C00, A01 |
+| 4 | QHX04 | Lý luận, lịch sử và phê bình điện ảnh, truyền hình _(CTĐT Điện ảnh và nghệ thuật đại chúng)_ | 7210231 | D01, D09, D10, D11, D14, D15, C00 |
+| 5 | QHX05 | Đông Nam Á học | 7310620 | D01, D09, D10, D11, D14, D15 |
+| 6 | QHX06 | Đông phương học | 7310608 | D01, D09, D10, D11, D14, D15, D04 |
+| 7 | QHX07 | Hán Nôm | 7220104 | D01, D09, D10, D11, D14, D15, D04, C00 |
+| 8 | QHX08 | Hàn Quốc học | 7310614 | D01, D09, D10, D11, D14, D15, DD2 |
+| 9 | QHX09 | Khoa học quản lý | 7340401 | D01, D09, D10, D11, D14, D15, A01 |
+| 10 | QHX10 | Lịch sử | 7229010 | D01, D09, D10, D11, D14, D15, C00 |
+| 11 | QHX11 | Lưu trữ học | 7320303 | D01, D09, D10, D11, D14, D15, C00, A01 |
+| 12 | QHX12 | Ngôn ngữ học | 7229020 | D01, D09, D10, D11, D14, D15, C00, A01 |
+| 13 | QHX13 | Nhân học | 7310302 | D01, D09, D10, D11, D14, D15, C00 |
+| 14 | QHX14 | Nhật Bản học | 7310613 | D01, D09, D10, D11, D14, D15, D06, A01 |
+| 15 | QHX15 | Quan hệ công chúng | 7320108 | D01, D09, D10, D11, D14, D15, A01 |
+| 16 | QHX16 | Quản lý thông tin | 7320205 | D01, D09, D10, D11, D14, D15, A01 |
+| 17 | QHX17 | Quản trị dịch vụ du lịch và lữ hành | 7810103 | D01, D09, D10, D11, D14, D15 |
+| 18 | QHX18 | Quản trị khách sạn | 7810201 | D01, D09, D10, D11, D14, D15 |
+| 19 | QHX19 | Quản trị văn phòng | 7340406 | D01, D09, D10, D11, D14, D15, A01 |
+| 20 | QHX20 | Quốc tế học | 7310601 | D01, D09, D10, D11, D14, D15, A01 |
+| 21 | QHX21 | Tâm lý học | 7310401 | D01, D09, D10, D11, D14, D15 |
+| 22 | QHX22 | Thông tin - Thư viện | 7320201 | D01, D09, D10, D11, D14, D15, C00, A01 |
+| 23 | QHX23 | Tôn giáo học | 7229009 | D01, D09, D10, D11, D14, D15, C00 |
+| 24 | QHX24 | Triết học | 7229001 | D01, D09, D10, D11, D14, D15, C00 |
+| 25 | QHX25 | Văn hóa học | 7229040 | D01, D09, D10, D11, D14, D15, C00 |
+| 26 | QHX26 | Văn học | 7229030 | D01, D09, D10, D11, D14, D15, C00 |
+| 27 | QHX27 | Việt Nam học | 7310630 | D01, D09, D10, D11, D14, D15, C00, A01 |
+| 28 | QHX28 | Xã hội học | 7310301 | D01, D09, D10, D11, D14, D15, C00, A01 |
+| 29 | QHX29 | Truyền thông đa phương tiện | 7320104 | D01, D09, D10, D11, D14, D15, A01 |
+_Môn thi các tổ hợp xét tuyển:_
+| - D01: Toán học, Ngữ văn, Tiếng Anh; - D04: Toán học, Ngữ văn, Tiếng Trung; - DD2: Toán học, Ngữ văn, Tiếng Hàn; - D06: Toán học, Ngữ văn, Tiếng Nhật; - D09: Toán học, Lịch sử, Tiếng Anh; - D10: Toán học, Địa lý, Tiếng Anh; | - D11: Ngữ Văn, Vật lý, Tiếng Anh; - D14: Ngữ văn, Lịch sử, Tiếng Anh; - D15: Ngữ văn, Địa lí, Tiếng Anh; - C00: Ngữ văn, Lịch sử, Địa lí; - A01: Toán học, Vật lý, Tiếng Anh. |
+| --- | --- |
+**Tổng điểm đạt được =**(Điểm môn 1 + Điểm môn 2 + Điểm môn 3) + điểm khuyến khích (nếu có).
+Tổng điểm đạt được cao nhất là 30 điểm.
+**Điểm khuyến khích** : xem chi tiết tại _**mục 5.2. Điểm cộng khuyến khích.**_ **Điểm xét tuyển** = Tổng điểm đạt được + điểm ưu tiên (nếu có).
+_Thí sinh được hưởng chính sách ưu tiên khu vực theo quy định trong năm tốt nghiệp THPT (hoặc trung cấp) và một năm kế tiếp. (Thí sinh tốt nghiệp từ năm 2024 trở về trước không được cộng điểm ưu tiên khu vực);_ _Điểm ưu tiên đối với thí sinh có tổng điểm đạt được từ 22.5 trở lên (khi quy đổi về điểm theo thang 30 và tổng điểm 3 môn tối đa là 30) được xác định theo công thức sau:_ **Điểm ưu tiên** = [(30 – Tổng điểm đạt được)/7,5] × Mức điểm ưu tiên (khu vực, đối tượng nếu có).
+Tại Trường ĐHKHXH&NV, trong quá trình xét tuyển sẽ có độ chênh điểm giữa các tổ hợp xét tuyển. Trường ĐHKHXH&NV sẽ công bố khi có kết quả thi tốt nghiệp THPT và phổ điểm thi.
+### 3. Quy tắc quy đổi độ lệch điểm ngưỡng đầu vào và điểm trúng tuyển giữa các tổ hợp, phương thức tuyển sinh
 
-Người đăng ký cần thuộc một trong các nhóm:
+_**3.1. Quy đổi ngưỡng đầu vào:**_ _a. Đối với phương thức 100 và phương thức 401:_ Trường ĐHKHXH&NV sẽ công bố ngưỡng đảm bảo chất lượng đầu vào đối với phương thức 100 và phương thức 401 sau khi có kết quả thi tốt nghiệp THPT năm 2026, phổ điểm thi tốt nghiệp THPT và công bố công thức quy đổi chuẩn phương thức 401.
+_b. Thí sinh là người dân tộc thiểu số rất ít người theo quy định hiện hành của Chính phủ_ thì tổng điểm 3 môn thi tốt nghiệp THPT năm 2026 thuộc tổ hợp xét tuyển của ngành/CTĐT đăng ký đạt ngưỡng đảm bảo chất lượng đầu vào như đối với phương thức 100.
+_**3.2. Quy tắc quy đổi tương đương điểm trúng tuyển giữa các phương thức, tổ hợp**_ Khi có kết quả và phổ điểm thi tốt nghiệp THPT năm 2026, Trường ĐHKHXH&NV sẽ công bố:
+- Bảng quy đổi điểm xét tuyển giữa phương thức 401 và phương thức 301 theo thang điểm 30.
+- Độ chênh lệch giữa các tổ hợp xét tuyển với của phương thức 100.
+### 4. Số lượng tuyển sinh
+| **TT** | **Mã**
+**xét tuyển** | **Tên ngành/CTĐT xét tuyển** | **Mã chương trình, ngành, nhóm ngành 5** | **Tên chương trình, ngành,** **nhóm ngành 6** | **Số lượng tuyển sinh** | **Phương thức** **tuyển sinh** |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | QHX01 | Báo chí | 7320101 | Báo chí | 160 | 301, 401, 100 |
+| 2 | QHX02 | Chính trị học | 7310201 | Chính trị học | 60 | 301, 401, 100 |
+| 3 | QHX03 | Công tác xã hội | 7760101 | Công tác xã hội | 55 | 301, 401, 100 |
+| 4 | QHX04 | Lý luận, lịch sử và phê bình điện ảnh, truyền hình _(CTĐT Điện ảnh và nghệ thuật đại chúng)_ | 7210231 | Lý luận, lịch sử và phê bình điện ảnh, truyền hình | 50 | 301, 401, 100 |
+| 5 | QHX05 | Đông Nam Á học | 7310620 | Đông Nam Á học | 50 | 301, 401, 100 |
+| 6 | QHX06 | Đông phương học | 7310608 | Đông phương học | 100 | 301, 401, 100 |
+| 7 | QHX07 | Hán Nôm | 7220104 | Hán Nôm | 30 | 301, 401, 100 |
+| 8 | QHX08 | Hàn Quốc học | 7310614 | Hàn Quốc học | 60 | 301, 401, 100 |
+| 9 | QHX09 | Khoa học quản lý | 7340401 | Khoa học quản lý | 120 | 301, 401, 100 |
+| 10 | QHX10 | Lịch sử | 7229010 | Lịch sử | 80 | 301, 401, 100 |
+| 11 | QHX11 | Lưu trữ học | 7320303 | Lưu trữ học | 50 | 301, 401, 100 |
+| 12 | QHX12 | Ngôn ngữ học | 7229020 | Ngôn ngữ học | 80 | 301, 401, 100 |
+| 13 | QHX13 | Nhân học | 7310302 | Nhân học | 50 | 301, 401, 100 |
+| 14 | QHX14 | Nhật Bản học | 7310613 | Nhật Bản học | 50 | 301, 401, 100 |
+| 15 | QHX15 | Quan hệ công chúng | 7320108 | Quan hệ công chúng | 200 | 301, 401, 100 |
+| 16 | QHX16 | Quản lý thông tin | 7320205 | Quản lý thông tin | 110 | 301, 401, 100 |
+| 17 | QHX17 | Quản trị dịch vụ du lịch và lữ hành | 7810103 | Quản trị dịch vụ du lịch và lữ hành | 200 | 301, 401, 100 |
+| 18 | QHX18 | Quản trị khách sạn | 7810201 | Quản trị khách sạn | 150 | 301, 401, 100 |
+| 19 | QHX19 | Quản trị văn phòng | 7340406 | Quản trị văn phòng | 110 | 301, 401, 100 |
+| 20 | QHX20 | Quốc tế học | 7310601 | Quốc tế học | 180 | 301, 401, 100 |
+| 21 | QHX21 | Tâm lý học | 7310401 | Tâm lý học | 200 | 301, 401, 100 |
+| 22 | QHX22 | Thông tin - Thư viện | 7320201 | Thông tin - Thư viện | 50 | 301, 401, 100 |
+| 23 | QHX23 | Tôn giáo học | 7229009 | Tôn giáo học | 50 | 301, 401, 100 |
+| 24 | QHX24 | Triết học | 7229001 | Triết học | 50 | 301, 401, 100 |
+| 25 | QHX25 | Văn hóa học | 7229040 | Văn hóa học | 55 | 301, 401, 100 |
+| 26 | QHX26 | Văn học | 7229030 | Văn học | 120 | 301, 401, 100 |
+| 27 | QHX27 | Việt Nam học | 7310630 | Việt Nam học | 60 | 301, 401, 100 |
+| 28 | QHX28 | Xã hội học | 7310301 | Xã hội học | 70 | 301, 401, 100 |
+| 29 | QHX29 | Truyền thông đa phương tiện | 7320104 | Truyền thông đa phương tiện | 50 | 301, 401, 100 |
+******5. Các thông tin cần thiết khác để thí sinh dự tuyển vào cơ sở đào tạo** _**5.1. Điều kiện phụ trong xét tuyển**_
+- Xét tuyển theo điểm từ trên xuống đến hết chỉ tiêu.
+- Điểm xét tuyển làm tròn đến 2 chữ số thập phân.
+- Điểm trúng tuyển được xét tuyển theo từng ngành/CTĐT.
+- Trường hợp nhiều thí sinh có cùng điểm xét ở cuối danh sách, thứ tự xét ưu tiên đối với các thí sinh có thứ tự ưu tiên nguyện vọng cao hơn.
+_**5.2. Điểm cộng khuyến khích**_
+_a)_ Thí sinh đạt giải nhất, nhì, ba trong kỳ thi chọn học sinh giỏi quốc gia, quốc tế _các môn Toán, Vật lý, Ngữ văn, Lịch sử, Địa lý, Tiếng Anh, Tiếng Trung, Tiếng Nhật_ hoặc cuộc thi khoa học, kỹ thuật cấp quốc gia, quốc tế _(có nội dung dự án, đề tài nghiên cứu khoa học thuộc lĩnh vực khoa học xã hội và hành vi do Hội đồng tuyển sinh xét)_ do Bộ GDĐT tổ chức và cử tham gia; thời gian đạt giải không quá 3 năm tính theo năm tới thời điểm xét tuyển vào các ngành/CTĐT theo nguyện vọng mà không dùng quyền xét tuyển thẳng _,_ thí sinh được cộng điểm (thang điểm 30), cụ thể:
+- Giải nhất HSG quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia: được cộng 3,0 điểm;
+- Giải nhì HSG quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia: được cộng 2,5 điểm;
+- Giải ba HSG quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia: được cộng 2,0 điểm;
+- Giải khuyến khích HSG quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia: được cộng 1,5 điểm;
+- Giải nhất cuộc thi khoa học, kỹ thuật cấp quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia: được cộng 1,5 điểm;
+- Giải nhì cuộc thi khoa học, kỹ thuật cấp quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia: được cộng 1,0 điểm;
+- Giải ba cuộc thi khoa học, kỹ thuật cấp quốc gia, quốc tế do Bộ GDĐT tổ chức, cử tham gia: được cộng 0,5 điểm.
+_b)_ _Thí sinh đạt giải cuộc thi Olympic bậc THPT của ĐHQGHN, cuộc thi học sinh giỏi bậc THPT, học sinh giỏi cấp tỉnh/thành phố trực thuộc Trung ương_ _các môn Toán, Vật lý, Ngữ văn, Lịch sử, Địa lý, Tiếng Anh, Tiếng Trung, Tiếng Nhật, thí sinh được cộng điểm_ _(thang điểm 30), cụ thể:_
+- Giải nhất (HSG bậc THPT cấp ĐHQGHN, Olympic bậc THPT của ĐHQGHN, HSG cấp tỉnh/thành phố trực thuộc trung ương): được cộng 1.5 điểm;
+- Giải nhì (HSG bậc THPT cấp ĐHQGHN, Olympic bậc THPT của ĐHQGHN, HSG cấp tỉnh/thành phố trực thuộc trung ương): được cộng 1.0 điểm;
+- Giải ba (HSG bậc THPT cấp ĐHQGHN, Olympic bậc THPT của ĐHQGHN, HSG cấp tỉnh/thành phố trực thuộc trung ương): được cộng 0.5 điểm.
+Trường ĐHKHXH&NV không xét cộng điểm ưu tiên đối với các cuộc thi HSG **hệ Giáo dục thường xuyên** cấp tỉnh/Thành phố trực thuộc trung ương (tổ chức độc lập với cuộc thi HSG cấp tỉnh/Thành phố trực thuộc trung ương).
+_c)_ _Thí sinh đã tham gia Chương trình VNU 12+_ được cộng điểm thưởng (thang 30 điểm), cụ thể:
+Thí sinh được lựa chọn kết quả học tập của 3 học phần trong chương trình đào tạo đại học, do ĐHQGHN công bố hàng năm đã tích lũy để tính GPA xác định điểm cộng, với mức điểm cộng như sau:
+- GPA đạt loại xuất sắc được cộng 1.5 điểm;
+- GPA đạt loại giỏi được cộng 1.0 điểm;
+- GPA đạt loại khá được cộng 0.5 điểm.
+_d)_ _Thí sinh có kết quả trong kỳ thi chuẩn hóa SAT_ (Scholastic Assessment Test, Hoa Kỳ) đạt điểm từ 1100/1600 trở lên. Mã đăng ký của ĐHQGHN với tổ chức thi SAT (The College Board) là 7853-Vietnam National University-Hanoi (thí sinh cần khai báo mã đăng ký trên khi đăng ký thi SAT) được cộng điểm (thang điểm 30), cụ thể:
+- SAT từ 1500-1600 được cộng 1.5 điểm;
+- SAT từ 1300-1499 được cộng 1.25 điểm;
+- SAT từ 1100-1299 được cộng 1.0 điểm.
+_e) Thí sinh đạt nhiều thành tích, có nhiều điểm cộng nhưng chỉ được tính 01 lần với mức điểm/thành tích cao nhất_.
+_**5.3. Các thông tin khác:**_
+Các thí sinh thuộc đối tượng tại **mục 2.1** sẽ được xác định đủ điều kiện trúng tuyển một nguyện vọng cao nhất đối với từng phương thức (nguyện vọng 1 là nguyện vọng ưu tiên cao nhất).
+_a) Với thí sinh thuộc đối tượng thuộc mục 2.1 điểm b và c_ Trong trường hợp số thí sinh đăng ký xét tuyển thẳng vào một ngành/CTĐT vượt quá số chỉ tiêu quy định, Trường ĐHKHXH&NV sẽ xét trúng tuyển theo thứ tự ưu tiên từ cao xuống thấp các tiêu chí sau: (1) thành tích trong các kỳ thi học sinh giỏi quốc tế hoặc cuộc thi khoa học, kỹ thuật quốc tế; (2) thành tích kỳ thi chọn học sinh giỏi cấp quốc gia hoặc cuộc thi khoa học, kỹ thuật quốc gia; (3) điểm trung bình chung 03 năm học bậc THPT.
+_* Thí sinh có thành tích tại cuộc thi khoa học, kỹ thuật quốc tế phải là thành viên các đội tham dự do Bộ GDĐT quyết định (không xét tuyển đối với thí sinh thuộc các đội tuyển của các Sở GDĐT tổ chức, cử tham gia, được Bộ GDĐT đồng ý)._ _b) Với thí sinh thuộc đối tượng mục 2.1 điểm d_ Trường hợp thí sinh đăng ký nhiều hơn chỉ tiêu công bố, Trường ĐHKHXH&NV sẽ xét theo điểm trung bình chung 03 năm học bậc THPT từ cao xuống thấp cho đến khi hết chỉ tiêu.
+_c) Với thí sinh thuộc đối tượng mục 2.1 điểm e_ Trường hợp thí sinh đăng ký nhiều hơn chỉ tiêu công bố, Trường ĐHKHXH&NV thực hiện quy đổi tương đương tổng điểm xét tuyển của thí sinh theo các tổ hợp xét tuyển về tổ hợp D01 trên cơ sở phân tích phổ điểm kỳ thi và nguyên tắc do Trường quy định; căn cứ kết quả quy đổi, xét từ cao xuống thấp cho đến hết chỉ tiêu.
+_d) Với thí sinh thuộc đối tượng dự bị đại học dân tộc (DBĐH)_ Thí sinh là học sinh dự bị đại học dân tộc do các cơ sở đào tạo dự bị đại học dân tộc giới thiệu, gửi hồ sơ về Trường Đại học Khoa học Xã hội và Nhân văn theo hướng dẫn của Trường, được xem xét tuyển vào các ngành/chương trình đào tạo khi đáp ứng được đồng thời các tiêu chí sau:
++ Thí sinh tốt nghiệp THPT năm 2025;
++ Thí sinh có học lực bậc THPT đạt loại Khá trở lên;
++ Thí sinh có trung bình chung môn ngoại ngữ ở bậc THPT đạt từ 7.0 trở lên;
++ Thí sinh có điểm thi tốt nghiệp THPT năm 2025 tạo thành tổ hợp xét tuyển mà Trường sử dụng để tuyển sinh đại học chính quy năm 2025 và tổ hợp đó đáp ứng điều kiện về ngưỡng đảm bảo chất lượng đầu vào do Trường ĐHKHXH&NV quy định với ngành/CTĐT tương ứng mà thí sinh đăng ký;
++ Thí sinh có tổng điểm hai môn Toán và Ngữ văn trong kì thi tốt nghiệp THPT năm 2025 đạt tối thiểu 14,0 điểm.
+### 6. Tổ chức tuyển sinh
+- Trường ĐHKHXH&NV xét tuyển theo kế hoạch tuyển sinh chung của Bộ GDĐT.
+- Với phương thức 301 thí sinh nộp hồ sơ trực tiếp về ĐHKHXH&NV được thông báo tại đây: https://tuyensinh.ussh.edu.vn/thong-bao-ve-viec-nhan-ho-so-xet-tuyen-thang-va-uu-tien-xet-tuyen-theo-dieu-8-quy-che-tuyen-sinh-cac-nganh-dao-tao-trinh-do-dai-hoc-va-nganh-giao-duc-mam-non-trinh-do-cao-dang-cua-bo-giao-duc-va-dao-tao-nam-2026.html
+- Với phương thức 100, phương thức 401; thí sinh có nhu cầu rà soát, kiểm tra minh chứng phục vụ việc quy đổi điểm ngoại ngữ, xác nhận/đối chiếu kết quả thi ĐGNL (HSA) của ĐHQGHN và/hoặc cộng điểm khuyến khích trong tuyển sinh đại học chính quy năm 2026 được thông báo tại đây: https://tuyensinh.ussh.edu.vn/thong-bao-ve-viec-mo-he-thong-truc-tuyen-tiep-nhan-ra-soat-kiem-tra-ho-sominh-chung-phuc-vu-xet-tuyen-dai-hoc-chinh-quy-nam-2026.html.
+- Đối với tất cả các phương thức, thí sinh cần thực hiện đầy đủ việc đăng ký xét tuyển tại Hệ thống hỗ trợ tuyển sinh chung của Bộ GDĐT tại đây: https://thisinh.thitotnghiepthpt.edu.vn.
+### 7. Chính sách ưu tiên
+_**7.1 Chính sách ưu tiên chung**_
+Trường ĐHKHXH&NV áp dụng chính sách ưu tiên chung về khu vực và đối tượng theo quy chế tuyển sinh hiện hành.
+Thí sinh chỉ được hưởng chính sách ưu tiên khu vực theo quy định trong năm tốt nghiệp THPT (trung cấp) và một năm kế tiếp.
+_**7.2 Xét tuyển thẳng và ưu tiên xét tuyển**_ Thí sinh được xét tuyển thẳng và ưu tiên xét tuyển quy định tại _**mục 2.1**_ của Thông tin tuyển sinh.
+### 8. Mức thu dịch vụ tuyển sinh
+- Lệ phí xét tuyển tất cả các phương thức: Theo quy định của Bộ Giáo dục và Đào tạo.
+- Mức phí rà soát, kiểm tra minh chứng phục vụ việc quy đổi điểm ngoại ngữ, xác nhận/đối chiếu kết quả thi ĐGNL (HSA) của ĐHQGHN và/hoặc cộng điểm khuyến khích trong tuyển sinh đại học chính quy năm 2026 được thông báo tại cổng thông tin tuyển sinh tuyensinh.ussh.edu.vn.
+### 9. Cam kết của cơ sở đào tạo đối với thí sinh
 
-- Đã tốt nghiệp trung học phổ thông tại Việt Nam.
-- Có văn bằng nước ngoài được công nhận tương đương trình độ trung học phổ thông.
-- Có bằng trung cấp thuộc nhóm ngành phù hợp và đã hoàn thành yêu cầu kiến thức văn hóa bậc trung học phổ thông theo quy định.
-
-## Điều kiện chung
-
-Thí sinh phải:
-
-1. Đạt ngưỡng đầu vào của phương thức và chương trình đăng ký.
-2. Có sức khỏe phù hợp để học tập.
-3. Cung cấp đầy đủ thông tin cá nhân và hồ sơ minh chứng.
-4. Thực hiện đăng ký nguyện vọng trên hệ thống tuyển sinh chung của Bộ Giáo dục và Đào tạo.
-
-Đối với thí sinh khuyết tật nặng, nếu không thể tham gia phương thức tuyển sinh thông thường, Hội đồng tuyển sinh có thể xem xét chương trình phù hợp với điều kiện sức khỏe và khả năng học tập.
-
-## Ba phương thức xét tuyển
-
-### Phương thức 301: Xét tuyển thẳng và ưu tiên xét tuyển
-
-Áp dụng theo quy chế tuyển sinh hiện hành của Bộ Giáo dục và Đào tạo. Các nhóm chính gồm:
-
-- Anh hùng Lao động, Anh hùng Lực lượng vũ trang nhân dân, Chiến sĩ thi đua toàn quốc.
-- Thí sinh đạt giải nhất, nhì hoặc ba trong kỳ thi học sinh giỏi quốc gia, quốc tế ở môn phù hợp với chương trình đăng ký.
-- Thí sinh đạt giải trong cuộc thi khoa học – kỹ thuật cấp quốc gia hoặc quốc tế, nếu đề tài và điều kiện đáp ứng yêu cầu của trường.
-- Người khuyết tật nặng được cơ quan có thẩm quyền xác nhận và có khả năng theo học chương trình phù hợp.
-- Người thuộc dân tộc thiểu số rất ít người theo quy định.
-- Người nước ngoài đáp ứng chuẩn năng lực ngôn ngữ của chương trình.
-
-Với một số nhóm xét tuyển thẳng, thành tích phải còn trong giới hạn thời gian quy định và thí sinh phải tốt nghiệp trung học phổ thông năm 2026.
-
-### Phương thức 401: Xét kết quả thi Đánh giá năng lực HSA của ĐHQGHN
-
-- Kết quả HSA phải còn hiệu lực; thời hạn sử dụng được tính trong hai năm kể từ ngày thi.
-- Bài thi được chấp nhận gồm ba phần: Toán học và xử lý số liệu; Văn học – Ngôn ngữ; Tiếng Anh, tương ứng cấu trúc mã Q21.
-- Điểm HSA theo thang 150 được quy đổi về thang 30 theo công thức nhà trường công bố sau khi có dữ liệu phổ điểm.
-- Tổng điểm gồm điểm HSA quy đổi và điểm khuyến khích, sau đó cộng điểm ưu tiên nếu có.
-- Điểm ưu tiên khu vực chỉ áp dụng trong năm tốt nghiệp trung học phổ thông hoặc trung cấp và một năm tiếp theo.
-
-### Phương thức 100: Xét kết quả thi tốt nghiệp THPT năm 2026
-
-Thí sinh đăng ký theo kế hoạch chung của Bộ Giáo dục và Đào tạo. Chứng chỉ ngoại ngữ quốc tế còn hiệu lực có thể được quy đổi thành điểm môn ngoại ngữ nếu thuộc danh mục được trường chấp nhận. Chứng chỉ thi trực tuyến tại nhà không được dùng để quy đổi.
-
-Điểm xét tuyển được tính từ tổng điểm ba môn thuộc tổ hợp, cộng điểm khuyến khích và điểm ưu tiên nếu có. Nhà trường có thể áp dụng độ chênh giữa các tổ hợp sau khi có kết quả và phổ điểm thi năm 2026.
-
-## Các tổ hợp sử dụng
-
-Các tổ hợp xuất hiện trong đề án gồm:
-
-- **A01:** Toán, Vật lý, Tiếng Anh.
-- **C00:** Ngữ văn, Lịch sử, Địa lý.
-- **D01:** Toán, Ngữ văn, Tiếng Anh.
-- **D04:** Toán, Ngữ văn, Tiếng Trung.
-- **D06:** Toán, Ngữ văn, Tiếng Nhật.
-- **D09:** Toán, Lịch sử, Tiếng Anh.
-- **D10:** Toán, Địa lý, Tiếng Anh.
-- **D11:** Ngữ văn, Vật lý, Tiếng Anh.
-- **D14:** Ngữ văn, Lịch sử, Tiếng Anh.
-- **D15:** Ngữ văn, Địa lý, Tiếng Anh.
-- **DD2:** Toán, Ngữ văn, Tiếng Hàn.
-
-Không phải ngành nào cũng dùng tất cả tổ hợp; thí sinh phải kiểm tra đúng dòng ngành trong đề án.
-
-## Danh mục ngành, mã xét tuyển và chỉ tiêu
-
-| Mã | Ngành/chương trình | Chỉ tiêu dự kiến |
-|---|---|---:|
-| QHX01 | Báo chí | 160 |
-| QHX02 | Chính trị học | 60 |
-| QHX03 | Công tác xã hội | 55 |
-| QHX04 | Điện ảnh và nghệ thuật đại chúng | 50 |
-| QHX05 | Đông Nam Á học | 50 |
-| QHX06 | Đông phương học | 100 |
-| QHX07 | Hán Nôm | 30 |
-| QHX08 | Hàn Quốc học | 60 |
-| QHX09 | Khoa học quản lý | 120 |
-| QHX10 | Lịch sử | 80 |
-| QHX11 | Lưu trữ học | 50 |
-| QHX12 | Ngôn ngữ học | 80 |
-| QHX13 | Nhân học | 50 |
-| QHX14 | Nhật Bản học | 50 |
-| QHX15 | Quan hệ công chúng | 200 |
-| QHX16 | Quản lý thông tin | 110 |
-| QHX17 | Quản trị dịch vụ du lịch và lữ hành | 200 |
-| QHX18 | Quản trị khách sạn | 150 |
-| QHX19 | Quản trị văn phòng | 110 |
-| QHX20 | Quốc tế học | 180 |
-| QHX21 | Tâm lý học | 200 |
-| QHX22 | Thông tin – Thư viện | 50 |
-| QHX23 | Tôn giáo học | 50 |
-| QHX24 | Triết học | 50 |
-| QHX25 | Văn hóa học | 55 |
-| QHX26 | Văn học | 120 |
-| QHX27 | Việt Nam học | 60 |
-| QHX28 | Xã hội học | 70 |
-| QHX29 | Truyền thông đa phương tiện | 50 |
-
-Các ngành đều sử dụng ba phương thức 301, 401 và 100, nhưng điều kiện cụ thể và tổ hợp khác nhau.
-
-## Nguyên tắc xét tuyển
-
-- Xét từ điểm cao xuống thấp đến khi hết chỉ tiêu.
-- Điểm xét tuyển được làm tròn đến hai chữ số thập phân.
-- Điểm trúng tuyển xác định riêng theo từng ngành hoặc chương trình.
-- Khi nhiều thí sinh bằng điểm ở cuối danh sách, người có thứ tự nguyện vọng ưu tiên cao hơn được xem xét trước.
-- Trường sẽ công bố ngưỡng đầu vào và quy tắc quy đổi tương đương sau khi có kết quả thi và phổ điểm năm 2026.
-
-## Điểm cộng khuyến khích
-
-Một số nhóm thành tích được cộng điểm trên thang 30:
-
-### Giải học sinh giỏi quốc gia, quốc tế
-
-- Giải nhất: 3,0 điểm.
-- Giải nhì: 2,5 điểm.
-- Giải ba: 2,0 điểm.
-- Giải khuyến khích: 1,5 điểm.
-
-### Cuộc thi khoa học – kỹ thuật cấp quốc gia, quốc tế
-
-- Giải nhất: 1,5 điểm.
-- Giải nhì: 1,0 điểm.
-- Giải ba: 0,5 điểm.
-
-### Giải cấp ĐHQGHN hoặc cấp tỉnh/thành phố
-
-- Giải nhất: 1,5 điểm.
-- Giải nhì: 1,0 điểm.
-- Giải ba: 0,5 điểm.
-
-### Chương trình VNU 12+
-
-Dựa trên kết quả ba học phần đã tích lũy:
-
-- GPA xuất sắc: cộng 1,5 điểm.
-- GPA giỏi: cộng 1,0 điểm.
-- GPA khá: cộng 0,5 điểm.
-
-### SAT
-
-- 1500–1600: cộng 1,5 điểm.
-- 1300–1499: cộng 1,25 điểm.
-- 1100–1299: cộng 1,0 điểm.
-
-Nếu thí sinh có nhiều thành tích, chỉ mức điểm cao nhất được tính một lần.
-
-## Quy trình đăng ký
-
-- Hồ sơ xét tuyển thẳng và ưu tiên xét tuyển được nộp theo thông báo riêng của trường.
-- Minh chứng quy đổi ngoại ngữ, xác nhận HSA và điểm khuyến khích được tiếp nhận qua hệ thống trực tuyến do trường công bố.
-- Dù sử dụng phương thức nào, thí sinh vẫn phải đăng ký nguyện vọng trên Hệ thống hỗ trợ tuyển sinh chung của Bộ Giáo dục và Đào tạo.
-- Lệ phí và lịch tuyển sinh thực hiện theo quy định, kế hoạch chung và các thông báo cập nhật.
-
-## Một số hướng chuyên ngành
-
-Đề án cũng nêu các định hướng bên trong một số chương trình. Ví dụ:
-
-- Báo chí có thể phát triển theo báo chí số, báo chí dữ liệu, báo chí và AI, kinh tế và quản lý báo chí – truyền thông.
-- Chính trị học gồm các hướng quản trị quốc gia, chính trị và truyền thông, Hồ Chí Minh học.
-- Quản lý thông tin có các hướng quản trị dữ liệu và khởi nghiệp số; quản trị và sáng tạo nội dung số.
-- Quốc tế học có quan hệ quốc tế, châu Mỹ học, châu Âu học và nghiên cứu phát triển quốc tế.
-- Tâm lý học có các hướng xã hội, quản lý – kinh doanh, lâm sàng, tham vấn và phát triển.
-- Thông tin – Thư viện có hướng thư viện số và AI; nhân văn số và dịch vụ tri thức số.
-
-## Lưu ý cho thí sinh
-
-Thông tin tuyển sinh có thể được cập nhật sau khi có kết quả thi, phổ điểm hoặc hướng dẫn mới của Bộ Giáo dục và Đào tạo. Thí sinh cần kiểm tra cổng tuyển sinh chính thức trước từng mốc nộp hồ sơ, rà soát minh chứng và đăng ký nguyện vọng.
+Trường ĐHKHXH&NV cam kết hỗ trợ thí sinh giải quyết khiếu nại, bảo vệ quyền lợi chính đáng của thí sinh trong những trường hợp rủi ro và hỗ trợ giải quyết việc thí sinh chuyển đến hoặc chuyển đi do sai sót trong tuyển sinh.
+### 10. Các nội dung khác
+_**10.1. Về định hướng chuyên ngành**_
+_a) Ngành Đông phương học:_ Chương trình đào tạo ngành Đông phương học gồm có 2 hướng chuyên ngành: Ấn Độ học, Trung Quốc học. Sau học kỳ đầu tiên, khoa Đông phương học sẽ thực hiện chia hướng chuyên ngành cho sinh viên năm thứ nhất ngành Đông phương học dựa trên nguyện vọng và kết quả học tập của sinh viên ở học kỳ đầu tiên, ưu tiên các sinh viên có chứng chỉ năng lực ngoại ngữ HSK và HSKK cấp độ 3 trở lên vào hướng chuyên ngành Trung Quốc học, chứng chỉ tiếng Anh quốc tế vào hướng chuyên ngành Ấn Độ học.
+_b) Các ngành/chương trình đào tạo khác:_ Chia định hướng chuyên ngành cho sinh viên theo kế hoạch đào tạo (sinh viên lựa chọn hướng chuyên ngành nhu cầu chuyên môn của cá nhân và định hướng của đơn vị đào tạo), cụ thể:
+| **TT** | _**Ngành/CTĐT và hướng chuyên ngành**_ | **TT** | _**Ngành/CTĐT và hướng chuyên ngành**_ |
+| --- | --- | --- | --- |
+| 1 | **Báo chí** _- Báo chí số_ _- Báo chí dữ liệu_ _- Báo chí và AI_ _- Kinh tế và quản lý Báo chí - Truyền thông_ | 15 | **Quản lý thông tin** _- Quản trị dữ liệu và khởi nghiệp số_ _- Quản trị và sáng tạo nội dung số_ |
+| 2 | **Chính trị học** _- Quản trị quốc gia_ _- Chính trị và truyền thông_ _- Hồ Chí Minh học_ | 16 | **Quản trị dịch vụ du lịch và lữ hành** _- Quản trị lữ hành_ _- Quản trị sự kiện_ _- Kinh tế du lịch_ |
+| 3 | **Công tác xã hội** | 17 | **Quản trị khách sạn** |
+| 4 | **Điện ảnh và nghệ thuật đại chúng** _- Biên kịch - Phê bình điện ảnh và nghệ thuật đại chúng_ _- Sản xuất, phân phối và tiêu thụ điện ảnh và nghệ thuật đại chúng_ | 18 | **Quản trị văn phòng** _- Quản trị văn phòng doanh nghiệp_ _- Công nghệ Quản trị văn phòng_ |
+| 5 | **Đông Nam Á học** | 19 | **Quốc tế học** _- Quan hệ Quốc tế_ _- Châu Mỹ học_ _- Châu Âu học_ _- Nghiên cứu phát triển quốc tế_ |
+| 6 | **Hán Nôm** | 20 | **Tâm lý học** _- Tâm lý học xã hội_ _- Tâm lý học quản lý - kinh doanh_ _- Tâm lý học lâm sàng_ _- Tâm lý học tham vấn_ _- Tâm lý học phát triển_ |
+| 7 | **Hàn Quốc học** | 21 | **Thông tin - Thư viện** _- Thư viện số và Trí tuệ nhân tạo_ _- Nhân văn số và dịch vụ tri thức số_ |
+| 8 | **Khoa học quản lý** _- Chính sách và Quản lý cấp cơ sở_ _- Quản lý nguồn nhân lực_ _- Quản lý Sở hữu trí tuệ_ _- Quản lý Khoa học và công nghệ_ _- Văn hóa và đạo đức quản lý_ _- Quản lý kinh tế_ | 22 | **Tôn giáo học** _- Quản lý Nhà nước về tín ngưỡng, tôn giáo_ _- Tín ngưỡng, tôn giáo trong đời sống xã hội_ |
+| 9 | **Lịch sử** _- Khảo cổ học_ _- Lịch sử Đảng Cộng sản Việt Nam_ _- Lịch sử Đô thị_ _- Lịch sử Thế giới_ _- Lịch sử Việt Nam_ _- Lịch sử Văn hoá Việt Nam_ | 23 | **Triết học** _- Lịch sử Triết học và tôn giáo phương Tây_ _- Lịch sử Triết học và tôn giáo phương Đông_ _- Triết học Mác-Lênin_ _- Chủ nghĩa xã hội khoa học_ _- Triết học Logic_ _- Triết học đạo đức và nghệ thuật_ _- Triết học quản trị_ |
+| 10 | **Lưu trữ học** _- Hành chính - Văn thư_ _- Văn thư - Lưu trữ số_ | 24 | **Văn hóa học** _- Công nghiệp văn hóa_ _- Kinh tế di sản_ _- Nghiên cứu văn hóa_ _- Quản trị văn hóa_ |
+| 11 | **Ngôn ngữ học** _- Ngôn ngữ học_ _- Ngôn ngữ học trị liệu_ _- Ngôn ngữ và AI_ _- Việt ngữ học cho người nước ngoài (dành cho sinh viên nước ngoài)_ | 25 | **Văn học** _- Folklore và văn hoá đại chúng_ _- Văn học Việt Nam_ _- Văn học nước ngoài_ _- Lý luận văn học_ |
+| 12 | **Nhân học** _- Nhân học_ _- Dân tộc học_ | 26 | **Việt Nam học** |
+| 13 | **Nhật Bản học** | 27 | **Xã hội học** |
+| 14 | **Quan hệ công chúng** _- Truyền thông doanh nghiệp_ _- Truyền thông chính phủ_ _- Truyền thông văn hóa - nghệ thuật_ | 28 | **Truyền thông đa phương tiện** |
+_******10.2. Đào tạo cùng lúc hai chương trình đào tạo (bằng kép)**_
+- Sinh viên chính quy của Trường ĐHKHXH&NV có cơ hội học thêm một ngành thứ hai là một trong các ngành sau:
++ Các ngành/CTĐT của Trường ĐHKHXH&NV:
+| **TT** | **Ngành/CTĐT** | **TT** | | **TT** | **Ngành/CTĐT** |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Báo chí | 10 | Lịch sử | 19 | Quản lý thông tin |
+| 2 | Quản trị dịch vụ du lịch và lữ hành | 11 | Văn hóa học | 20 | Thông tin - Thư viện |
+| 3 | Chính trị học | 12 | Lưu trữ học | 21 | Triết học |
+| 4 | Quan hệ công chúng | 13 | Quản trị văn phòng | 22 | Hán Nôm |
+| 5 | Quản trị khách sạn | 14 | Nhân học | 23 | Văn học |
+| 6 | Đông Nam Á học | 15 | Ngôn ngữ học | 24 | Việt Nam học |
+| 7 | Đông phương học | 16 | Quốc tế học | 25 | Công tác xã hội |
+| 8 | Hàn Quốc học | 17 | Tôn giáo học | 26 | Xã hội học |
+| 9 | Khoa học quản lý | 18 | Tâm lý học | 27 | Lý luận, lịch sử và phê bình điện ảnh, truyền hình _(CTĐT Điện ảnh và nghệ thuật đại chúng)_ |
++ Các ngành/CTĐT của các trường thành viên trong ĐHQGHN:
+Ngành Ngôn ngữ Anh, ngành Ngôn ngữ Hàn Quốc, ngành Ngôn ngữ Nhật, ngành Ngôn ngữ Trung Quốc của Trường Đại học Ngoại ngữ, ĐHQGHN;
+Ngành Luật học của Trường Đại học Luật, ĐHQGHN;
+Ngành Sư phạm Ngữ văn (áp dụng với sinh viên ngành Văn học); ngành Sư phạm Lịch sử (áp dụng với sinh viên ngành Lịch sử) của Trường Đại học Giáo dục, ĐHQGHN.
+- Sinh viên chính quy của các trường trong ĐHQGHN (Trường Đại học Ngoại ngữ, Trường Đại học Luật, Trường Quốc tế, Trường Đại học Giáo dục, Trường Khoa học Liên ngành và Nghệ thuật, Trường Đại học Kinh tế) có cơ hội học thêm một ngành tại Trường ĐHKHXH&NV như sau:
+| **TT** | **Ngành** | **TT** | | **TT** | **Ngành** |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Báo chí | 10 | Lịch sử | 19 | Quản lý thông tin |
+| 2 | Quản trị dịch vụ du lịch và lữ hành | 11 | Văn hóa học | 20 | Thông tin - Thư viện |
+| 3 | Chính trị học | 12 | Lưu trữ học | 21 | Triết học |
+| 4 | Quan hệ công chúng | 13 | Quản trị văn phòng | 22 | Hán Nôm |
+| 5 | Quản trị khách sạn | 14 | Nhân học | 23 | Văn học |
+| 6 | Đông Nam Á học | 15 | Ngôn ngữ học | 24 | Việt Nam học |
+| 7 | Đông phương học | 16 | Quốc tế học | 25 | Công tác xã hội |
+| 8 | Hàn Quốc học | 17 | Tôn giáo học | 26 | Xã hội học |
+| 9 | Khoa học quản lý | 18 | Tâm lý học | 27 | Điện ảnh và nghệ thuật đại chúng |
+- Sinh viên hoàn thành chương trình đào tạo của cả hai ngành sẽ được nhận hai bằng cử nhân chính quy.
+- Điều kiện để đăng ký học bằng kép:
++ Ngành học chính của chương trình đào tạo thứ hai phải khác ngành học chính của chương trình đào tạo thứ nhất;
++ Đã học ít nhất hai học kỳ của chương trình đào tạo thứ nhất;
++ Điểm trung bình chung tất cả các học phần tính từ đầu khóa học đến thời điểm đăng ký học chương trình đào tạo thứ hai đạt từ 2,5 trở lên và đáp ứng ngưỡng bảo đảm chất lượng đầu vào của chương trình thứ hai trong năm tuyển sinh hoặc điểm trung bình chung tất cả các học phần tính từ đầu khóa học đến thời điểm đăng ký học chương trình đào tạo thứ hai đạt từ 2,0 trở lên và đáp ứng điều kiện trúng tuyển của chương trình thứ hai trong năm tuyển sinh;
++ Sinh viên có đơn xin học thêm chương trình đào tạo thứ hai và thực hiện đầy đủ các nghĩa vụ theo quy định của đơn vị đào tạo.
+_**10.3. Xử lý vi phạm về hồ sơ và thông tin của thí sinh**_ Thí sinh có trách nhiệm kê khai đầy đủ, trung thực, chính xác các thông tin trong hồ sơ đăng ký xét tuyển và hồ sơ nhập học; đồng thời nộp các minh chứng hợp lệ theo quy định của Trường ĐHKHXH&NV. Thí sinh hoàn toàn chịu trách nhiệm về tính chính xác của các thông tin đã kê khai và các giấy tờ đã nộp.
+Sau khi thí sinh trúng tuyển và nhập học, Trường ĐHKHXH&NV tổ chức rà soát, đối chiếu và xác minh thông tin trong hồ sơ. Thí sinh có thông tin kê khai không chính xác, không đầy đủ hoặc minh chứng không hợp lệ, không đáp ứng điều kiện trúng tuyển theo quy định đã công bố, Trường ĐHKHXH&NV xử lý theo quy định hiện hành. Tùy theo tính chất, mức độ vi phạm; việc xử lý có thể bao gồm hủy kết quả trúng tuyển hoặc buộc thôi học theo quy định của Trường ĐHKHXH&NV và quy định của pháp luật.
+_**Thông tin chi tiết về****học phí dự kiến; thông tin về tuyển sinh của 02 năm gần nhất; Danh mục các môn/lĩnh vực đạt giải được đăng ký xét tuyển thẳng và cộng điểm khuyến khích; Chỉ tiêu và điều kiện xét tuyển với đối tượng học sinh là người dân tộc thiểu số, học sinh khuyết tật nặng; Các chứng chỉ ngoại ngữ sử dụng trong quy đổi ngoại ngữ… có tại**_[ _**THÔNG BÁO TUYỂN SINH ĐẠI HỌC CHÍNH QUY NĂM 2026.**_](https://ussh.vnu.edu.vn/uploads/ussh/news/2026_05/qhx-ttts-dhcq-2026.docx)

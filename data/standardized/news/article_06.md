@@ -1,143 +1,63 @@
 # Năng lực số trong giáo dục đại học: Đánh giá, đo lường và hàm ý chính sách
 
-**Nguồn:** https://ussh.vnu.edu.vn/vi/news/khoa-hoc/nang-luc-so-trong-giao-duc-dai-hoc-danh-gia-do-luong-va-ham-y-chinh-sach-24105.html
-
-**Ngày đăng trên website:** 21/05/2026
-
-**Ngày chuẩn hóa:** 04/08/2026
-
-**Loại tài liệu:** Nội dung website USSH được chuẩn hóa chi tiết cho RAG
-
-> Lưu ý: Đây là bản diễn giải chi tiết, giữ các dữ kiện và ý chính của nguồn nhưng không sao chép nguyên văn toàn bộ bài viết.
+**Source:** https://ussh.vnu.edu.vn/vi/news/khoa-hoc/nang-luc-so-trong-giao-duc-dai-hoc-danh-gia-do-luong-va-ham-y-chinh-sach-24105.html
+**Document ID:** ussh-digital-competence-conference-2026
+**Type:** news
+**Language:** vi
+**Organization:** Trường Đại học Khoa học Xã hội và Nhân văn, ĐHQGHN
+**Scope:** Hội thảo khoa học về năng lực số trong giáo dục đại học
+**Published:** 2026-05-21
+**Crawled:** 2026-08-04T14:24:56+07:00
+**Content Kind:** source_extract
+**Status:** official-source-extract
+**Crawl Backend:** crawl4ai
+**Content Selector:** #news-bodyhtml
+**Content Transforms:** strip_related_story_list
+**Raw Content Hash:** 6d86d3b80838b52b97942d705e9260a0a8ce3341bb08f4a4e7e7565657c1412a
+**Landing Content Hash:** 90c32e3ea75b712884fcdfb12a0ab76eebd3740c4d6383ad62376fd7a0f1805a
+**Original File:** article_06.json
+**Source SHA256:** 6284f0719bbce014ae76706d8c3a16d421e810add670b80edbbaba8c84e5cefc
+**Content Hash:** 6f5a92bcd0eaf3954eea1e97e52bde44376fc1af641bffad3074a8fc4fc9163f
 
 ---
 
-# Năng lực số trong giáo dục đại học: Đánh giá, đo lường và hàm ý chính sách
+Trong bối cảnh trí tuệ nhân tạo, dữ liệu lớn và các nền tảng số đang làm thay đổi mạnh mẽ phương thức dạy học, nghiên cứu, quản trị và đánh giá trong các cơ sở giáo dục đại học, năng lực số không còn là một kỹ năng bổ trợ mà ngày càng trở thành năng lực nền tảng của người học, giảng viên và nhà quản lý giáo dục. Không chỉ dừng lại ở khả năng sử dụng công nghệ, năng lực số còn bao gồm tư duy số, năng lực khai thác dữ liệu, khả năng học tập trong môi trường số, ý thức đạo đức, trách nhiệm học thuật và năng lực thích ứng với những biến đổi nhanh chóng của đời sống học thuật hiện đại.
 
-## Thông tin sự kiện
+Xuất phát từ yêu cầu đó, Hội thảo “Năng lực số trong giáo dục đại học: Đánh giá, đo lường và hàm ý chính sách” được tổ chức nhằm tạo không gian trao đổi liên ngành giữa chính sách, pháp lý, giáo dục, công nghệ, quản trị thông tin và đo lường năng lực. Đây cũng là một trong những hoạt động học thuật góp phần làm nổi bật tinh thần của SSHWeek 2026: lan tỏa tri thức, thúc đẩy đổi mới sáng tạo, kết nối nghiên cứu với thực tiễn và khẳng định vai trò của khoa học xã hội và nhân văn trong bối cảnh chuyển đổi số.
+Về phía khách mời, tham dự Hội thảo có TS. Đặng Văn Huấn, Phó Vụ trưởng Vụ Giáo dục Đại học, Bộ Giáo dục và Đào tạo; PGS.TS. Trần Thành Nam, Phó Hiệu trưởng Trường Đại học Giáo dục, ĐHQGHN; PGS.TS, NGƯT Nguyễn Thị Quế Anh, nguyên Hiệu trưởng Trường Đại học Luật, ĐHQGHN; cùng đại diện lãnh đạo các thư viện, trung tâm thông tin, doanh nghiệp, các nhà khoa học và các chuyên gia quan tâm đến chủ đề năng lực số trong giáo dục đại học.
+Về phía Trường Đại học Khoa học Xã hội và Nhân văn có PGS.TS. Bùi Thành Nam, Bí thư Đảng ủy Nhà trường; PGS.TS. Đặng Thị Thu Hương, Phó Hiệu trưởng Nhà trường; PGS.TS. Đỗ Văn Hùng, Trưởng Khoa Quản trị thông tin; đại diện các phòng, ban chức năng; cùng toàn thể cán bộ, giảng viên Khoa Quản trị thông tin; các bạn nghiên cứu sinh, học viên và sinh viên của Khoa.
+Phát biểu khai mạc Hội thảo, PGS.TS. Bùi Thành Nam, Bí thư Đảng ủy, nhấn mạnh sứ mệnh cốt lõi của trường đại học là đào tạo và nghiên cứu. Để thực hiện sứ mệnh đó trong bối cảnh mới, nghiên cứu khoa học cần được quan tâm như một động lực then chốt của phát triển đại học. Việc Nhà trường tăng mạnh nguồn lực dành cho nghiên cứu khoa học cho thấy định hướng nhất quán trong việc đầu tư cho tri thức, đổi mới sáng tạo và nâng cao chất lượng học thuật.
+Theo PGS.TS. Bùi Thành Nam, chuyển đổi số và sự phát triển nhanh chóng của AI đang làm thay đổi căn bản phương thức giáo dục. Điều này đặt ra yêu cầu cấp thiết về việc xây dựng khung năng lực số cho giảng viên, nhà quản lý và người học. Năng lực số, trong cách tiếp cận hiện nay, không chỉ là kỹ năng sử dụng công nghệ, mà còn là tư duy số, năng lực đổi mới, khả năng ra quyết định dựa trên dữ liệu và đạo đức trong môi trường số. Trong tinh thần đó, Hội thảo được tổ chức không chỉ như một hoạt động học thuật của Khoa Quản trị thông tin, mà còn nằm trong chủ trương chung của Nhà trường về thúc đẩy nghiên cứu, chuyển đổi số và đổi mới sáng tạo trong khuôn khổ SSHWeek 2026.
 
-Ngày 20/05/2026, Khoa Quản trị thông tin thuộc Trường Đại học Khoa học Xã hội và Nhân văn, Đại học Quốc gia Hà Nội tổ chức hội thảo “Năng lực số trong giáo dục đại học: Đánh giá, đo lường và hàm ý chính sách”. Sự kiện là một hoạt động trong Tuần lễ Khoa học Xã hội và Nhân văn – SSHWeek 2026.
+_PGS.TS. Bùi Thành Nam, Bí thư Đảng ủy Trường Đại học Khoa học Xã hội và Nhân văn, phát biểu khai mạc Hội thảo_ Tại phiên báo cáo tham luận, Hội thảo đã tiếp cận chủ đề năng lực số từ nhiều góc nhìn khác nhau, tạo nên một bức tranh toàn diện về chuyển đổi số trong giáo dục đại học.
+Mở đầu phiên tham luận, TS. Đặng Văn Huấn, Phó Vụ trưởng Vụ Giáo dục Đại học, Bộ Giáo dục và Đào tạo, trình bày nội dung về chuyển đổi số và AI trong giáo dục đại học. Tham luận cho thấy chuyển đổi số trong giáo dục đại học không còn là câu chuyện ứng dụng công nghệ thông tin đơn lẻ, mà là quá trình đổi mới mô hình hoạt động dựa trên dữ liệu, công nghệ số và hệ sinh thái học tập mở. Trong thời gian qua, nhiều cơ sở giáo dục đại học đã có bước chuyển mạnh mẽ về nhận thức và tầm nhìn, từng bước đầu tư hạ tầng số, triển khai các nền tảng quản trị, hệ thống LMS, học liệu số, mô phỏng số và các hình thức dạy học kết hợp. Tuy nhiên, quá trình này vẫn đối diện với những khó khăn như chênh lệch hạ tầng, năng lực số chưa đồng đều, văn hóa dữ liệu còn hạn chế, vấn đề an toàn dữ liệu và đạo đức số chưa được quan tâm tương xứng.
+Từ góc nhìn quản lý nhà nước, tham luận cũng nhấn mạnh các định hướng trong thời gian tới: hoàn thiện thể chế về giáo dục đại học số, phát triển hạ tầng và nền tảng dùng chung, đổi mới dạy học và kiểm tra đánh giá trên môi trường số, phát triển đội ngũ giảng viên và cán bộ quản lý số, xây dựng văn hóa số, tăng cường an toàn dữ liệu và thúc đẩy hệ sinh thái giáo dục đại học số.
 
-Hội thảo quy tụ nhà quản lý, chuyên gia chính sách, nhà khoa học, giảng viên, nghiên cứu sinh, học viên và sinh viên. Các nội dung tập trung vào năng lực số, năng lực AI, công cụ đo lường và các chính sách cần thiết cho giáo dục đại học Việt Nam trong bối cảnh chuyển đổi số.
+_TS. Đặng Văn Huấn – Phó Vụ trưởng Vụ Giáo dục Đại học, Bộ Giáo dục và Đào tạo với tham luận “Chuyển đổi số trong giáo dục đại học: năng lực số và hệ sinh thái số”_ Từ bình diện pháp lý, PGS.TS, NGƯT Nguyễn Thị Quế Anh trình bày tham luận về trí tuệ nhân tạo và tác động đến giáo dục đại học Việt Nam. Tham luận đặt vấn đề AI trong giáo dục không chỉ là công cụ hỗ trợ dạy học, mà còn liên quan trực tiếp đến quản trị đại học, bảo vệ dữ liệu, minh bạch thuật toán, liêm chính học thuật, quyền tác giả và trách nhiệm giải trình. Các mô hình quản trị AI trên thế giới cho thấy mỗi quốc gia có cách tiếp cận khác nhau, từ quản trị dựa trên rủi ro đến các khung hướng dẫn mềm, linh hoạt. Dù theo mô hình nào, điểm chung vẫn là yêu cầu bảo đảm con người giữ vai trò trung tâm, AI phải phục vụ con người, không thay thế thẩm quyền và trách nhiệm của con người.
+Đối với giáo dục đại học, những vấn đề như chấm thi tự động, phân tích dữ liệu học tập, cá nhân hóa lộ trình học tập, phát hiện đạo văn AI, xác lập quyền tác giả đối với sản phẩm có sự tham gia của AI và bảo vệ dữ liệu sinh viên đang đặt ra nhiều yêu cầu mới. Tham luận gợi mở nhu cầu xây dựng cơ chế quản trị AI trong nhà trường, trong đó có hội đồng đạo đức AI, quy trình kiểm soát dữ liệu, cơ chế giải trình thuật toán và nguyên tắc “human-in-the-loop” – con người tham gia giám sát, phê duyệt và chịu trách nhiệm đối với các quyết định có sự hỗ trợ của AI.
 
-## Vì sao năng lực số trở thành năng lực nền tảng?
+_PGS.TS, NGƯT. Nguyễn Thị Quế Anh, Nguyên Hiệu trưởng Trường Đại học Luật, Đại học Quốc gia Hà Nội phát biểu tham luận “Luật Trí tuệ Nhân tạo và các tác động tới giáo dục đại học Việt Nam”_ Tiếp nối mạch trao đổi về năng lực con người trong môi trường số, tham luận của PGS.TS. Trần Thành Nam tập trung vào phát triển năng lực số và năng lực AI cho đội ngũ giảng viên, cán bộ quản lý giáo dục trong kỷ nguyên trí tuệ nhân tạo. Một trong những điểm nhấn của tham luận là sự thay đổi vai trò của giảng viên: từ người truyền đạt tri thức sang người thiết kế trải nghiệm học tập. Trong môi trường giáo dục số, giảng viên không chỉ cần biết sử dụng công nghệ, mà còn phải biết tổ chức hoạt động học tập, thiết kế phản hồi, khai thác dữ liệu học tập, hỗ trợ sinh viên phát triển tư duy phản biện và sử dụng AI có trách nhiệm.
+Tham luận cũng nhấn mạnh vai trò của lãnh đạo số và quản trị dựa trên dữ liệu. Chuyển đổi số trong giáo dục đại học không thể thành công nếu chỉ tập trung vào hạ tầng công nghệ mà thiếu năng lực thực thi, thiếu đội ngũ quản lý cấp trung có khả năng chuyển hóa chiến lược thành hành động cụ thể. Trưởng khoa, trưởng bộ môn, các phòng ban chức năng và đội ngũ giảng viên đều là những mắt xích quan trọng trong hệ sinh thái đại học số. Vì vậy, phát triển năng lực số cần được triển khai như một quá trình dài hạn, có khung năng lực, chương trình bồi dưỡng, cơ chế đánh giá và lộ trình cải tiến liên tục.
 
-AI, dữ liệu lớn, nền tảng học trực tuyến và các hệ thống quản trị số đang làm thay đổi cách trường đại học tổ chức dạy học, nghiên cứu, đánh giá và vận hành. Vì vậy, năng lực số không còn chỉ là biết sử dụng máy tính hoặc phần mềm.
+_PGS.TS. Trần Thành Nam – Phó Hiệu trưởng Trường Đại học Giáo dục, ĐHQGHN với tham luận “Phát triển năng lực số và AI cho đội ngũ giảng viên và cán bộ quản lý giáo dục trong kỷ nguyên trí tuệ nhân tạo”_ Ở góc độ đo lường, TS. Bùi Thanh Thủy trình bày tham luận “Phát triển thang đo năng lực số cho sinh viên Việt Nam trong bối cảnh AI và giáo dục số”. Tham luận chỉ ra rằng sinh viên hiện nay học tập chủ yếu trong môi trường số, trong khi AI đang thay đổi cách tiếp cận tri thức, cách học tập và cách tham gia vào đời sống học thuật. Tuy nhiên, các công cụ đo lường năng lực số hiện còn chưa thống nhất, nhiều thang đo được phát triển thiên về kỹ năng công nghệ cơ bản và chưa phản ánh đầy đủ các yêu cầu mới như an sinh số, học tập số, sử dụng AI và chuẩn bị nghề nghiệp trong môi trường số.
+Từ đó, nghiên cứu đề xuất thang đo năng lực số gồm bảy thành phần: vận hành thiết bị và phần mềm; thông tin và dữ liệu; giao tiếp và hợp tác số; an toàn và an sinh số; sáng tạo nội dung số; học tập và phát triển kỹ năng số; ứng dụng năng lực số cho nghề nghiệp. Với 31 biến quan sát, thang đo được xây dựng theo hướng gắn với trải nghiệm thực tế của sinh viên, phản ánh hành vi cụ thể và sử dụng ngôn ngữ dễ hiểu. Kết quả kiểm định ban đầu cho thấy thang đo có độ tin cậy và giá trị cấu trúc, qua đó có thể trở thành công cụ hỗ trợ các trường đại học đánh giá thực trạng năng lực số của sinh viên, xác định khoảng trống cần bồi dưỡng và tích hợp năng lực số vào chương trình đào tạo.
 
-Khái niệm năng lực số được mở rộng sang:
+_TS. Bùi Thanh Thủy – Khoa Quản trị Thông tin, Trường Đại học KHXH &NV, ĐHQGHN với tham luận “Phát triển thang đo năng lực số cho sinh viên trong bối cảnh AI và giáo dục số”_ Tiếp tục từ vấn đề xây dựng thang đo, TS. Nguyễn Thị Kim Dung trình bày đề xuất áp dụng bộ thang đo đánh giá năng lực số vào thực tế giáo dục đại học Việt Nam. Tham luận nhấn mạnh rằng bộ thang đo không chỉ phục vụ khảo sát, mà có thể trở thành công cụ quản trị chiến lược của cơ sở giáo dục đại học. Khi được triển khai một cách hệ thống, kết quả đánh giá năng lực số có thể hỗ trợ xây dựng chuẩn đầu ra, cá nhân hóa lộ trình học tập, thiết kế các chương trình đào tạo kỹ năng số, phục vụ kiểm định chất lượng và cung cấp dữ liệu cho hoạch định chính sách giáo dục số.
+Một trong những đề xuất đáng chú ý là đánh giá năng lực số theo chu trình: đầu vào đối với sinh viên năm nhất, đánh giá định kỳ theo năm học và đánh giá đầu ra trước khi tốt nghiệp. Cách tiếp cận này cho phép nhà trường theo dõi tiến trình phát triển năng lực số của sinh viên, phát hiện khoảng trống theo ngành học, kết hợp dữ liệu từ hệ thống LMS để phân tích học tập và hỗ trợ người học theo thời gian thực. Ở cấp nhà trường, tham luận đề xuất xây dựng bộ phận chuyên trách và dashboard năng lực số nhằm theo dõi các chỉ số như điểm trung bình theo khoa/ngành, tỷ lệ sinh viên đạt chuẩn, xu hướng tiến bộ theo khóa học và mức độ chênh lệch giữa các nhóm người học.
 
-- Tư duy số và khả năng thích ứng với môi trường công nghệ.
-- Tìm kiếm, đánh giá, quản lý và khai thác dữ liệu.
-- Học tập và cộng tác trong môi trường trực tuyến.
-- Sáng tạo nội dung số.
-- Bảo đảm an toàn, sức khỏe và an sinh số.
-- Đạo đức, liêm chính học thuật và trách nhiệm sử dụng công nghệ.
-- Sử dụng AI một cách phản biện và có trách nhiệm.
-- Vận dụng năng lực số cho công việc và phát triển nghề nghiệp.
+_TS. Nguyễn Thị Kim Dung Phó Trưởng Khoa Quản trị Thông tin, Trường Đại học KHXH &NV với tham luận “Đề xuất áp dụng bộ thang đo đánh giá năng lực số vào thực tế của giáo dục đại học Việt Nam”_ Sau phiên tham luận, Hội thảo bước vào phiên thảo luận với chủ đề “Phát triển năng lực AI cho người học: nội dung, chương trình và đánh giá”, do PGS.TS. Bùi Thành Nam và PGS.TS. Đỗ Văn Hùng chủ trì. Đây là không gian trao đổi cởi mở, kết nối các tham luận chuyên đề với những vấn đề thực tiễn mà các cơ sở giáo dục đại học đang quan tâm: người học cần được trang bị năng lực AI nào, năng lực đó cần được tích hợp vào chương trình đào tạo ra sao, đánh giá bằng công cụ nào và chính sách nào có thể hỗ trợ triển khai một cách hiệu quả.
 
-## Góc nhìn về hệ sinh thái giáo dục đại học số
+_PGS.TS. Bùi Thành Nam và PGS.TS. Đỗ Văn Hùng chủ trì phiên thảo luận_ Tại phiên thảo luận, ông Trần Văn Tùng, Chủ tịch Hội Thông tin Khoa học và Công nghệ Việt Nam, nguyên Thứ trưởng Bộ Khoa học và Công nghệ, nhấn mạnh mối liên hệ giữa đổi mới sáng tạo, chuyển đổi số và yêu cầu đưa tri thức vào thực tiễn. Theo ông, điểm khác biệt quan trọng của đổi mới sáng tạo là khả năng tạo ra giá trị trong đời sống, phục vụ người sáng tạo, người sử dụng và cộng đồng. Chuyển đổi số cũng cần được nhìn nhận như một quá trình quay trở lại phục vụ thực tiễn, nâng cao hiệu quả hoạt động và tạo ra giá trị xã hội. Những vấn đề được trao đổi tại Hội thảo, từ năng lực số đến năng lực AI, chính là một phần của nhiệm vụ phát triển khoa học, công nghệ và đổi mới sáng tạo mà đất nước đang quan tâm.
+Ông cũng đề cập đến sự cần thiết của việc hoàn thiện khuôn khổ pháp lý về trí tuệ nhân tạo, trong đó có vấn đề xây dựng luật về AI, nhằm tạo cơ sở cho phát triển công nghệ an toàn, có trách nhiệm và phù hợp với lợi ích xã hội. Từ góc nhìn chính sách, ông cho rằng cần tiếp tục tổ chức các diễn đàn học thuật như Hội thảo hôm nay để đóng góp vào quá trình xây dựng chính sách, đồng thời nâng cao năng lực số cho các cơ sở giáo dục đại học.
 
-Nhiều cơ sở giáo dục đã đầu tư hạ tầng, nền tảng quản trị, hệ thống LMS, học liệu số, mô phỏng và dạy học kết hợp. Tuy nhiên, quá trình chuyển đổi vẫn gặp các rào cản:
+_Ông Trần Văn Tùng, Chủ tịch Hội Thông tin Khoa học và Công nghệ Việt Nam, nguyên Thứ trưởng Bộ Khoa học và Công nghệ phát biểu tại Hội thảo_ PGS.TS. Trần Văn Hải, giảng viên thỉnh giảng Khoa Quản trị thông tin, Trường Đại học Khoa học Xã hội và Nhân văn, trao đổi về AI trong môi trường giảng dạy, với cả những ưu điểm và hạn chế cần được nhận diện thận trọng. Bên cạnh khả năng hỗ trợ học tập, thiết kế nội dung, phản hồi và cá nhân hóa, AI cũng đặt ra các thách thức về liêm chính học thuật, quyền tác giả và trách nhiệm sử dụng. Từ đó, ông gợi mở việc đánh giá chuẩn đầu ra của sinh viên cần tính đến năng lực nhận biết và tôn trọng quyền bảo hộ tác giả trong thời đại AI. Đây là một vấn đề có ý nghĩa thiết thực, nhất là khi sinh viên ngày càng sử dụng các công cụ AI trong học tập, nghiên cứu và sáng tạo nội dung.
 
-- Hạ tầng giữa các trường và nhóm người học còn chênh lệch.
-- Năng lực số của giảng viên, sinh viên và cán bộ quản lý chưa đồng đều.
-- Văn hóa dữ liệu và quản trị dựa trên dữ liệu còn hạn chế.
-- An toàn dữ liệu, quyền riêng tư và đạo đức số chưa được đầu tư tương xứng.
-- Nhiều dự án tập trung vào công nghệ nhưng thiếu thay đổi về quy trình và con người.
+_PGS.TS. Trần Văn Hải, giảng viên thỉnh giảng Khoa Quản trị thông tin, Trường Đại học Khoa học Xã hội và Nhân văn, trao đổi về AI trong môi trường giảng dạy_ Một câu hỏi từ sinh viên về việc Nhà trường có những công cụ nào để cá nhân hóa lộ trình học tập cũng thu hút sự quan tâm tại phiên thảo luận. Câu hỏi này cho thấy người học không chỉ quan tâm đến công nghệ như một công cụ hỗ trợ, mà còn kỳ vọng công nghệ có thể giúp họ được tư vấn, định hướng và phát triển phù hợp với năng lực, nhu cầu và mục tiêu cá nhân. Đây cũng là tinh thần quan trọng của giáo dục đại học hiện đại: đặt sinh viên ở vị trí trung tâm của quá trình đào tạo, đồng thời sử dụng dữ liệu và công nghệ để hỗ trợ người học một cách hiệu quả, nhân văn và có trách nhiệm.
 
-Các định hướng chính sách được thảo luận gồm hoàn thiện thể chế cho giáo dục đại học số, phát triển nền tảng dùng chung, đổi mới kiểm tra – đánh giá, bồi dưỡng đội ngũ, xây dựng văn hóa số và tăng cường an toàn dữ liệu.
+_Sinh viên Vũ Thị Trà My quan tâm đến việc có những công cụ nào để cá nhân hóa lộ trình học tập_ Đặc biệt, phát biểu tại phiên thảo luận, PGS.TS. Đặng Thị Thu Hương, Phó Hiệu trưởng Trường Đại học Khoa học Xã hội và Nhân văn, nhấn mạnh ý nghĩa của SSHWeek 2026 như một không gian học thuật quy mô toàn trường, kết nối nhiều hội thảo, tọa đàm và hoạt động nghiên cứu gắn với công nghệ, đổi mới sáng tạo và ứng dụng thực tiễn. Hội thảo do Khoa Quản trị thông tin tổ chức đã thu hút nhiều bên liên quan, từ chuyên gia hoạch định chính sách, nhà quản lý, nhà khoa học đến giảng viên, học viên và sinh viên. Điều này cho thấy chủ đề năng lực số không chỉ là vấn đề riêng của một ngành học, mà là yêu cầu chung của giáo dục đại học trong bối cảnh mới.
 
-## AI và yêu cầu pháp lý
+_PGS.TS. Đặng Thị Thu Hương, Phó Hiệu trưởng Trường Đại học Khoa học Xã hội và Nhân văn phát biểu tại Hội thảo_ Tổng kết và bế mạc Hội thảo, PGS.TS. Đỗ Văn Hùng, Trưởng Khoa Quản trị thông tin, khẳng định sau một buổi sáng làm việc nghiêm túc, trách nhiệm và nhiều trao đổi học thuật sâu sắc, Hội thảo đã hoàn thành toàn bộ nội dung chương trình đề ra. Các tham luận và ý kiến thảo luận đã cho thấy năng lực số không còn là năng lực bổ trợ, mà đang trở thành năng lực nền tảng của giáo dục đại học trong kỷ nguyên chuyển đổi số và trí tuệ nhân tạo.
+Theo PGS.TS. Đỗ Văn Hùng, Hội thảo đã đạt được nhiều điểm thống nhất quan trọng. Thứ nhất, phát triển năng lực số và năng lực AI cho người học cần được xem là chiến lược dài hạn của các cơ sở giáo dục đại học, gắn với đổi mới mô hình đào tạo, phương pháp dạy học và quản trị đại học. Thứ hai, đánh giá và đo lường năng lực số cần dựa trên các khung năng lực có tính chuẩn hóa, phù hợp với bối cảnh Việt Nam nhưng vẫn tiệm cận các chuẩn mực quốc tế. Thứ ba, trong bối cảnh AI phát triển mạnh mẽ, yêu cầu đặt ra không chỉ là biết sử dụng công nghệ, mà còn là tư duy phản biện, đạo đức số, trách nhiệm học thuật, khả năng thích ứng và học tập suốt đời.
+Hội thảo cũng ghi nhận nhiều đề xuất có giá trị liên quan đến tích hợp năng lực AI vào chương trình đào tạo, xây dựng hệ thống đánh giá năng lực số cho sinh viên, phát triển học liệu số và môi trường học tập số, nâng cao năng lực số cho đội ngũ giảng viên, đồng thời xây dựng hệ sinh thái giáo dục đại học số lấy người học làm trung tâm. Những trao đổi này sẽ là nguồn tư liệu học thuật và thực tiễn quan trọng để tiếp tục hoàn thiện các nghiên cứu, kiến nghị chính sách và thúc đẩy hợp tác trong thời gian tới.
 
-Hội thảo xem AI không chỉ là công cụ hỗ trợ bài giảng. Việc sử dụng AI còn liên quan đến:
-
-- Bảo vệ dữ liệu cá nhân.
-- Minh bạch và khả năng giải thích của thuật toán.
-- Quyền tác giả và sở hữu trí tuệ.
-- Liêm chính học thuật.
-- Trách nhiệm giải trình khi AI tạo ra kết quả sai hoặc gây ảnh hưởng.
-- Quyền quyết định cuối cùng của con người.
-
-Các mô hình quản trị AI trên thế giới có thể khác nhau, nhưng điểm chung là công nghệ cần phục vụ con người và không thay thế hoàn toàn trách nhiệm chuyên môn.
-
-## Lãnh đạo số và năng lực thực thi
-
-Chuyển đổi số không thể thành công nếu chỉ mua công nghệ. Nhà trường cần đội ngũ lãnh đạo và quản lý có khả năng chuyển chiến lược thành hoạt động cụ thể. Trưởng khoa, trưởng bộ môn, đơn vị chức năng và giảng viên đều là mắt xích của hệ sinh thái số.
-
-Phát triển năng lực số phải được coi là quá trình dài hạn, có:
-
-1. Khung năng lực rõ ràng.
-2. Chương trình đào tạo và bồi dưỡng.
-3. Cơ chế đánh giá định kỳ.
-4. Dữ liệu theo dõi tiến bộ.
-5. Lộ trình cải tiến liên tục.
-
-## Thang đo năng lực số cho sinh viên
-
-Một nghiên cứu được trình bày tại hội thảo đề xuất thang đo gồm **bảy thành phần**:
-
-1. Vận hành thiết bị và phần mềm.
-2. Thông tin và dữ liệu.
-3. Giao tiếp và hợp tác số.
-4. An toàn và an sinh số.
-5. Sáng tạo nội dung số.
-6. Học tập và phát triển kỹ năng số.
-7. Ứng dụng năng lực số cho nghề nghiệp.
-
-Thang đo gồm 31 biến quan sát, được thiết kế theo hướng phản ánh hành vi thực tế và sử dụng ngôn ngữ dễ hiểu đối với sinh viên. Kết quả kiểm định ban đầu cho thấy công cụ có thể hỗ trợ xác định điểm mạnh, khoảng trống và nhu cầu bồi dưỡng.
-
-## Đề xuất áp dụng thang đo trong nhà trường
-
-Thang đo không chỉ dùng cho khảo sát mà có thể trở thành công cụ quản trị. Một chu trình đánh giá được đề xuất:
-
-- Đánh giá đầu vào khi sinh viên năm nhất nhập học.
-- Đánh giá định kỳ theo năm học.
-- Đánh giá đầu ra trước khi tốt nghiệp.
-
-Dữ liệu có thể hỗ trợ:
-
-- Xây dựng chuẩn đầu ra.
-- Cá nhân hóa lộ trình học tập.
-- Thiết kế chương trình kỹ năng số.
-- Theo dõi sự tiến bộ theo khóa, khoa hoặc ngành.
-- Phục vụ kiểm định chất lượng.
-- Hoạch định chính sách giáo dục số.
-
-Nhà trường có thể xây dựng bộ phận chuyên trách và dashboard theo dõi điểm trung bình, tỷ lệ đạt chuẩn, xu hướng tiến bộ và chênh lệch giữa các nhóm người học.
-
-## Năng lực AI cho người học
-
-Phiên thảo luận đặt ra các câu hỏi trọng tâm:
-
-- Sinh viên cần những năng lực AI nào?
-- Năng lực AI nên tích hợp vào chương trình chung hay từng ngành?
-- Nên đánh giá khả năng sử dụng AI bằng sản phẩm, bài thi hay hồ sơ năng lực?
-- Làm thế nào để cân bằng giữa đổi mới và liêm chính học thuật?
-- Công nghệ có thể hỗ trợ cá nhân hóa học tập đến mức nào?
-
-Các ý kiến thống nhất rằng người học cần biết sử dụng công cụ, nhưng cũng phải có tư duy phản biện, hiểu quyền tác giả, biết kiểm chứng và chịu trách nhiệm đối với sản phẩm của mình.
-
-## Đổi mới sáng tạo và giá trị thực tiễn
-
-Chuyển đổi số và đổi mới sáng tạo chỉ có ý nghĩa khi tạo ra giá trị cho người học, nhà trường và xã hội. Công nghệ cần giúp nâng cao chất lượng, giảm thao tác lặp lại, hỗ trợ ra quyết định và mở rộng khả năng tiếp cận giáo dục.
-
-Hội thảo cũng đề cập nhu cầu hoàn thiện hành lang pháp lý về AI, tổ chức thêm các diễn đàn học thuật và kết nối nghiên cứu với quá trình xây dựng chính sách.
-
-## Kết luận chính
-
-Các điểm thống nhất nổi bật gồm:
-
-1. Năng lực số và năng lực AI phải trở thành chiến lược dài hạn của cơ sở giáo dục đại học.
-2. Việc đánh giá cần dựa trên khung chuẩn hóa, phù hợp bối cảnh Việt Nam và có khả năng tham chiếu quốc tế.
-3. Năng lực công nghệ phải đi cùng tư duy phản biện, đạo đức số, trách nhiệm học thuật và học tập suốt đời.
-4. Cần tích hợp năng lực số vào chương trình đào tạo, phát triển học liệu và môi trường học số.
-5. Cần bồi dưỡng giảng viên, cán bộ quản lý và xây dựng hệ sinh thái số lấy người học làm trung tâm.
-
-## Câu hỏi hệ thống RAG có thể trả lời
-
-- Năng lực số bao gồm những thành phần nào?
-- Vì sao năng lực số không chỉ là kỹ năng sử dụng phần mềm?
-- Thang đo dành cho sinh viên có bao nhiêu thành phần?
-- Các trường đại học nên đánh giá năng lực số ở những thời điểm nào?
-- AI đặt ra vấn đề gì về pháp lý và liêm chính học thuật?
-- Dashboard năng lực số có thể hỗ trợ quản trị ra sao?
+_PGS.TS. Đỗ Văn Hùng, Trưởng Khoa Quản trị thông tin, phát biểu tổng kết và bế mạc Hội thảo_ Có thể khẳng định, Hội thảo “Năng lực số trong giáo dục đại học: Đánh giá, đo lường và hàm ý chính sách” không chỉ là một sự kiện học thuật trong khuôn khổ SSHWeek 2026, mà còn là diễn đàn kết nối giữa nghiên cứu, quản lý, chính sách và thực tiễn giáo dục đại học. Từ các tham luận và thảo luận tại Hội thảo, một thông điệp được nhấn mạnh xuyên suốt: chuyển đổi số trong giáo dục đại học, suy cho cùng, là chuyển đổi về năng lực con người, văn hóa học thuật và phương thức quản trị. Công nghệ là phương tiện, còn con người vẫn là trung tâm của mọi quá trình đổi mới.
