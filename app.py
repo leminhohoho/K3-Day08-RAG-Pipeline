@@ -55,6 +55,31 @@ with st.sidebar:
     st.divider()
     st.subheader("⚙️ Thiết lập")
     top_k = st.slider("Số chunks retrieval (top_k)", 3, 10, 5)
+    retrieval_mode_label = st.selectbox(
+        "Chế độ retrieval",
+        ("Auto fallback", "Hybrid only", "PageIndex direct"),
+        help=(
+            "Auto dùng Hybrid và chỉ fallback sang PageIndex khi dense confidence thấp. "
+            "PageIndex direct phục vụ demo vectorless route minh bạch."
+        ),
+    )
+    retrieval_mode = {
+        "Auto fallback": "auto",
+        "Hybrid only": "hybrid",
+        "PageIndex direct": "pageindex",
+    }[retrieval_mode_label]
+
+    from src.task8_pageindex_vectorless import get_pageindex_status
+
+    pageindex_status = get_pageindex_status()
+    if pageindex_status["available"]:
+        st.success(
+            f"PageIndex sẵn sàng: {pageindex_status['ready_documents']} tài liệu"
+        )
+    elif pageindex_status["configured"]:
+        st.warning("PageIndex đã có key nhưng chưa có tài liệu retrieval-ready")
+    else:
+        st.info("PageIndex chưa được cấu hình; Auto vẫn dùng Hybrid an toàn")
 
     st.divider()
     st.caption("**Kiến trúc hệ thống:**")
@@ -86,9 +111,18 @@ for msg in st.session_state.messages:
                     meta = src.get("metadata", {})
                     source_name = meta.get("source", "Unknown")
                     doc_type = meta.get("type", "unknown")
-                    score = src.get("score", 0)
                     display_score = src.get("confidence_score") or src.get("score", 0)
-                    st.markdown(f"**[{i}] {source_name}** `{doc_type}` | similarity: `{display_score:.4f}`")
+                    score_label = (
+                        "rank proxy"
+                        if src.get("score_type") == "rank_proxy"
+                        else "similarity"
+                    )
+                    page = meta.get("page_index")
+                    page_label = f" | trang: `{page}`" if page is not None else ""
+                    st.markdown(
+                        f"**[{i}] {source_name}** `{doc_type}` | "
+                        f"{score_label}: `{display_score:.4f}`{page_label}"
+                    )
                     st.text(src.get("content", ""))
                     st.divider()
 
@@ -112,16 +146,12 @@ if query:
     with st.chat_message("assistant"):
         with st.spinner("Đang tìm kiếm tài liệu và tổng hợp câu trả lời..."):
             try:
-                # TODO (Học viên): Tích hợp hàm sinh câu trả lời từ Task 10
-                # Ví dụ:
-                # from src.task10_generation import generate_with_citation
-                # response = generate_with_citation(query, top_k=top_k)
-                # answer = response["answer"]
-                # sources = response.get("sources", [])
-
-                # Tạm thời mockup để test UI:
                 from src.task10_generation import generate_with_citation
-                response = generate_with_citation(query, top_k=top_k)
+                response = generate_with_citation(
+                    query,
+                    top_k=top_k,
+                    retrieval_mode=retrieval_mode,
+                )
                 answer = response.get("answer", "Chưa thể trả lời.")
                 sources = response.get("sources", [])
 
@@ -140,9 +170,18 @@ if query:
                         meta = src.get("metadata", {})
                         source_name = meta.get("source", "Unknown")
                         doc_type = meta.get("type", "unknown")
-                        score = src.get("score", 0)
                         display_score = src.get("confidence_score") or src.get("score", 0)
-                        st.markdown(f"**[{i}] {source_name}** `{doc_type}` | similarity: `{display_score:.4f}`")
+                        score_label = (
+                            "rank proxy"
+                            if src.get("score_type") == "rank_proxy"
+                            else "similarity"
+                        )
+                        page = meta.get("page_index")
+                        page_label = f" | trang: `{page}`" if page is not None else ""
+                        st.markdown(
+                            f"**[{i}] {source_name}** `{doc_type}` | "
+                            f"{score_label}: `{display_score:.4f}`{page_label}"
+                        )
                         st.text(src.get("content", ""))
                         st.divider()
 

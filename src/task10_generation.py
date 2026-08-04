@@ -102,8 +102,15 @@ def format_context(chunks: list[dict]) -> str:
         metadata = chunk.get("metadata") or {}
         source = metadata.get("source", f"Source {i}")
         doc_type = metadata.get("type", "unknown")
+        title = metadata.get("title") or source
+        section = metadata.get("section") or title
+        page = metadata.get("page_index")
+        url = metadata.get("url") or "N/A"
+        page_label = f" | Page: {page}" if page is not None else ""
         context_parts.append(
-            f"[Document {i} | Source: {source} | Type: {doc_type}]\n{chunk['content']}"
+            f"[Document {i} | Source: {source} | Type: {doc_type} | "
+            f"Title: {title} | Section: {section}{page_label} | URL: {url}]\n"
+            f"{chunk['content']}"
         )
     return "\n---\n".join(context_parts)
 
@@ -113,7 +120,11 @@ def format_context(chunks: list[dict]) -> str:
 # =============================================================================
 
 
-def generate_with_citation(query: str, top_k: int = TOP_K) -> dict:
+def generate_with_citation(
+    query: str,
+    top_k: int = TOP_K,
+    retrieval_mode: str = "auto",
+) -> dict:
     """
     End-to-end RAG generation có citation.
 
@@ -137,7 +148,7 @@ def generate_with_citation(query: str, top_k: int = TOP_K) -> dict:
         }
     """
     # Step 1: Retrieve
-    chunks = retrieve(query, top_k=top_k)
+    chunks = retrieve(query, top_k=top_k, retrieval_mode=retrieval_mode)
 
     if not chunks:
         return {

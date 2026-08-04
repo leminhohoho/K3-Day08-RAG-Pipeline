@@ -49,6 +49,7 @@ def retrieve(
     top_k: int = DEFAULT_TOP_K,
     score_threshold: float = SCORE_THRESHOLD,
     use_reranking: bool = True,
+    retrieval_mode: str = "auto",
 ) -> list[dict]:
     """
     Retrieval pipeline hoàn chỉnh với hybrid search + fallback.
@@ -82,16 +83,24 @@ def retrieve(
         }
     """
     # Step 1: Parallel retrieval (top_k * 2 để có candidate pool cho rerank)
+    retrieval_mode = retrieval_mode.strip().casefold()
+    if retrieval_mode not in {"auto", "hybrid", "pageindex"}:
+        raise ValueError("retrieval_mode must be 'auto', 'hybrid', or 'pageindex'")
+    if not str(query).strip() or top_k <= 0:
+        return []
+    if retrieval_mode == "pageindex":
+        return pageindex_search(query, top_k=top_k)
+
     dense_results = semantic_search(query, top_k=top_k * 2)
     sparse_results = lexical_search(query, top_k=top_k * 2)
 
     # Step 2: RRF Merge
     ranked_lists = [lst for lst in [dense_results, sparse_results] if lst]
     if not ranked_lists:
-        # Try fallback directly
-        fallback = pageindex_search(query, top_k=top_k)
-        if fallback:
-            return fallback
+        if retrieval_mode == "auto":
+            fallback = pageindex_search(query, top_k=top_k)
+            if fallback:
+                return fallback
         return []
 
     merged = rerank_rrf(ranked_lists, top_k=top_k * 2, k=60)
@@ -110,7 +119,7 @@ def retrieve(
 
     # Step 4: Fallback check — DÙNG RAW COSINE, KHÔNG PHẢI RRF
     best_cosine = dense_results[0]["score"] if dense_results else 0.0
-    if best_cosine < score_threshold:
+    if retrieval_mode == "auto" and best_cosine < score_threshold:
         fallback = pageindex_search(query, top_k=top_k)
         if fallback:
             return fallback
