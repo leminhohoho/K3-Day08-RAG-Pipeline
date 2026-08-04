@@ -19,6 +19,7 @@ data/staging/
 *.tmp
 pageindex_doc_ids.json
 pageindex_pdfs/
+group_project/evaluation/runs/
 
 # IDE
 .vscode/
