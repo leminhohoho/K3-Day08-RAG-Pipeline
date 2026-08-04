@@ -144,193 +144,435 @@ PDF — nếu chỉ `pip install markitdown` sẽ báo lỗi `MissingDependencyE
 
 ### Task 4 — Chunking & Indexing
 
-Chọn **một loại chunking strategy** và **một embedding model** để index toàn bộ markdown files vào vector store.
+Sử dụng **fixed-size chunking** (`CHUNK_SIZE=800`, `CHUNK_OVERLAP=100`) và **`BAAI/bge-m3`** (dim=1024) để index toàn bộ markdown files vào ChromaDB.
 
-**Chunking — khuyến khích dùng [langchain-text-splitters](https://python.langchain.com/docs/modules/data_connection/document_transformers/):**
+**Cấu hình (bắt buộc):**
+
+| Constant | Giá trị | Lý do |
+|---|---:|---|
+| `CHUNK_SIZE` | `800` | Đủ ngữ cảnh cho văn bản pháp lý nhưng vẫn giữ retrieval chính xác |
+| `CHUNK_OVERLAP` | `100` | Overlap 12.5% để hạn chế mất ý ở biên chunk |
+| `CHUNKING_METHOD` | `"fixed_size"` | Chia thành các đoạn có độ dài cố định, không giữ cấu trúc heading |
+| `EMBEDDING_MODEL` | `"BAAI/bge-m3"` | Multilingual, phù hợp tiếng Việt và tiếng Anh |
+| `EMBEDDING_DIM` | `1024` | Kích thước output của `BAAI/bge-m3` |
+| `VECTOR_STORE` | `"chromadb"` | Chạy local, persistent, có metadata filtering |
+| `COLLECTION_NAME` | `"university_services_docs"` | Một collection thống nhất cho corpus |
+
+**Chunking — dùng `CharacterTextSplitter` từ [langchain-text-splitters](https://python.langchain.com/docs/modules/data_connection/document_transformers/):**
 ```bash
 pip install langchain-text-splitters
 ```
 
-Các loại splitter phù hợp:
-- `RecursiveCharacterTextSplitter` (mặc định, an toàn)
-- `MarkdownHeaderTextSplitter` (tốt cho file có heading rõ)
-- `SemanticChunker` (nâng cao, dùng embedding để tách)
+```python
+from langchain_text_splitters import CharacterTextSplitter
 
-**Embedding model gợi ý:**
-- `sentence-transformers/all-MiniLM-L6-v2` (nhẹ, nhanh)
-- `BAAI/bge-m3` (multilingual, tốt cho tiếng Việt)
-- OpenAI `text-embedding-3-small` (nếu có API key)
+splitter = CharacterTextSplitter(
+    chunk_size=CHUNK_SIZE,
+    chunk_overlap=CHUNK_OVERLAP,
+    separator="\n\n",
+)
+```
 
-**Vector Store — sử dụng ChromaDB (Vector Store mặc định của bài lab):**
+**Embedding — dùng OpenRouter API (OpenAI-compatible SDK) hoặc SentenceTransformer local:**
+```python
+from openai import OpenAI
+client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
+```
+
+**Vector Store — ChromaDB với cosine distance:**
 ```bash
 pip install chromadb
 ```
-- ChromaDB lưu trữ vector embeddings (`BAAI/bge-m3`), metadata và thông tin phân đoạn local tại thư mục `chroma_db/`
-- Hỗ trợ truy vấn tìm kiếm tương đồng Cosine (Cosine Similarity Search) phục vụ Dense Retrieval ở Task 5
+
+```python
+import chromadb
+client = chromadb.PersistentClient(path="chroma_db/")
+collection = client.create_collection(
+    name=COLLECTION_NAME,
+    metadata={"hnsw:space": "cosine"},
+)
+```
+
+**Pipeline chính (trong `src/task4_chunking_indexing.py`):**
+
+1. `load_documents()` — đọc `*.md` từ `data/standardized/`, parse metadata header, trả body
+2. `chunk_documents(documents)` — cắt fixed-size 800/100, gắn `chunk_id`, `section`, `chunk_index`
+3. `embed_chunks(chunks)` — encode từng chunk content bằng `BAAI/bge-m3`
+4. `index_to_vectorstore(chunks)` — upsert vector + metadata vào ChromaDB
+
+**Helper export (dùng chung với Task 5/6):**
+
+```python
+def get_embedding_model(): ...      # lazy-load, cached instance
+def get_collection(): ...           # mở persistent collection
+def prepare_query_for_embedding(query: str) -> str: ...
+```
 
 **Yêu cầu:**
-- Ghi rõ trong code: dùng chunking nào, chunk_size bao nhiêu, overlap bao nhiêu, vì sao
-- Ghi rõ embedding model nào, dimension bao nhiêu
-- Index thành công toàn bộ documents
+- Chunk không vượt quá `CHUNK_SIZE` (800) ký tự
+- `chunk_id` format: `{document_id}_chunk_{chunk_index}`
+- Metadata giữ `source`, `title`, `url`, `type`, `section`, `language`, `chunk_id`, `document_id`
+- Index persistent, rebuild idempotent (xóa collection cũ trước khi tạo mới)
+- Semantic search (Task 5) có thể query cùng collection ngay sau khi index
 
 ---
 
-### Task 5 — Semantic Search Module
+### Task 5 — Semantic Search & Query Expansion
 
-Viết module thực hiện **semantic search** (dense retrieval) trên vector store.
+Module thực hiện **dense semantic retrieval** trên ChromaDB từ Task 4.
 
-**Yêu cầu:**
+**API chính (trong `src/task5_semantic_search.py`):**
+
 ```python
 def semantic_search(query: str, top_k: int = 10) -> list[dict]:
     """
     Returns:
         List of {'content': str, 'score': float, 'metadata': dict}
+        Score: cosine similarity [0, 1], sorted descending
     """
     ...
-```
 
-- Input: query string + top_k
-- Output: danh sách chunks có score, sorted descending
-- Phải hoạt động được với embedding model đã chọn ở Task 4
-
----
-
-### Task 6 — Lexical Search Module
-
-Viết module thực hiện **lexical search**. Mặc định sử dụng **BM25**.
-
-```bash
-pip install rank-bm25
-```
-
-**Code mẫu BM25:**
-```python
-from rank_bm25 import BM25Okapi
-
-# Tokenize corpus
-tokenized_corpus = [doc.split() for doc in corpus]
-bm25 = BM25Okapi(tokenized_corpus)
-
-# Search
-tokenized_query = query.split()
-scores = bm25.get_scores(tokenized_query)
+def semantic_search_expanded(
+    query: str,
+    top_k: int = 10,
+    max_variants: int = 3,
+    history: list[dict] | None = None,
+) -> list[dict]:
+    """Search original + expanded queries, fuse by RRF, keep best raw cosine."""
 ```
 
 **Yêu cầu:**
+- Tái sử dụng `get_embedding_model()`, `get_collection()`, `prepare_query_for_embedding()` từ Task 4
+- Chuẩn hóa query: NFC, trim, collapse whitespace, giữ nguyên dấu tiếng Việt
+- Query ChromaDB với cosine distance → `1.0 - distance`, clamp `[0, 1]`
+- Deduplicate bằng `chunk_id`
+- Cache embedding model (1 instance/process), Chroma client, query embedding (LRU)
+- Kết quả có `raw_scores.dense` để Task 9 calibrate fallback threshold
+
+**Query Expansion (Bonus, 5 điểm) — trong `src/task5_query_expansion.py`:**
+
 ```python
+def expand_query(
+    query: str,
+    history: list[dict] | None = None,
+    max_variants: int = 3,
+) -> list[str]:
+    """Deterministic bilingual expansion using domain glossary."""
+```
+
+- Deterministic, không cần API key
+- Domain glossary: `học phí ↔ tuition fee`, `học bổng ↔ scholarship`, ...
+- Original query luôn là phần tử đầu tiên
+- Fusion các variants bằng RRF trên `chunk_id`
+- Giữ `raw_scores.dense` (best raw cosine) cho Task 9
+- Optional LLM expansion với fallback về deterministic
+
+---
+
+### Task 6 — Lexical Search (BM25 & TF-IDF)
+
+Module thực hiện **lexical retrieval** trên cùng tập chunk với Task 4/5. Mặc định dùng **BM25**, bonus với **TF-IDF char n-gram**.
+
+**API chính (trong `src/task6_lexical_search.py`):**
+
+```python
+def build_bm25_index(corpus: list[dict]):
+    """Build BM25 index (k1=1.5, b=0.75) from corpus chunks."""
+
 def lexical_search(query: str, top_k: int = 10) -> list[dict]:
-    """
-    Returns:
-        List of {'content': str, 'score': float, 'metadata': dict}
-    """
-    ...
+    """BM25 search, returns chunks with positive BM25 score, sorted descending."""
+
+def build_tfidf_index(corpus: list[dict]):
+    """Build TF-IDF index with char_wb n-gram (3,5)."""
+
+def tfidf_search(query: str, top_k: int = 10) -> list[dict]:
+    """TF-IDF cosine search, scores in [0, 1]."""
+
+def lexical_search_configured(
+    query: str,
+    top_k: int = 10,
+    method: str = "bm25",  # "bm25" | "tfidf" | "bm25_tfidf"
+) -> list[dict]:
+    """Configured lexical search with method selection."""
 ```
-
-**Bonus:** Nếu dùng phương pháp khác (TF-IDF, Elasticsearch, Weaviate BM25 built-in), hãy giải thích cơ chế hoạt động trong buổi demo → **+5 điểm bonus**.
-
----
-
-### Task 7 — Reranking Module
-
-Viết module **reranking** để chấm lại độ liên quan của kết quả retrieval.
-
-**Lựa chọn (chọn 1):**
-
-| Phương pháp | Thư viện / Model | Đặc điểm |
-|-------------|-----------------|-----------|
-| Cross-encoder reranker | `jinaai/jina-reranker-v2-base-multilingual` | Multilingual, tốt cho tiếng Việt |
-| Cross-encoder reranker | `Qwen/Qwen3-Reranker-0.6B` | Nhẹ, hiệu quả |
-| MMR (Maximal Marginal Relevance) | Tự implement | Giảm trùng lặp, tăng diversity |
-| RRF (Reciprocal Rank Fusion) | Tự implement | Gộp kết quả từ nhiều ranker |
-
-**Code mẫu (Jina Reranker via API):**
-```python
-import requests
-
-def rerank(query: str, documents: list[str], top_k: int = 5) -> list[dict]:
-    response = requests.post(
-        "https://api.jina.ai/v1/rerank",
-        headers={"Authorization": "Bearer YOUR_API_KEY"},
-        json={
-            "model": "jina-reranker-v2-base-multilingual",
-            "query": query,
-            "documents": documents,
-            "top_n": top_k
-        }
-    )
-    return response.json()["results"]
-```
-
-**Yêu cầu:**
-```python
-def rerank(query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
-    """
-    Re-score and re-order candidates based on relevance to query.
-    """
-    ...
-```
-
----
-
-### Task 8 — PageIndex Vectorless RAG
-
-Đăng ký tài khoản tại [https://pageindex.ai/](https://pageindex.ai/), sau đó sử dụng [PageIndex SDK](https://github.com/VectifyAI/PageIndex) để tạo một **vectorless RAG pipeline**.
 
 **Cài đặt:**
 ```bash
-pip install pageindex
+pip install rank-bm25 scikit-learn
 ```
 
-**Tham khảo:** [https://github.com/VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex)
+**Text Normalization & Tokenization:**
 
-**Yêu cầu:**
-- Upload tài liệu lên PageIndex
-- Viết function query PageIndex và trả về kết quả
 ```python
-def pageindex_search(query: str, top_k: int = 5) -> list[dict]:
-    """
-    Vectorless retrieval using PageIndex.
-    Fallback khi hybrid search không trả về kết quả phù hợp.
-    """
-    ...
+def normalize_lexical_text(text: str) -> str:
+    """NFC, lowercase, collapse whitespace, keep diacritics."""
+
+def tokenize_lexical(text: str) -> list[str]:
+    """Unicode-aware regex: \\w+(?:[-./]\\w+)*"""
 ```
+
+**BM25 (Core):**
+- `BM25Okapi(k1=1.5, b=0.75)`
+- Corpus load từ ChromaDB collection hoặc fallback `load_documents()` + `chunk_documents()` từ Task 4
+- Lazy index manager, rebuild khi corpus hash đổi
+- Tie-break: score → exact match count → doc_id → chunk_index
+
+**TF-IDF (Bonus, 5 điểm):**
+- `TfidfVectorizer(analyzer="char_wb", ngram_range=(3,5), sublinear_tf=True)`
+- Bền với word segmentation tiếng Việt và typo nhỏ
+- Score cosine `[0, 1]`, không cộng trực tiếp với BM25
+- Fusion BM25+TF-IDF qua RRF, không cộng raw score khác thang đo
 
 ---
 
-### Task 9 — Retrieval Pipeline Hoàn Chỉnh
+### Task 7 — Reranking & Weighted Fusion
 
-Kết hợp tất cả modules thành một **retrieval pipeline** thống nhất với logic fallback:
+Module hợp nhất và sắp hạng lại candidates từ dense (Task 5) và lexical (Task 6) retrieval.
+
+**API chính (trong `src/task7_reranking.py`):**
+
+```python
+def rerank_rrf(
+    ranked_lists: list[list[dict]],
+    top_k: int = 5,
+    k: int = 60,
+    weights: list[float] | None = None,
+) -> list[dict]:
+    """Weighted RRF: RRF(d) = Σ weightᵣ / (k + rankᵣ(d))"""
+
+def rerank_cross_encoder(
+    query: str,
+    candidates: list[dict],
+    top_k: int = 5,
+) -> list[dict]:
+    """Cross-encoder reranking (optional, requires API/model)."""
+
+def rerank_mmr(
+    query_embedding: list[float],
+    candidates: list[dict],
+    top_k: int = 5,
+    lambda_param: float = 0.7,
+) -> list[dict]:
+    """MMR diversity reranking (optional)."""
+
+def rerank(
+    query: str,
+    candidates: list[dict],
+    top_k: int = 5,
+    method: str = "rrf",  # "rrf" | "cross_encoder" | "mmr" | "none"
+) -> list[dict]:
+    """Unified reranking interface."""
+```
+
+**Weighted RRF — Core (bắt buộc):**
+
+| Ranker | Weight |
+|--------|-------:|
+| Dense (cosine) | `1.0` |
+| BM25 | `0.9` |
+| TF-IDF | `0.7` |
+
+- Công thức: `RRF(d) = Σ weightᵣ / (k + rankᵣ(d))`
+- Deduplicate bằng `chunk_id` (fallback: content hash + source)
+- Merge `raw_scores` và `provenance` từ tất cả occurrences
+- `score_type="rrf"`, `confidence_score` = max raw dense cosine
+- Không mutate input objects
+
+**Cross-encoder (Optional):**
+- Adapter pattern, hỗ trợ Jina/Qwen/local model
+- Timeout 15-30s, retry 1x cho 429/5xx, fallback về RRF order
+- Cache query + candidate hashes trong process
+
+**MMR (Optional):**
+- `MMR(d) = λ × relevance(query,d) - (1-λ) × max similarity(d, selected)`
+- Chỉ dùng khi top candidates bị trùng content
+
+**Config Profiles:**
+
+| Profile | Pipeline |
+|---|---|
+| `fusion_only` | Dense + BM25 + TF-IDF → Weighted RRF → top_k (default) |
+| `quality_rerank` | Weighted RRF top 15 → cross-encoder → top_k |
+| `quality_diverse` | Weighted RRF top 20 → cross-encoder top 10 → MMR → top_k |
+
+---
+
+### Task 8 — PageIndex Vectorless RAG & Resilient Fallback
+
+Tích hợp [PageIndex](https://pageindex.ai/) như một **vectorless retrieval backend** — fallback khi hybrid search confidence thấp.
+
+**API chính (trong `src/task8_pageindex_vectorless.py`):**
+
+```python
+def upload_documents(
+    force: bool = False,
+    wait_until_ready: bool = True,
+) -> dict[str, str]:
+    """Upload changed documents to PageIndex, return document_id → pageindex_doc_id."""
+
+def pageindex_search(query: str, top_k: int = 5) -> list[dict]:
+    """Vectorless retrieval via PageIndex. Returns [] on API error (never crashes)."""
+
+def get_pageindex_status() -> dict:
+    """Sanitized availability/readiness diagnostics."""
+```
+
+**Cài đặt:**
+```bash
+pip install "pageindex>=0.2.8"
+```
+
+**Document Registry (`pageindex_doc_ids.json`):**
+- Lưu mapping `document_id` → `pageindex_doc_id`
+- Track checksum, status, `retrieval_ready` flag
+- Atomic writes (temp file → replace)
+- Skip upload nếu checksum không đổi và ready
+
+**Upload Flow:**
+1. Ưu tiên upload original PDF từ `data/landing/legal/`
+2. Markdown/news được convert sang Unicode PDF
+3. Poll processing status với deadline (600s) + exponential backoff
+4. Không upload trong query path
+
+**Query Flow:**
+1. Shortlist ready documents (max 3) via file-level metadata
+2. Submit retrieval jobs, poll với shared deadline
+3. Parse response: flatten `retrieved_nodes` → `relevant_contents`
+4. Gán `score_type="rank_proxy"`, `score = 1.0 / global_rank`
+
+**Output Contract:**
+
+```python
+{
+    "content": "...",
+    "score": 1.0,           # rank proxy, KHÔNG phải cosine confidence
+    "score_type": "rank_proxy",
+    "confidence_score": None,
+    "source": "pageindex",
+    "metadata": {
+        "chunk_id": "pageindex:<doc_id>:<node_id>:<hash>",
+        "document_id": "...",
+        "source": "NhanVan_HocPhi.pdf",
+        "title": "...",
+        "section": "...",
+        "node_id": "0005",
+        "page_index": 10,
+    }
+}
+```
+
+**Cache & Resilience:**
+- In-memory TTL cache cho query results (3600s)
+- Circuit breaker: sau N lỗi liên tiếp, tạm trả `[]`
+- Cache hit → `metadata.cache_hit=true`
+- Không giả kết quả dưới `source="pageindex"` khi API unavailable
+
+**Local Structural Search (resilience extension):**
+
+```python
+def local_structural_search(query: str, top_k: int = 5) -> list[dict]:
+    """Local fallback using Markdown heading tree + TF-IDF."""
+```
+
+- `source="hybrid"`, `retrieval_method="local_structural"`
+- Không gắn nhãn `pageindex` cho kết quả local
+
+---
+
+### Task 9 — Retrieval Pipeline Hoàn Chỉnh (Hybrid + Fallback)
+
+Tầng **orchestration** kết hợp semantic search (Task 5), lexical search (Task 6), RRF fusion (Task 7) và PageIndex fallback (Task 8) vào một `retrieve()` thống nhất.
+
+**Cấu hình:**
+
+| Constant | Default | Mô tả |
+|---|---|---|
+| `SCORE_THRESHOLD` | `0.3` | Raw cosine threshold để trigger fallback (cần calibrate) |
+| `DEFAULT_TOP_K` | `5` | Số lượng kết quả mặc định |
+| `RERANK_METHOD` | `"none"` | Post-fusion reranking method (tránh double-RRF) |
+
+**API chính (trong `src/task9_retrieval_pipeline.py`):**
+
+```python
+def retrieve(
+    query: str,
+    top_k: int = DEFAULT_TOP_K,
+    score_threshold: float = SCORE_THRESHOLD,
+    use_reranking: bool = True,
+) -> list[dict]:
+    """
+    Full retrieval pipeline: hybrid search + RRF fusion + optional reranking + fallback.
+    """
+```
+
+**Pipeline Flow:**
 
 ```
 Query
   │
-  ├─→ Semantic Search (Task 5)  ──┐
-  │                                ├─→ Merge + Rerank (Task 7) → Results
-  ├─→ Lexical Search (Task 6)  ──┘
-  │
-  └─→ Nếu hybrid search không có kết quả đủ tốt (score < threshold)
-        └─→ Fallback: PageIndex Vectorless (Task 8)
+  Step 1 — Parallel retrieval (top_k × 2 candidate pool)
+  ├─→ semantic_search(query, top_k=top_k*2)  ──┐   (Task 5)
+  └─→ lexical_search(query, top_k=top_k*2)  ───┤   (Task 6)
+  │                                              │
+  Step 2 — RRF Merge                            │
+  └─→ rerank_rrf([dense, sparse], top_k=top_k*2)◄┘   (Task 7)
+       │  mỗi result: source="hybrid"
+       │
+  Step 3 — Optional Reranking
+       if use_reranking and RERANK_METHOD != "none":
+  └─→ rerank(query, merged, top_k=top_k, method=RERANK_METHOD)
+       else: final = merged[:top_k]
+       │
+  Step 4 — Fallback Check
+       best_cosine = dense_results[0]["score"] (raw cosine, NOT RRF)
+       if best_cosine < score_threshold:
+  └─→ pageindex_search(query, top_k=top_k)     (Task 8)
+       if fallback non-empty → return fallback
+       else → return []
 ```
 
-**Yêu cầu:**
+> ⚠️ **Bẫy thường gặp (quan trọng):** RRF score (`≈1/(k+1) ≈ 0.016`) **chỉ phụ thuộc thứ hạng**,
+> không phản ánh độ liên quan thực sự. Dùng RRF score làm threshold khiến fallback **không bao giờ
+> trigger**. Luôn dùng **raw cosine similarity từ `semantic_search`** (thang `[0,1]`) để so `score_threshold`.
+
+**Output Contract:**
+
 ```python
-def retrieve(query: str, top_k: int = 5, score_threshold: float = 0.3) -> list[dict]:
-    """
-    1. Chạy semantic_search + lexical_search
-    2. Merge kết quả (RRF hoặc weighted fusion)
-    3. Rerank
-    4. Nếu top result score < threshold → fallback PageIndex
-    5. Return top_k results
-    """
-    ...
+# Hybrid result
+{
+    "content": "...",
+    "score": 0.0321,             # RRF score (rank-based, sắp hạng)
+    "score_type": "rrf",
+    "confidence_score": 0.82,    # raw cosine similarity (dùng cho threshold)
+    "source": "hybrid",
+    "metadata": { "chunk_id": "...", "document_id": "...", ... },
+    "raw_scores": { "dense": 0.82, "bm25": 6.78, "rrf": 0.0321 }
+}
+
+# PageIndex fallback result
+{
+    "content": "...",
+    "score": 0.5,                # rank proxy
+    "score_type": "rank_proxy",
+    "confidence_score": None,
+    "source": "pageindex",
+    "metadata": { "chunk_id": "pageindex:...", ... },
+    "raw_scores": { "pageindex_rank_proxy": 0.5 }
+}
 ```
 
-> ⚠️ **Bẫy thường gặp:** nếu dùng RRF để merge (`RRF(d) = Σ 1/(k+rank)`, k=60), điểm số kết quả
-> sau khi fuse **chỉ phụ thuộc thứ hạng**, không phản ánh độ liên quan thực sự — top-1 luôn
-> xấp xỉ `1/(k+1) ≈ 0.016` dù nội dung có liên quan hay không. Nếu so `score_threshold` với
-> điểm RRF đã fuse, fallback gần như **không bao giờ trigger** được (kể cả với query hoàn toàn
-> lạc đề). Hãy so `score_threshold` với **điểm cosine similarity gốc** từ `semantic_search`
-> (Task 5, thang đo `[0,1]` có ý nghĩa) — tách riêng khỏi điểm dùng để sắp xếp kết quả cuối cùng.
+**Calibrate `SCORE_THRESHOLD`:**
+
+```bash
+python -c "
+from src.task5_semantic_search import semantic_search
+for q in ['tuition fee', 'scholarship', 'xyzabc123']:
+    r = semantic_search(q, top_k=1)
+    print(f'{q}: best cosine = {r[0][\"score\"]:.3f}' if r else f'{q}: no results')
+"
+```
+
+Chọn threshold nằm giữa cluster in-domain (cao) và OOD (thấp).
 
 
 
@@ -338,44 +580,90 @@ def retrieve(query: str, top_k: int = 5, score_threshold: float = 0.3) -> list[d
 
 ### Task 10 — Generation Có Citation
 
-Sắp xếp lại context chunks sau reranking để **tránh lost in the middle**, inject vào prompt, và yêu cầu LLM trả lời có **citation**.
+Tầng **generation cuối cùng**: retrieve → reorder (tránh lost in the middle) → format context → LLM → answer có citation.
 
-**Document Reordering (tránh lost in the middle):**
+**Cấu hình:**
+
+| Constant | Default | Lý do |
+|---|---:|---|
+| `TOP_K` | `5` | Đủ evidence mà không overflow context window |
+| `TOP_P` | `0.9` | Cân bằng diversity và determinism |
+| `TEMPERATURE` | `0.3` | Thấp → giảm hallucination, phù hợp factual RAG |
+| `LLM_MODEL` | `"openai/gpt-4o-mini"` | OpenRouter model (hỗ trợ `:free` suffix) |
+
+**API chính (trong `src/task10_generation.py`):**
+
 ```python
 def reorder_for_llm(chunks: list[dict]) -> list[dict]:
     """
-    Sắp xếp chunks theo pattern: quan trọng nhất ở đầu và cuối,
-    ít quan trọng hơn ở giữa.
-    Ví dụ: [1, 3, 5, 4, 2] thay vì [1, 2, 3, 4, 5]
+    Reorder: front + back[::-1]
+    Input:  [1, 2, 3, 4, 5]  → Output: [1, 3, 5, 4, 2]
+    Best chunk first, worst in middle, second-best last.
     """
-    ...
+
+def format_context(chunks: list[dict]) -> str:
+    """
+    Format: [Document {i} | Source: {source} | Type: {type}]
+    Separator: \n---\n
+    """
+
+def generate_with_citation(query: str, top_k: int = TOP_K) -> dict:
+    """
+    End-to-end: retrieve → reorder → format → LLM → answer
+    Returns: {"answer": str, "sources": list, "retrieval_source": str}
+    """
 ```
 
-**Prompt template:**
-```python
-SYSTEM_PROMPT = """Answer the following question comprehensively.
-For every statement of fact or claim, immediately insert a citation
-in brackets linking to the specific source
-(e.g., [Author/Platform Name, Year]).
-If the information is not explicitly stated in the provided context
-or knowledge base, state 'I cannot verify this information'
-rather than guessing."""
+**Pipeline:**
 
-def generate_with_citation(query: str, context_chunks: list[dict]) -> str:
-    """
-    1. Reorder chunks để tránh lost in the middle
-    2. Format context với source metadata
-    3. Inject vào prompt với SYSTEM_PROMPT
-    4. Gọi LLM (OpenAI, Gemini, hoặc local model)
-    5. Return answer có citation
-    """
-    ...
+```
+1. Retrieve chunks từ Task 9: chunks = retrieve(query, top_k=TOP_K)
+   Nếu không có chunks → trả no-answer ngay
+
+2. Reorder: reordered = reorder_for_llm(chunks)
+   front = chunks[::2]      # indices 0, 2, 4, ...
+   back  = chunks[1::2]     # indices 1, 3, ...
+   result = front + back[::-1]
+
+3. Format: context = format_context(reordered)
+   [Document 1 | Source: tuition-policy.md | Type: legal]
+   Nội dung chunk...
+   ---
+   [Document 2 | Source: scholarship-news.md | Type: news]
+   ...
+
+4. Build prompt:
+   system = SYSTEM_PROMPT (tiếng Việt, citation required, no hallucination)
+   user = "Context:\n{context}\n\n---\n\nQuestion: {query}"
+
+5. Gọi OpenRouter (OpenAI-compatible SDK):
+   client.chat.completions.create(
+       model=LLM_MODEL,
+       messages=[{"role": "system", "content": SYSTEM_PROMPT},
+                 {"role": "user", "content": user_message}],
+       temperature=TEMPERATURE,
+       top_p=TOP_P,
+   )
+```
+
+**System Prompt (tiếng Việt, yêu cầu citation):**
+
+```
+Bạn là trợ lý trả lời câu hỏi về dịch vụ và chính sách đại học
+(học phí, học bổng, ký túc xá, thư viện, đăng ký học phần).
+
+Quy tắc bắt buộc:
+1. Chỉ sử dụng thông tin từ context được cung cấp — KHÔNG bịa đặt
+2. Mỗi khẳng định phải có trích dẫn ngay sau, ví dụ: [Tuition Fees, 2026]
+3. Nếu context không đủ thông tin → trả lời: "Tôi không thể xác minh thông tin này từ nguồn hiện có"
+4. Trả lời bằng tiếng Việt, có cấu trúc rõ ràng theo đoạn văn
+5. Không suy luận hay mở rộng ngoài những gì được nêu trong context
 ```
 
 **Yêu cầu:**
-- Chọn top_k và top_p phù hợp (giải thích lý do trong code comment)
-- Output phải có citation dạng `[Nguồn, Năm]`
-- Nếu không đủ evidence → trả về "I cannot verify this information"
+- Output phải có citation dạng `[Nguồn, Năm]` hoặc `[Document N, Section]`
+- Nếu không đủ evidence → trả về "Tôi không thể xác minh thông tin này từ nguồn hiện có"
+- `reorder_for_llm()`: giữ nguyên length, first element không đổi, không duplicate/missing
 
 ---
 
@@ -530,9 +818,9 @@ run_dashboard()
 
 #### Deliverable Evaluation
 
-- [ ] File `group_project/evaluation/golden_dataset.json` — 15+ cặp Q&A
-- [ ] File `group_project/evaluation/eval_pipeline.py` — script chạy evaluation
-- [ ] File `group_project/evaluation/results.md` — bảng điểm + phân tích
+- [x] File `group_project/evaluation/golden_dataset.json` — 15+ cặp Q&A
+- [x] File `group_project/evaluation/eval_pipeline.py` — script chạy evaluation
+- [x] File `group_project/evaluation/results.md` — bảng điểm + phân tích
 - [ ] So sánh A/B ít nhất 2 configs
 
 ---
@@ -549,9 +837,86 @@ run_dashboard()
 
 ### Kiến Trúc Hệ Thống
 
+Hệ thống là một **RAG pipeline end-to-end** gồm 4 tầng chính: **Ingestion/Dữ liệu → Indexing → Retrieval (Hybrid + Fallback) → Generation (có citation)**. Toàn bộ pipeline được điều phối bởi tầng Chatbot (Streamlit) và Evaluation (DeepEval/RAGAS).
+
 ```
-[Vẽ diagram kiến trúc ở đây]
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                        TẦNG QUẢN LÝ PHÁI TRÊN (UI & Eval)                    │
+│                                                                              │
+│   ┌──────────────┐            ┌────────────────────────────────────────────┐ │
+│   │ app.py       │            │ group_project/evaluation/                  │ │
+│   │ Streamlit UI │ ─────────▶ │ • golden_dataset.json (≥15 Q&A)             │ │
+│   │ Chatbot      │            │ • eval_pipeline.py (DeepEval/RAGAS)         │ │
+│   │ + sources    │            │ • results.md (A/B report)                   │ │
+│   └──────┬───────┘            └────────────────────────────────────────────┘ │
+└──────────┼────────────────────────────────────────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         TẦNG GENERATION (Task 10)                            │
+│                                                                              │
+│   generate_with_citation(query)                                              │
+│     reorder_for_llm()  → tránh "lost in the middle" (best đầu, 2nd cuối)     │
+│     format_context()   → [Document N | Source | Type]                       │
+│     OpenRouter LLM (gpt-4o-mini / gemini :free)  → trả lời có citation      │
+│     temperature=0.3, top_p=0.9                                              │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                    TẦNG RETRIEVAL (Task 9) — Hybrid + Fallback               │
+│                                                                              │
+│   retrieve(query, top_k, score_threshold)                                    │
+│        │                                                                     │
+│        ├─▶ Task 5 semantic_search ──┐ (dense, cosine [0,1])                 │
+│        ├─▶ Task 6 lexical_search ───┼ (BM25 + TF-IDF, sparse)               │
+│        │        └───────────────────┘                                        │
+│        ▼                          ▼                                          │
+│   Task 7 rerank_rrf(weighted)  ──▶  top_k*2 candidate pool (dedup by chunk_id)│
+│        │                                                                     │
+│        │  best_cosine < score_threshold ?                                    │
+│        ├── YES ──▶ Task 8 pageindex_search (vectorless fallback)             │
+│        │           • rank_proxy score, không phải cosine confidence          │
+│        └── NO  ──▶ hybrid results  (source="hybrid")                        │
+│                                                                              │
+│   ⚠️  Fallback dùng RAW cosine từ semantic_search, KHÔNG dùng RRF score      │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                    TẦNG INDEXING (Task 4) — Vector Store                     │
+│                                                                              │
+│   chunk_documents()  → fixed_size (CHUNK_SIZE=800, OVERLAP=100)             │
+│   embed_chunks()     → BAAI/bge-m3 (dim=1024) qua OpenRouter / local         │
+│   index_to_vectorstore() → ChromaDB (cosine) tại chroma_db/                 │
+│   Export helpers: get_embedding_model(), get_collection()                    │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     TẦNG INGESTION (Task 1-3) — Dữ liệu                     │
+│                                                                              │
+│   Task 1: Thu thập legal (PDF/DOCX) ──▶  data/landing/legal/                │
+│   Task 2: Crawl news (Crawl4AI)       ──▶  data/landing/news/               │
+│   Task 3: MarkItDown convert          ──▶  data/standardized/{legal,news}/   │
+│   (Task 3-optimize: tối ưu Markdown cho RAG)                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
+
+**Luồng dữ liệu chính:**
+
+1. **Ingestion** — Thu thập chính sách/đại học (task1) và crawl bài viết (task2), rồi chuẩn hóa thành Markdown (task3).
+2. **Indexing** — Chunk cố định 800/100 ký tự, embed bằng `BAAI/bge-m3`, lưu vector + metadata vào ChromaDB (task4).
+3. **Retrieval** — Chạy song song **Dense** (task5, cosine) và **Sparse** (task6, BM25/TF-IDF), hợp nhất bằng **Weighted RRF** (task7), rồi kiểm tra ngưỡng `score_threshold` dựa trên **raw cosine**; nếu quá thấp → fallback **PageIndex vectorless** (task8) (task9).
+4. **Generation** — Sắp xếp lại chunk để tránh *lost in the middle*, định dạng context có source label, gọi LLM qua OpenRouter để sinh câu trả lời **có citation** (task10).
+5. **Hiển thị & Đánh giá** — Chatbot Streamlit hiển thị answer + nguồn tham khảo; evaluation pipeline (DeepEval/RAGAS) đo faithfulness, answer relevance, context recall/precision và so sánh A/B.
+
+**Các điểm thiết kế quan trọng:**
+
+- **Hybrid fusion** bằng RRF (không cộng trực tiếp cosine + BM25 vì khác thang đo).
+- **Fallback threshold** dùng raw cosine similarity (thang `[0,1]`) từ Task 5, tách biệt với RRF score dùng để xếp hạng — tránh bẫy fallback không bao giờ trigger.
+- **Dedup key thống nhất** là `chunk_id` xuyên suốt Task 4→9.
+- **Citation** dựa trên metadata `source/title/url/type/section` giữ nguyên từ tầng Indexing.
 
 ---
 
