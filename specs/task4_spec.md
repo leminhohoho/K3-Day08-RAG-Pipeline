@@ -70,6 +70,8 @@ python src/task4_chunking_indexing.py
 | `EMBEDDING_DIM` | `int` | 1024 | Output dimension of the embedding model |
 | `VECTOR_STORE` | `str` | `"chromadb"` | Vector store choice: `"chromadb"` | `"weaviate"` | `"faiss"` |
 | `COLLECTION_NAME` | `str` | `"university_services_docs"` | ChromaDB collection name |
+| `EMBEDDING_QUERY_PREFIX` | `str` | `""` | Optional prefix for query encoding (e.g. `"query: "` for E5 models) |
+| `EMBEDDING_DOC_PREFIX` | `str` | `""` | Optional prefix for document encoding (e.g. `"passage: "` for E5 models) |
 
 **Constraints (enforced by tests):**
 - `CHUNK_SIZE > 0`
@@ -87,15 +89,24 @@ def load_documents() -> list[dict]:
         List of dicts, each with:
             "content": str   — full text of the markdown file
             "metadata": dict — containing:
-                "source": str  — filename (e.g. "tuition-policy.md")
-                "type": str    — "legal" if path contains "legal", else "news"
+                "source": str      — filename (e.g. "tuition-policy.md")
+                "document_id": str — stem of filename without extension (e.g. "tuition-policy")
+                "type": str        — "legal" if path contains "legal", else "news"
+                "title": str      — document title (derived from filename stem)
+                "url": str        — empty string "" (reserved for future use)
+                "section": str    — empty string "" (reserved for section info)
+                "language": str   — "vi" (default)
     """
 ```
 
 **Behavior:**
 - Iterate recursively through `STANDARDIZED_DIR.rglob("*.md")`
 - Read each file with `utf-8` encoding
+- Derive `document_id` from the filename stem (e.g. `"tuition-policy.md"` → `"tuition-policy"`)
+- Derive `title` from the filename stem (replace hyphens/underscores with spaces, title-case) OR from the first H1 heading in the markdown content
 - Infer `type` from parent directory name: `"legal"` if `"legal"` in `str(md_file)`, else `"news"`
+- Set `url`, `section` to empty string `""` as defaults
+- Set `language` to `"vi"` as default
 - Return empty list if no .md files found (test expects list, not None)
 
 ### 3.3 Function: `chunk_documents(documents: list[dict]) -> list[dict]`
@@ -112,7 +123,8 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
         List of dicts, each with:
             "content": str   — chunk text
             "metadata": dict — inherits parent metadata PLUS:
-                "chunk_index": int  — sequential index within the source document
+                "chunk_index": int  — sequential index within the source document (0-based)
+                "chunk_id": str     — unique ID: f"{document_id}_chunk_{chunk_index}"
     """
 ```
 
@@ -122,7 +134,7 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
   - `chunk_overlap=CHUNK_OVERLAP`
   - `separators=["\n\n", "\n", ". ", " ", ""]`
 - Each chunk content length must not exceed `CHUNK_SIZE * 1.1` (10% tolerance)
-- Preserve parent metadata and add `chunk_index` to each chunk
+- Preserve parent metadata and add `chunk_index` and `chunk_id` to each chunk
 
 ### 3.4 Function: `embed_chunks(chunks: list[dict]) -> list[dict]`
 
@@ -167,8 +179,40 @@ def index_to_vectorstore(chunks: list[dict]) -> None:
 - Get or create collection with:
   - `name=COLLECTION_NAME`
   - `metadata={"hnsw:space": "cosine"}`
-- Generate unique IDs: `f"{metadata['source']}_chunk_{chunk_index}"`
+- Generate unique IDs from each chunk's `chunk_id` metadata field (`f"{document_id}_chunk_{chunk_index}"`), falling back to `f"{metadata['source']}_chunk_{chunk_index}"` for legacy chunks
 - Call `collection.upsert(ids=ids, documents=[...], embeddings=[...], metadatas=[...])`
+
+### 3.7 Shared Helpers (imported by Task 5)
+
+These helpers are **exported from Task 4** and reused by Task 5/6 — do NOT create a second model/client instance in other tasks. They must be lazy-loaded and cached per process.
+
+```python
+def get_embedding_model():
+    """
+    Lazy-loads and caches SentenceTransformer(EMBEDDING_MODEL).
+    Returns the same instance on every call within a process.
+    """
+
+
+def get_collection():
+    """
+    Opens the persistent ChromaDB collection via PersistentClient(CHROMA_DIR).
+    Creates it if missing. Uses COLLECTION_NAME + hnsw:space=cosine.
+    Raises a clear config error if the embedding dimension mismatches.
+    """
+
+
+def prepare_query_for_embedding(query: str) -> str:
+    """
+    Applies EMBEDDING_QUERY_PREFIX if configured (e.g. "query: " for E5).
+    Must be symmetric with the doc-side prefix used during indexing.
+    """
+```
+
+**Consistency requirements:**
+- Query encoding (`prepare_query_for_embedding`) and document encoding during indexing must use the SAME embedding model with symmetric preprocessing.
+- If `EMBEDDING_DOC_PREFIX` is non-empty, `embed_chunks()` must apply it to each chunk text before `model.encode()`.
+- `get_collection()` must be safe to call when the collection has no data (returns the collection object; callers check `collection.count()`).
 
 ### 3.6 Function: `run_pipeline()`
 
@@ -214,10 +258,10 @@ def run_pipeline() -> None:
 
 ### 4.4 Document Metadata Mapping
 
-| Source Directory | `type` field | Example |
+| Source Directory | `type` field | Example metadata (full) |
 |---|---|---|
-| `data/standardized/legal/` | `"legal"` | `{"source": "tuition-policy.md", "type": "legal"}` |
-| `data/standardized/news/` | `"news"` | `{"source": "scholarship-announcement.md", "type": "news"}` |
+| `data/standardized/legal/` | `"legal"` | `{"source": "tuition-policy.md", "document_id": "tuition-policy", "type": "legal", "title": "Tuition Policy", "url": "", "section": "", "language": "vi"}` |
+| `data/standardized/news/` | `"news"` | `{"source": "scholarship-announcement.md", "document_id": "scholarship-announcement", "type": "news", "title": "Scholarship Announcement", "url": "", "section": "", "language": "vi"}` |
 
 ---
 
@@ -287,6 +331,8 @@ print(f'Collection contains {col.count()} chunks')
 | Document shorter than CHUNK_SIZE | Single chunk, no splitting needed |
 | Very long document without paragraph breaks | `RecursiveCharacterTextSplitter` falls back to character-level splitting |
 | Embedding model downloads on first run | First run downloads ~2GB model; subsequent runs use cache |
+| Cross-task: `chunk_id` mismatch | Task 5/6 deduplicate using `chunk_id` from metadata | Ensure `chunk_id` format is `f"{document_id}_chunk_{chunk_index}"` |
+| Cross-task: shared helpers not exported | Task 5 expects `get_embedding_model()`, `get_collection()`, `prepare_query_for_embedding()` | Export these from `src/task4_chunking_indexing.py` |
 
 ### Troubleshooting
 
