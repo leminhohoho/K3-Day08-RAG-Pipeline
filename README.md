@@ -558,11 +558,11 @@ run_dashboard()
 ### Phân Công Công Việc
 
 | Thành viên | MSSV | Nhiệm vụ | Trạng thái |
-|-----------|------|----------|------------|
-| | | | |
-| | | | |
-| | | | |
-| | | | |
+|---|---|---|---|
+| Nguyễn Lê Minh | 2A202601045 | Điều phối và tích hợp dự án; Task 4 — Chunking & Indexing; Task 9 — Retrieval Pipeline; Task 10 — Generation; tích hợp giao diện và chuẩn bị RAG Demo | Hoàn thành |
+| Nguyễn Chí Quang | 2A202601932 | Task 5 — Semantic Search; Task 6 — Lexical Search; Task 7 — Reranking; Task 8 — PageIndex/Vectorless RAG; xây dựng Golden Dataset và RAG Evaluation | Hoàn thành |
+| Bùi Hoàng Vương | 2A202601553 | Task 1 — thu thập văn bản chính sách đại học; Task 3 — chuẩn hóa và chuyển đổi dữ liệu Legal sang Markdown tối ưu cho RAG; hỗ trợ kiểm chứng Golden Dataset phần Legal | Hoàn thành |
+| Đặng Tiến Thành | 2A202601305 | Task 2 — crawl bài viết, tin tức và thông báo; Task 3 — chuẩn hóa và chuyển đổi dữ liệu News sang Markdown tối ưu cho RAG; hỗ trợ kiểm chứng Golden Dataset phần News | Hoàn thành |
 
 ---
 
