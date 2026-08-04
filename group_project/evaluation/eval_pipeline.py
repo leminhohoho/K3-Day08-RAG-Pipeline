@@ -14,6 +14,7 @@ optional paths and never run during validation/unit tests.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.metadata
 import json
@@ -459,6 +460,8 @@ def evaluate_with_ragas(
     *,
     judge_model: str,
     embedding_model: str,
+    judge_max_tokens: int,
+    judge_max_workers: int,
     case_ids: set[str] | None = None,
 ) -> dict[str, Any]:
     """Evaluate the four required RAGAS metrics for answerable cases only."""
@@ -474,6 +477,8 @@ def evaluate_with_ragas(
         faithfulness,
     )
 
+    from ragas.run_config import RunConfig
+
     load_dotenv(PROJECT_DIR / ".env")
     api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
     if not api_key:
@@ -483,6 +488,9 @@ def evaluate_with_ragas(
         api_key=api_key,
         base_url="https://openrouter.ai/api/v1",
         temperature=0.0,
+        # RAGAS expects short structured judgements. Keeping this bounded
+        # avoids reserving the provider's much larger default output budget.
+        max_tokens=judge_max_tokens,
     )
     embeddings = OpenAIEmbeddings(
         model=embedding_model,
@@ -493,6 +501,12 @@ def evaluate_with_ragas(
         # token-ID arrays before sending the request.
         tiktoken_enabled=False,
         check_embedding_ctx_length=False,
+    )
+    metric_names = (
+        "faithfulness",
+        "answer_relevancy",
+        "context_recall",
+        "context_precision",
     )
     metrics = [faithfulness, answer_relevancy, context_recall, context_precision]
     payload: dict[str, Any] = {
@@ -525,15 +539,10 @@ def evaluate_with_ragas(
             metrics=metrics,
             llm=judge,
             embeddings=embeddings,
+            run_config=RunConfig(max_workers=judge_max_workers, timeout=300),
             raise_exceptions=False,
         )
         frame = result.to_pandas()
-        metric_names = (
-            "faithfulness",
-            "answer_relevancy",
-            "context_recall",
-            "context_precision",
-        )
         case_scores: list[dict[str, Any]] = []
         for row_index, case in enumerate(rows):
             score_row = {"id": case["id"]}
@@ -553,9 +562,83 @@ def evaluate_with_ragas(
         payload["configs"][config] = {
             "case_count": len(case_scores),
             "overall": overall,
+            "valid_counts": {
+                metric_name: sum(
+                    isinstance(row[metric_name], (int, float))
+                    and math.isfinite(float(row[metric_name]))
+                    for row in case_scores
+                )
+                for metric_name in metric_names
+            },
             "cases": case_scores,
         }
     return payload
+
+
+def _merge_ragas_payload(
+    existing: dict[str, Any] | None,
+    update: dict[str, Any],
+) -> dict[str, Any]:
+    """Merge retry results without discarding previously valid case scores."""
+
+    if not existing:
+        return update
+
+    merged = copy.deepcopy(existing)
+    existing_case_ids = existing.get("case_ids")
+    update_case_ids = update.get("case_ids")
+    merged["case_ids"] = (
+        None
+        if existing_case_ids is None or update_case_ids is None
+        else sorted(set(existing_case_ids) | set(update_case_ids))
+    )
+    metric_names = (
+        "faithfulness",
+        "answer_relevancy",
+        "context_recall",
+        "context_precision",
+    )
+    for config, incoming in update.get("configs", {}).items():
+        previous = merged.get("configs", {}).get(config, {})
+        previous_by_id = {
+            row["id"]: row for row in previous.get("cases", []) if "id" in row
+        }
+        incoming_by_id = {
+            row["id"]: row for row in incoming.get("cases", []) if "id" in row
+        }
+        ordered_ids = list(previous_by_id)
+        ordered_ids.extend(
+            case_id for case_id in incoming_by_id if case_id not in previous_by_id
+        )
+        merged_cases = []
+        for case_id in ordered_ids:
+            row = incoming_by_id.get(case_id, {})
+            combined = {"id": case_id}
+            prior = previous_by_id.get(case_id, {})
+            for metric_name in metric_names:
+                value = row.get(metric_name)
+                valid = isinstance(value, (int, float)) and math.isfinite(float(value))
+                combined[metric_name] = value if valid else prior.get(metric_name)
+            merged_cases.append(combined)
+
+        valid_counts: dict[str, int] = {}
+        overall: dict[str, float | None] = {}
+        for metric_name in metric_names:
+            values = [
+                float(row[metric_name])
+                for row in merged_cases
+                if isinstance(row.get(metric_name), (int, float))
+                and math.isfinite(float(row[metric_name]))
+            ]
+            valid_counts[metric_name] = len(values)
+            overall[metric_name] = mean(values) if values else None
+        merged.setdefault("configs", {})[config] = {
+            "case_count": len(merged_cases),
+            "overall": overall,
+            "valid_counts": valid_counts,
+            "cases": merged_cases,
+        }
+    return merged
 
 
 def evaluate_safety(
@@ -751,9 +834,14 @@ def _split_table(metrics_payload: dict[str, Any], config_names: list[str]) -> st
 def _ragas_table(ragas_payload: dict[str, Any] | None, config_names: list[str]) -> str:
     if not ragas_payload:
         return "Chưa chạy LLM judge; không tạo điểm RAGAS giả."
+    ragas_configs = ragas_payload.get("configs", {})
+
+    def case_count(name: str) -> int:
+        config_payload = ragas_configs.get(name, {})
+        return config_payload.get("case_count", len(config_payload.get("cases", [])))
+
     counts = ", ".join(
-        f"`{name}`: {ragas_payload['configs'][name].get('case_count', len(ragas_payload['configs'][name].get('cases', [])))}"
-        for name in config_names
+        f"`{name}`: {case_count(name)}" for name in config_names
     )
     selected_ids = ragas_payload.get("case_ids")
     subset_note = (
@@ -771,13 +859,29 @@ def _ragas_table(ragas_payload: dict[str, Any] | None, config_names: list[str]) 
         ("Context Recall", "context_recall"),
         ("Context Precision", "context_precision"),
     ):
-        values = [
-            _fmt(ragas_payload["configs"][config]["overall"].get(key))
-            for config in config_names
-        ]
+        values = []
+        for config in config_names:
+            config_payload = ragas_configs.get(config)
+            if not config_payload:
+                values.append("not run (0/0)")
+                continue
+            case_count = config_payload.get(
+                "case_count", len(config_payload.get("cases", []))
+            )
+            valid_count = config_payload.get("valid_counts", {}).get(key)
+            if valid_count is None:
+                valid_count = sum(
+                    isinstance(row.get(key), (int, float))
+                    and math.isfinite(float(row[key]))
+                    for row in config_payload.get("cases", [])
+                )
+            values.append(
+                f"{_fmt(config_payload['overall'].get(key))} ({valid_count}/{case_count})"
+            )
         rows.append(f"| {label} | " + " | ".join(values) + " |")
     return (
         f"Answerable cases evaluated: {counts}.{subset_note}\n\n"
+        + "Each cell reports `mean (valid judgements/selected cases)`.\n\n"
         + "\n".join(rows)
     )
 
@@ -793,7 +897,10 @@ def _safety_table(safety_payload: dict[str, Any] | None, config_names: list[str]
         ("Refusal Accuracy", "refusal_accuracy"),
         ("Unsupported Answer Rate", "unsupported_answer_rate"),
     ):
-        values = [_fmt(safety_payload["configs"][name].get(key)) for name in config_names]
+        values = [
+            _fmt(safety_payload.get("configs", {}).get(name, {}).get(key))
+            for name in config_names
+        ]
         rows.append(f"| {label} | " + " | ".join(values) + " |")
     return "\n".join(rows)
 
@@ -809,6 +916,22 @@ def export_results(
     safety_metrics: dict[str, Any] | None = None,
 ) -> None:
     """Export an evidence-backed report; absent stages are explicitly labelled."""
+
+    resumed_stages = manifest.get("resumed_stages", [])
+
+    def latest_model(key: str) -> str | None:
+        return manifest.get(key) or next(
+            (
+                stage[key]
+                for stage in reversed(resumed_stages)
+                if stage.get(key)
+            ),
+            None,
+        )
+
+    generation_model = latest_model("generation_model")
+    judge_model = latest_model("judge_model")
+    judge_embedding_model = latest_model("judge_embedding_model")
 
     ranked_worst: list[tuple[float, str, str, str]] = []
     for case in predictions["cases"]:
@@ -845,6 +968,9 @@ def export_results(
 - Golden dataset hash: `{manifest['golden_dataset_hash']}`
 - Cases: `{len(predictions['cases'])}`
 - Top-k: `{manifest['top_k']}`
+- Answer generation model: `{generation_model or 'not run'}` via OpenRouter
+- RAGAS LLM judge: `{judge_model or 'not run'}` via OpenRouter
+- RAGAS embedding model: `{judge_embedding_model or 'not run'}` via OpenRouter
 - Local raw artifacts (generated, gitignored): `{relative_run}/`
 
 ## Configurations
@@ -889,7 +1015,7 @@ Safety cases are excluded from answerable RAGAS averages.
 1. Use `{winner}` as the current evidence-backed retrieval baseline; do not select a configuration from one demo query.
 2. Inspect the worst cases in `predictions.json` before changing chunk size, RRF weights or fallback threshold.
 3. Re-run the same frozen golden dataset after Task 4 canonical metadata/index rebuild; compare by paired case ID.
-4. Expand RAGAS from the labelled smoke subset to the complete core split, then challenge split, using `--resume` so retrieval stays frozen.
+4. Re-run all 26 answerable RAGAS cases after material pipeline changes, using `--resume` so retrieval stays frozen during judge retries.
 5. Keep safety refusal metrics separate from answerable quality averages.
 """
     _atomic_write_text(RESULTS_PATH, content)
@@ -977,6 +1103,18 @@ def main() -> None:
         default=os.getenv("EVAL_JUDGE_MODEL", "openai/gpt-4o-mini"),
     )
     parser.add_argument(
+        "--judge-max-tokens",
+        type=int,
+        default=int(os.getenv("EVAL_JUDGE_MAX_TOKENS", "1024")),
+        help="maximum output tokens per RAGAS judge call",
+    )
+    parser.add_argument(
+        "--judge-max-workers",
+        type=int,
+        default=int(os.getenv("EVAL_JUDGE_MAX_WORKERS", "4")),
+        help="maximum concurrent RAGAS judge jobs",
+    )
+    parser.add_argument(
         "--judge-embedding-model",
         default=os.getenv("EVAL_EMBEDDING_MODEL", "BAAI/bge-m3"),
     )
@@ -1010,6 +1148,12 @@ def main() -> None:
                 "at": datetime.now().astimezone().isoformat(timespec="seconds"),
                 "generation_model": args.generation_model,
                 "judge_model": args.judge_model if args.mode in {"ragas", "all"} else None,
+                "judge_max_tokens": (
+                    args.judge_max_tokens if args.mode in {"ragas", "all"} else None
+                ),
+                "judge_max_workers": (
+                    args.judge_max_workers if args.mode in {"ragas", "all"} else None
+                ),
                 "judge_embedding_model": (
                     args.judge_embedding_model if args.mode in {"ragas", "all"} else None
                 ),
@@ -1077,16 +1221,27 @@ def main() -> None:
             config_names,
             judge_model=args.judge_model,
             embedding_model=args.judge_embedding_model,
+            judge_max_tokens=args.judge_max_tokens,
+            judge_max_workers=args.judge_max_workers,
             case_ids=ragas_case_ids,
+        )
+        ragas_payload = _merge_ragas_payload(
+            json.loads(ragas_path.read_text(encoding="utf-8-sig"))
+            if ragas_path.is_file()
+            else None,
+            ragas_payload,
         )
         _atomic_write_json(ragas_path, ragas_payload)
 
+    report_config_names = (
+        list(manifest.get("configs", {})) if args.resume else config_names
+    )
     export_results(
         run_dir,
         manifest,
         retrieval_metrics,
         predictions,
-        config_names,
+        report_config_names,
         ragas_metrics=ragas_payload,
         safety_metrics=safety_payload,
     )

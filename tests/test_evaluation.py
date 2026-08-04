@@ -9,6 +9,8 @@ import pytest
 
 from group_project.evaluation.eval_pipeline import (
     _load_existing_run,
+    _merge_ragas_payload,
+    _ragas_table,
     load_golden_dataset,
     select_cases,
     validate_golden_dataset,
@@ -168,3 +170,103 @@ def test_resume_rejects_config_not_in_frozen_run(tmp_path):
 
     with pytest.raises(ValueError, match="does not contain configurations"):
         _load_existing_run(tmp_path, ["hybrid_rrf"])
+
+
+def test_ragas_retry_merge_keeps_previous_valid_scores():
+    existing = {
+        "case_ids": None,
+        "configs": {
+            "bm25_only": {
+                "case_count": 2,
+                "overall": {"faithfulness": 0.5},
+                "cases": [
+                    {"id": "q1", "faithfulness": 0.5},
+                    {"id": "q2", "faithfulness": None},
+                ],
+            }
+        },
+    }
+    update = {
+        "case_ids": None,
+        "configs": {
+            "bm25_only": {
+                "case_count": 2,
+                "overall": {"faithfulness": 0.8},
+                "cases": [
+                    {"id": "q1", "faithfulness": None},
+                    {"id": "q2", "faithfulness": 0.8},
+                ],
+            }
+        },
+    }
+    for payload in (existing, update):
+        for row in payload["configs"]["bm25_only"]["cases"]:
+            row.update(
+                answer_relevancy=None,
+                context_recall=None,
+                context_precision=None,
+            )
+
+    merged = _merge_ragas_payload(existing, update)
+    config = merged["configs"]["bm25_only"]
+    assert config["valid_counts"]["faithfulness"] == 2
+    assert config["overall"]["faithfulness"] == pytest.approx(0.65)
+    assert [row["faithfulness"] for row in config["cases"]] == [0.5, 0.8]
+
+
+def test_ragas_subset_retry_merges_into_full_case_set():
+    metric_names = (
+        "faithfulness",
+        "answer_relevancy",
+        "context_recall",
+        "context_precision",
+    )
+    old_q1 = {"id": "q1", **{name: 0.5 for name in metric_names}}
+    old_q2 = {"id": "q2", **{name: None for name in metric_names}}
+    retry_q2 = {"id": "q2", **{name: 1.0 for name in metric_names}}
+    existing = {
+        "case_ids": None,
+        "configs": {"dense_only": {"case_count": 2, "cases": [old_q1, old_q2]}},
+    }
+    update = {
+        "case_ids": ["q2"],
+        "configs": {"dense_only": {"case_count": 1, "cases": [retry_q2]}},
+    }
+
+    merged = _merge_ragas_payload(existing, update)
+    config = merged["configs"]["dense_only"]
+    assert merged["case_ids"] is None
+    assert config["case_count"] == 2
+    assert config["valid_counts"] == {name: 2 for name in metric_names}
+    assert [row["id"] for row in config["cases"]] == ["q1", "q2"]
+
+
+def test_ragas_table_labels_config_without_judgements():
+    payload = {
+        "case_ids": None,
+        "configs": {
+            "dense_only": {
+                "case_count": 1,
+                "overall": {
+                    "faithfulness": 1.0,
+                    "answer_relevancy": 1.0,
+                    "context_recall": 1.0,
+                    "context_precision": 1.0,
+                },
+                "cases": [
+                    {
+                        "id": "q1",
+                        "faithfulness": 1.0,
+                        "answer_relevancy": 1.0,
+                        "context_recall": 1.0,
+                        "context_precision": 1.0,
+                    }
+                ],
+            }
+        },
+    }
+
+    table = _ragas_table(payload, ["dense_only", "bm25_only"])
+    assert "`dense_only`: 1" in table
+    assert "`bm25_only`: 0" in table
+    assert table.count("not run (0/0)") == 4

@@ -7,6 +7,9 @@
 - Golden dataset hash: `27393c4d97569ab72ff095fd76eed4907831303afc10af7b4976b79c79518a90`
 - Cases: `28`
 - Top-k: `5`
+- Answer generation model: `openai/gpt-4o-mini` via OpenRouter
+- RAGAS LLM judge: `openai/gpt-4o-mini` via OpenRouter
+- RAGAS embedding model: `BAAI/bge-m3` via OpenRouter
 - Local raw artifacts (generated, gitignored): `group_project/evaluation/runs/20260804_155222/`
 
 ## Configurations
@@ -54,14 +57,16 @@ Metrics are deterministic source/document retrieval metrics. `Evidence Coverage@
 
 ## Required RAGAS Metrics
 
-Answerable cases evaluated: `dense_only`: 3, `bm25_only`: 3, `hybrid_rrf`: 3. Selected case IDs: `GD001`, `GD018`, `GD025`. Treat these as smoke/diagnostic scores, not final full-corpus RAGAS scores.
+Answerable cases evaluated: `dense_only`: 26, `bm25_only`: 26, `hybrid_rrf`: 26.
+
+Each cell reports `mean (valid judgements/selected cases)`.
 
 | Metric | dense_only | bm25_only | hybrid_rrf |
 |---|---:|---:|---:|
-| Faithfulness | 0.722 | 0.333 | 0.833 |
-| Answer Relevance | 0.483 | 0.199 | 0.757 |
-| Context Recall | 1.000 | 1.000 | 1.000 |
-| Context Precision | 1.000 | 0.983 | 1.000 |
+| Faithfulness | 0.679 (26/26) | 0.643 (26/26) | 0.706 (26/26) |
+| Answer Relevance | 0.507 (26/26) | 0.465 (26/26) | 0.524 (26/26) |
+| Context Recall | 0.942 (26/26) | 0.936 (26/26) | 0.929 (26/26) |
+| Context Precision | 0.983 (26/26) | 0.908 (26/26) | 0.970 (26/26) |
 
 ## Safety
 
@@ -87,5 +92,5 @@ Safety cases are excluded from answerable RAGAS averages.
 1. Use `hybrid_rrf` as the current evidence-backed retrieval baseline; do not select a configuration from one demo query.
 2. Inspect the worst cases in `predictions.json` before changing chunk size, RRF weights or fallback threshold.
 3. Re-run the same frozen golden dataset after Task 4 canonical metadata/index rebuild; compare by paired case ID.
-4. Expand RAGAS from the labelled smoke subset to the complete core split, then challenge split, using `--resume` so retrieval stays frozen.
+4. Re-run all 26 answerable RAGAS cases after material pipeline changes, using `--resume` so retrieval stays frozen during judge retries.
 5. Keep safety refusal metrics separate from answerable quality averages.
