@@ -1,7 +1,7 @@
 """
 Task 4 — Chunking & Indexing vào Vector Store.
 
-Chunking strategy: markdown_section_recursive (heading-aware + recursive split)
+Chunking strategy: fixed_size (size=800, overlap=100)
 Embedding: OpenRouter API (BAAI/bge-m3), fallback SentenceTransformer
 Vector Store: ChromaDB (persistent, rebuild on each run)
 """
@@ -24,7 +24,7 @@ CHROMA_DIR = Path(__file__).parent.parent / "chroma_db"
 
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
-CHUNKING_METHOD = "markdown_section_recursive"  # heading-aware + recursive split
+CHUNKING_METHOD = "fixed_size"  # fixed-size split (size, overlap)
 
 EMBEDDING_MODEL = "BAAI/bge-m3"
 EMBEDDING_DIM = 1024
@@ -155,64 +155,47 @@ def load_documents() -> list[dict]:
 
 
 # =============================================================================
-# chunk_documents — markdown_section_recursive
+# chunk_documents — fixed_size
 # =============================================================================
 
-def _split_by_headings(content: str) -> list[tuple[str, str, list[str]]]:
+def _fixed_size_split(content: str, chunk_size: int, chunk_overlap: int) -> list[str]:
     """
-    Split content by Markdown headings (H1, H2, H3).
-    Returns list of (heading_text, heading_level, section_lines).
-    Pre-heading content gets empty heading.
+    Split content into fixed-size chunks with overlap.
+    Cắt cứng theo số ký tự, không tôn trọng ranh giới dòng/đoạn.
 
-    Handles content before first heading and content with no headings.
+    Args:
+        content: Nội dung cần split.
+        chunk_size: Số ký tự tối đa mỗi chunk.
+        chunk_overlap: Số ký tự overlap giữa các chunk kề nhau.
+
+    Returns:
+        list[str]: Các chunk text.
     """
-    lines = content.split("\n")
-    sections: list[tuple[str, str, list[str]]] = []  # (heading, level, lines)
+    if not content:
+        return []
 
-    current_heading = ""
-    current_level = ""
-    current_lines: list[str] = []
-    has_any_heading = False
+    step = chunk_size - chunk_overlap
+    if step <= 0:
+        # Nếu overlap >= size, chỉ trả toàn bộ content làm 1 chunk
+        return [content]
 
-    for line in lines:
-        hm = re.match(r"^(#{1,3})\s+(.+)$", line)
-        if hm:
-            has_any_heading = True
-            if current_lines or len(sections) == 0:
-                sections.append((current_heading, current_level, current_lines))
-            current_heading = hm.group(2).strip()
-            current_level = hm.group(1)
-            current_lines = []
-        else:
-            current_lines.append(line)
+    chunks = []
+    start = 0
+    n = len(content)
+    while start < n:
+        chunks.append(content[start:start + chunk_size])
+        start += step
 
-    if current_lines or not sections:
-        sections.append((current_heading, current_level, current_lines))
-
-    return sections, has_any_heading
-
-
-def _build_section_path(heading: str, title: str, has_any_heading: bool) -> str:
-    """Build section path from heading hierarchy. For flat sections, use title as fallback."""
-    if not heading:
-        return title if has_any_heading else ""
-    return heading
+    return chunks
 
 
 def chunk_documents(documents: list[dict]) -> list[dict]:
     """
-    Chunk documents theo markdown_section_recursive strategy:
-      1. Tách theo Markdown heading
-      2. RecursiveCharacterTextSplitter cho section dài
+    Chunk documents theo fixed_size strategy:
+      - Chia nội dung thành các đoạn có độ dài tối đa CHUNK_SIZE
+      - Overlap CHUNK_OVERLAP giữa các chunk kề nhau
+      - Không giữ cấu trúc heading (section = title fallback)
     """
-    from langchain_text_splitters import RecursiveCharacterTextSplitter
-
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=CHUNK_SIZE,
-        chunk_overlap=CHUNK_OVERLAP,
-        separators=["\n\n", "\n", ". ", " ", ""],
-    )
-
     chunks = []
     chunk_index = 0
 
@@ -221,51 +204,24 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
         content = doc["content"]
         title = meta.get("title", meta.get("document_id", "unknown"))
 
-        sections, has_any_heading = _split_by_headings(content)
-
-        for heading, level, section_lines in sections:
-            section_text = "\n".join(section_lines).strip()
-            if not section_text:
+        splits = _fixed_size_split(content, CHUNK_SIZE, CHUNK_OVERLAP)
+        for split_text in splits:
+            if not split_text.strip():
                 continue
-
-            section_path = _build_section_path(heading, title, has_any_heading)
-            section_label = heading if heading else title
-
-            if len(section_text) <= CHUNK_SIZE * 1.1:
-                chunk_id = f"{meta['document_id']}_chunk_{chunk_index}"
-                chunk_hash = hashlib.sha256(section_text.encode()).hexdigest()[:12]
-                chunks.append({
-                    "content": section_text,
-                    "metadata": {
-                        **meta,
-                        "section": section_label,
-                        "section_path": section_path,
-                        "chunk_index": chunk_index,
-                        "chunk_id": chunk_id,
-                        "chunk_hash": chunk_hash,
-                    },
-                })
-                chunk_index += 1
-            else:
-                # Recursive split on long section
-                splits = splitter.split_text(section_text)
-                for i, split_text in enumerate(splits):
-                    if not split_text.strip():
-                        continue
-                    chunk_id = f"{meta['document_id']}_chunk_{chunk_index}"
-                    chunk_hash = hashlib.sha256(split_text.encode()).hexdigest()[:12]
-                    chunks.append({
-                        "content": split_text,
-                        "metadata": {
-                            **meta,
-                            "section": section_label,
-                            "section_path": section_path,
-                            "chunk_index": chunk_index,
-                            "chunk_id": chunk_id,
-                            "chunk_hash": chunk_hash,
-                        },
-                    })
-                    chunk_index += 1
+            chunk_id = f"{meta['document_id']}_chunk_{chunk_index}"
+            chunk_hash = hashlib.sha256(split_text.encode()).hexdigest()[:12]
+            chunks.append({
+                "content": split_text,
+                "metadata": {
+                    **meta,
+                    "section": title,
+                    "section_path": "",
+                    "chunk_index": chunk_index,
+                    "chunk_id": chunk_id,
+                    "chunk_hash": chunk_hash,
+                },
+            })
+            chunk_index += 1
 
     return chunks
 

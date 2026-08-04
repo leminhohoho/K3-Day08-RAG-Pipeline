@@ -12,7 +12,7 @@ Tổng hợp các đầu việc cần triển khai từ tất cả spec files. M
 **Spec:** `specs/task4_spec.md`
 
 ### Config
-- [ ] Set `CHUNK_SIZE=800`, `CHUNK_OVERLAP=100`, `CHUNKING_METHOD="recursive"`
+- [ ] Set `CHUNK_SIZE=800`, `CHUNK_OVERLAP=100`, `CHUNKING_METHOD="fixed_size"`
 - [ ] Set `EMBEDDING_MODEL="BAAI/bge-m3"`, `EMBEDDING_DIM=1024`
 - [ ] Set `VECTOR_STORE="chromadb"`, `COLLECTION_NAME="university_services_docs"`
 - [ ] Set `EMBEDDING_QUERY_PREFIX=""`, `EMBEDDING_DOC_PREFIX=""`
@@ -25,10 +25,10 @@ Tổng hợp các đầu việc cần triển khai từ tất cả spec files. M
 - [ ] Return `[]` when no files found
 
 ### chunk_documents
-- [ ] Use `RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)`
+- [ ] Use `fixed_size` split (size=800, overlap=100), cắt cứng theo số ký tự
 - [ ] Each chunk must have `content`, `metadata` (inherited + `chunk_index`, `chunk_id`)
 - [ ] `chunk_id` format: `f"{document_id}_chunk_{chunk_index}"`
-- [ ] Content length ≤ `CHUNK_SIZE * 1.1` (800 × 1.1 = 880)
+- [ ] Content length ≤ `CHUNK_SIZE` (800), start offset = `CHUNK_SIZE - CHUNK_OVERLAP`
 
 ### embed_chunks
 - [ ] Use OpenRouter API (via OpenAI SDK) for embedding

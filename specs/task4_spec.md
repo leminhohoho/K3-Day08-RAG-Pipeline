@@ -7,8 +7,7 @@ Task 4 biến các tài liệu Markdown chuẩn hóa từ Task 3 thành các chu
 ```text
 data/standardized/
   -> tách metadata và body
-  -> chia theo heading
-  -> chia nhỏ section dài
+  -> chia thành đoạn cố định kích thước 800 ký tự, overlap 100 ký tự
   -> embedding phần nội dung
   -> ChromaDB (vector + metadata)
 ```
@@ -30,7 +29,7 @@ File `src/task4_chunking_indexing.py` hiện được giữ ở dạng starter/T
 |---|---:|---|
 | `CHUNK_SIZE` | `800` | Đủ ngữ cảnh cho văn bản pháp lý nhưng vẫn giữ retrieval chính xác |
 | `CHUNK_OVERLAP` | `100` | Overlap 12.5% để hạn chế mất ý ở biên chunk |
-| `CHUNKING_METHOD` | `"markdown_section_recursive"` | Giữ cấu trúc heading, sau đó xử lý section dài |
+| `CHUNKING_METHOD` | `"fixed_size"` | Chia thành các đoạn có độ dài cố định, không giữ cấu trúc heading |
 | `EMBEDDING_MODEL` | `"BAAI/bge-m3"` | Multilingual, phù hợp tiếng Việt và tiếng Anh |
 | `EMBEDDING_DIM` | `1024` | Kích thước output của `BAAI/bge-m3` |
 | `VECTOR_STORE` | `"chromadb"` | Chạy local, persistent, có metadata filtering |
@@ -53,8 +52,7 @@ run_pipeline()
      - chỉ trả body làm content
 
   2. chunk_documents(documents)
-     - chia body theo Markdown heading
-     - recursively split các section dài
+     - chia body thành đoạn cố định kích thước 800 ký tự, overlap 100 ký tự
      - gắn section, section_path, chunk_index và chunk_id
 
   3. embed_chunks(chunks)
@@ -122,21 +120,29 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
     ...
 ```
 
-Chiến lược hai tầng:
+Chiến lược fixed-size:
 
-1. Tách theo Markdown heading để không trộn hai mục/điều/chủ đề khác nhau.
-2. Dùng `RecursiveCharacterTextSplitter` cho section dài với thứ tự separator:
+1. Cắt nội dung thành các đoạn có độ dài tối đa `CHUNK_SIZE` (800) ký tự.
+2. Offset giữa hai chunk kề nhau là `CHUNK_SIZE - CHUNK_OVERLAP` (700), tạo overlap 100 ký tự.
+3. Không tôn trọng ranh giới dòng/heading — cắt cứng theo số ký tự.
 
 ```python
-["\n\n", "\n", ". ", " ", ""]
+def _fixed_size_split(content, chunk_size, chunk_overlap):
+    step = chunk_size - chunk_overlap
+    chunks = []
+    start = 0
+    while start < len(content):
+        chunks.append(content[start:start + chunk_size])
+        start += step
+    return chunks
 ```
 
 Mỗi chunk phải giữ metadata cha và bổ sung:
 
 ```python
 {
-    "section": "Tên heading gần nhất",
-    "section_path": "Heading cha > Heading con",
+    "section": "{title}",          # fallback từ title của document
+    "section_path": "",             # không còn phân cấp heading
     "chunk_index": 0,
     "chunk_id": "{document_id}_chunk_0",
     "chunk_hash": "sha256-của-chunk-content"
@@ -145,12 +151,12 @@ Mỗi chunk phải giữ metadata cha và bổ sung:
 
 Quy tắc quan trọng cho corpus hiện tại:
 
-- Một số bài news không có H2/H3 hoặc có nội dung trước heading đầu tiên.
-- Khi đó phải dùng `metadata["title"]` làm fallback cho cả `section` và `section_path`; không tạo chunk có section rỗng.
+- `section` luôn dùng `title` làm fallback; không tạo chunk có section rỗng.
+- `section_path` để `""` vì không còn phân cấp heading.
 - `chunk_index` bắt đầu từ 0 và tăng liên tục trong từng document.
 - `chunk_id` ổn định giữa các lần chạy nếu document và cấu hình chunking không đổi.
 - Nội dung chunk không chứa `Source SHA256`, `Content Hash`, URL hay các dòng metadata kỹ thuật ở header.
-- Mỗi chunk không vượt quá `CHUNK_SIZE * 1.1`, theo tolerance của test lab.
+- Mỗi chunk không vượt quá `CHUNK_SIZE` (800) ký tự.
 
 ### 3.3 `embed_chunks(chunks)`
 
@@ -343,7 +349,7 @@ Khi Task 4 còn là starter, các test implementation được skip là đúng t
 ```text
 ============================================================
 Task 4: Chunking & Indexing
-  Chunking: markdown_section_recursive (size=800, overlap=100)
+  Chunking: fixed_size (size=800, overlap=100)
   Embedding: BAAI/bge-m3 (dim=1024)
   Vector Store: chromadb
 ============================================================

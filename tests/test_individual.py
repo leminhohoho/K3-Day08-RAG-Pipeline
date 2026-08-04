@@ -221,21 +221,89 @@ class TestTask4(unittest.TestCase):
             self.skipTest("chunk_documents chưa implement")
 
     def test_chunks_respect_size_limit(self):
-        """Mỗi chunk không vượt quá CHUNK_SIZE (+ tolerance 10%)."""
+        """Mỗi chunk không vượt quá CHUNK_SIZE (fixed-size, không cần tolerance)."""
         load_documents, chunk_documents, chunk_size, _ = self._import_task4()
         try:
             docs = load_documents()
             if not docs:
                 self.skipTest("Không có documents")
             chunks = chunk_documents(docs[:1])
-            max_allowed = int(chunk_size * 1.1)
             for i, c in enumerate(chunks[:20]):
                 self.assertLessEqual(
-                    len(c["content"]), max_allowed,
-                    f"Chunk {i} vượt quá size limit: {len(c['content'])} > {max_allowed}"
+                    len(c["content"]), chunk_size,
+                    f"Chunk {i} vượt quá size limit: {len(c['content'])} > {chunk_size}"
                 )
         except NotImplementedError:
             self.skipTest("Chưa implement")
+
+    def test_chunk_overlap_behavior(self):
+        """Hai chunk liên tiếp có overlap đúng CHUNK_OVERLAP."""
+        from src.task4_chunking_indexing import _fixed_size_split, CHUNK_SIZE, CHUNK_OVERLAP
+        long_text = "X" * (CHUNK_SIZE * 3)
+        splits = _fixed_size_split(long_text, CHUNK_SIZE, CHUNK_OVERLAP)
+        self.assertGreaterEqual(len(splits), 2, "Cần ít nhất 2 chunk để test overlap")
+        # chunk_0[step:size] = chunk_1[:CHUNK_OVERLAP]
+        step = CHUNK_SIZE - CHUNK_OVERLAP
+        expected_overlap = long_text[step:CHUNK_SIZE]
+        actual_overlap = splits[1][:CHUNK_OVERLAP]
+        self.assertEqual(expected_overlap, actual_overlap,
+                         f"Overlap mismatch: expected {expected_overlap!r}, got {actual_overlap!r}")
+
+    def test_chunk_count_estimation(self):
+        """Số chunk ≈ ceil(len / (chunk_size - chunk_overlap))."""
+        from src.task4_chunking_indexing import _fixed_size_split, CHUNK_SIZE, CHUNK_OVERLAP
+        step = CHUNK_SIZE - CHUNK_OVERLAP
+        # Doc = 2000 chars → chunks = ceil(2000 / 700) = 3 (với size=800, overlap=100)
+        doc_len = 2000
+        long_text = "Y" * doc_len
+        splits = _fixed_size_split(long_text, CHUNK_SIZE, CHUNK_OVERLAP)
+        expected = (doc_len + step - 1) // step  # ceil division
+        self.assertEqual(len(splits), expected,
+                         f"Expected {expected} chunks, got {len(splits)}")
+
+    def test_chunk_metadata_section_not_empty(self):
+        """Mỗi chunk có metadata.section không rỗng (fallback title)."""
+        load_documents, chunk_documents, _, _ = self._import_task4()
+        try:
+            docs = load_documents()
+            if not docs:
+                self.skipTest("Không có documents")
+            chunks = chunk_documents(docs[:1])
+            for i, c in enumerate(chunks[:10]):
+                section = c.get("metadata", {}).get("section", "")
+                self.assertNotEqual(section.strip(), "",
+                                    f"Chunk {i} có section rỗng")
+        except NotImplementedError:
+            self.skipTest("Chưa implement")
+
+    def test_chunk_id_stable(self):
+        """chunk_id ổn định qua 2 lần chạy trên cùng document."""
+        load_documents, chunk_documents, _, _ = self._import_task4()
+        try:
+            docs = load_documents()
+            if not docs:
+                self.skipTest("Không có documents")
+            chunks1 = chunk_documents(docs[:1])
+            chunks2 = chunk_documents(docs[:1])
+            ids1 = [c["metadata"]["chunk_id"] for c in chunks1]
+            ids2 = [c["metadata"]["chunk_id"] for c in chunks2]
+            self.assertEqual(ids1, ids2,
+                             "chunk_id không ổn định giữa 2 lần chạy")
+        except NotImplementedError:
+            self.skipTest("Chưa implement")
+
+    def test_fixed_size_split_empty(self):
+        """_fixed_size_split với content rỗng trả []"""
+        from src.task4_chunking_indexing import _fixed_size_split
+        self.assertEqual(_fixed_size_split("", 800, 100), [])
+
+    def test_fixed_size_split_short(self):
+        """Content ngắn hơn chunk_size trả 1 chunk duy nhất."""
+        from src.task4_chunking_indexing import _fixed_size_split
+        text = "Hello World"
+        result = _fixed_size_split(text, 800, 100)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0], text)
 
 
 # ===========================================================================
