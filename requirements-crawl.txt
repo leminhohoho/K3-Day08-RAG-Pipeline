@@ -1,0 +1,15 @@
+# Task 2 only - install in a dedicated .venv-crawl environment.
+#
+# Crawl4AI is intentionally separated from requirements.txt. The main RAG
+# environment pins LangChain 0.2.x, RAGAS 0.1.21 and OpenAI <2, while modern
+# Crawl4AI has an independent, fast-moving LLM dependency chain. Mixing both
+# caused pip to backtrack to an old source release of LiteLLM and attempt a
+# Rust/Cargo build on Windows.
+#
+# Setup (PowerShell):
+#   py -3.12 -m venv .venv-crawl
+#   .\.venv-crawl\Scripts\python.exe -m pip install --upgrade pip setuptools wheel
+#   .\.venv-crawl\Scripts\python.exe -m pip install -r requirements-crawl.txt
+#   .\.venv-crawl\Scripts\crawl4ai-setup.exe
+
+crawl4ai==0.9.2

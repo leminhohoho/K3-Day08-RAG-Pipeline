@@ -5,7 +5,9 @@ requests>=2.31.0
 numpy>=1.26.0,<2.0.0
 
 # Task 2 - Crawling
-crawl4ai>=0.3.0
+# Crawl4AI has its own fast-moving OpenAI/LiteLLM dependency chain. Install it
+# in an isolated environment from requirements-crawl.txt so it cannot force
+# this legacy RAGAS/LangChain runtime to backtrack or build LiteLLM from source.
 
 # Task 3 - Document conversion
 markitdown[pdf]>=0.1.0
