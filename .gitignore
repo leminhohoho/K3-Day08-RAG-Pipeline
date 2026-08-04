@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *.pyo
 .venv/
+.venv-crawl/
 venv/
 *.egg-info/
 
@@ -11,6 +12,7 @@ venv/
 
 # Temp PDF conversion cache
 data/_tmp_pdf/
+data/staging/
 
 # Temp / cache
 .pytest_cache/

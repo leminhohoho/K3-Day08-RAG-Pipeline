@@ -4,12 +4,14 @@
 # environment pins LangChain 0.2.x, RAGAS 0.1.21 and OpenAI <2, while modern
 # Crawl4AI has an independent, fast-moving LLM dependency chain. Mixing both
 # caused pip to backtrack to an old source release of LiteLLM and attempt a
-# Rust/Cargo build on Windows.
+# Rust/Cargo build on Windows. Crawl4AI 0.9.2 resolves to the maintained
+# unclecode-litellm wheel and has been dependency-checked on Windows/Python 3.12.
 #
 # Setup (PowerShell):
 #   py -3.12 -m venv .venv-crawl
 #   .\.venv-crawl\Scripts\python.exe -m pip install --upgrade pip setuptools wheel
 #   .\.venv-crawl\Scripts\python.exe -m pip install -r requirements-crawl.txt
 #   .\.venv-crawl\Scripts\crawl4ai-setup.exe
+#   .\.venv-crawl\Scripts\crawl4ai-doctor.exe
 
 crawl4ai==0.9.2
