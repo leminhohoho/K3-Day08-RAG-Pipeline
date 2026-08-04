@@ -16,7 +16,7 @@ dependencies = [
     "markitdown[pdf]>=0.1.7",
     "numpy>=2.4.6",
     "openai>=2.53.0",
-    "pageindex>=0.2.8",
+    "pageindex==0.2.8",
     "pytest>=9.1.1",
     "python-dotenv>=1.2.2",
     "ragas>=0.4.3",
@@ -25,4 +25,9 @@ dependencies = [
     "scikit-learn>=1.9.0",
     "sentence-transformers>=5.6.1",
     "streamlit>=1.60.0",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "live: opt-in tests that call external services and may consume quota",
 ]

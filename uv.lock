@@ -1525,7 +1525,7 @@ requires-dist = [
     { name = "markitdown", extras = ["pdf"], specifier = ">=0.1.7" },
     { name = "numpy", specifier = ">=2.4.6" },
     { name = "openai", specifier = ">=2.53.0" },
-    { name = "pageindex", specifier = ">=0.2.8" },
+    { name = "pageindex", specifier = "==0.2.8" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "ragas", specifier = ">=0.4.3" },

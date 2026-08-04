@@ -5,7 +5,7 @@
 **File mở rộng đề xuất:** `src/local_structural_search.py`  
 **Điểm mục tiêu:** 4 điểm Task 8  
 **Vai trò mở rộng:** structural retrieval, fallback an toàn và demo external-service resilience  
-**Trạng thái:** Ready for implementation
+**Trạng thái:** Implemented and live-verified (PageIndex 0.2.8, 10/10 documents ready)
 
 ---
 
@@ -903,23 +903,23 @@ Các hướng này chỉ làm sau khi cloud baseline, provenance, safe refusal v
 
 ## 24. Checklist triển khai
 
-- [ ] Dùng SDK import path/version đã smoke test và pin stable release.
-- [ ] Backend adapter cô lập legacy endpoint/schema.
-- [ ] Registry schema + atomic write + checksum reuse.
-- [ ] Original PDF được ưu tiên; Markdown conversion giữ Unicode.
-- [ ] Upload không chạy trong query path.
-- [ ] Poll processing/retrieval có deadline/backoff.
-- [ ] Chỉ query docs `retrieval_ready=true`.
-- [ ] File-level shortlist giới hạn API calls.
-- [ ] Parser hỗ trợ current và nested legacy relevant contents.
-- [ ] Provenance source/title/url/section/node/page đầy đủ.
-- [ ] Rank proxy được label, không dùng làm confidence.
-- [ ] Public unavailable path trả `[]`, không `NotImplementedError`.
-- [ ] Không giả/local result dưới source PageIndex.
-- [ ] Cache chỉ lưu response thật và ghi cache status.
-- [ ] Unit/mock/live tests pass theo phạm vi.
-- [ ] Task 9 safe refusal khi PageIndex empty/unavailable.
-- [ ] Demo direct route và resilience đã diễn tập.
+- [x] Dùng SDK/API version đã smoke test và pin stable release.
+- [x] Backend adapter cô lập legacy endpoint/schema.
+- [x] Registry schema + atomic write + checksum reuse.
+- [x] Original PDF được ưu tiên; Markdown conversion giữ Unicode.
+- [x] Upload không chạy trong query path.
+- [x] Poll processing/retrieval có deadline/backoff.
+- [x] Chỉ query docs `retrieval_ready=true`.
+- [x] File-level shortlist giới hạn API calls.
+- [x] Parser hỗ trợ current và nested legacy relevant contents.
+- [x] Provenance source/title/url/section/node/page đầy đủ.
+- [x] Rank proxy được label, không dùng làm confidence.
+- [x] Public unavailable path trả `[]`, không `NotImplementedError`.
+- [x] Không giả/local result dưới source PageIndex.
+- [x] Cache chỉ lưu response thật và ghi cache status.
+- [x] Unit/mock/live tests pass theo phạm vi.
+- [x] Task 9 safe refusal khi PageIndex empty/unavailable.
+- [x] Demo direct route và resilience đã diễn tập.
 
 ---
 
