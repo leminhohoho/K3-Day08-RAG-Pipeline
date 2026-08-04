@@ -1,36 +1,14 @@
 """
 Task 4 — Chunking & Indexing vào Vector Store.
 
-Hướng dẫn:
-    1. Đọc toàn bộ markdown files từ data/standardized/
-    2. Chọn 1 chunking strategy (giải thích lý do)
-    3. Chọn 1 embedding model (giải thích lý do)
-    4. Index vào vector store (ChromaDB khuyến cáo — đơn giản, local, không cần Docker)
-
-Chunking options (langchain-text-splitters):
-    - RecursiveCharacterTextSplitter: an toàn, phổ biến
-    - MarkdownHeaderTextSplitter: tốt cho file có heading
-    - SemanticChunker: dùng embedding để tách (nâng cao)
-
-Embedding model options:
-    - sentence-transformers/all-MiniLM-L6-v2 (384 dim, nhẹ)
-    - BAAI/bge-m3 (1024 dim, multilingual, tốt cho cả tiếng Việt lẫn tiếng Anh)
-    - OpenAI text-embedding-3-small (1536 dim, API)
-
-Vector store options:
-    - ChromaDB (khuyến cáo: đơn giản, local persistent, không cần Docker)
-    - Weaviate (hỗ trợ hybrid search built-in, cần Docker/Cloud)
-    - FAISS (chỉ dense search)
-
-Cài đặt:
-    pip install langchain-text-splitters sentence-transformers chromadb
-
-Lưu ý quan trọng: nếu sau này đổi corpus (đổi chủ đề, thêm/bớt tài liệu), phải XÓA
-chroma_db/ cũ trước khi reindex — nếu không, chunk cũ và mới sẽ tồn tại lẫn lộn
-trong cùng collection, retrieval sẽ trả về kết quả rác từ dữ liệu cũ.
+Chunking strategy: markdown_section_recursive (heading-aware + recursive split)
+Embedding: OpenRouter API (BAAI/bge-m3), fallback SentenceTransformer
+Vector Store: ChromaDB (persistent, rebuild on each run)
 """
 
+import hashlib
 import os
+import re
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -41,77 +19,191 @@ CHROMA_DIR = Path(__file__).parent.parent / "chroma_db"
 
 
 # =============================================================================
-# CONFIGURATION — Giải thích lựa chọn của bạn trong comment
+# CONFIGURATION
 # =============================================================================
 
-# TODO: Chọn chunking strategy và giải thích vì sao
-CHUNK_SIZE = 800        # 800 chars: cân bằng giữa context completeness và retrieval granularity
-CHUNK_OVERLAP = 100      # 12.5% overlap: tránh mất thông tin ở chunk boundaries
-CHUNKING_METHOD = "recursive"  # "recursive" | "markdown_header" | "semantic"
+CHUNK_SIZE = 800
+CHUNK_OVERLAP = 100
+CHUNKING_METHOD = "markdown_section_recursive"  # heading-aware + recursive split
 
-EMBEDDING_MODEL = "BAAI/bge-m3"  # Multilingual 1024-dim, tốt cho cả tiếng Việt và tiếng Anh
+EMBEDDING_MODEL = "BAAI/bge-m3"
 EMBEDDING_DIM = 1024
 
-VECTOR_STORE = "chromadb"  # Local persistent, không cần Docker
+VECTOR_STORE = "chromadb"
 COLLECTION_NAME = "university_services_docs"
 
-# Prefix cho query/document encoding (dùng cho E5 models, BGE m3 không cần)
 EMBEDDING_QUERY_PREFIX = ""
 EMBEDDING_DOC_PREFIX = ""
 
-# Embedding qua OpenRouter API (không cần download model 2GB)
+# Embedding via OpenRouter API
 EMBEDDING_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 EMBEDDING_API_BASE = "https://openrouter.ai/api/v1"
 EMBEDDING_BATCH_SIZE = 20
 
 
 # =============================================================================
-# IMPLEMENTATION
+# PARSE canonical metadata header (Task 3 format)
+# =============================================================================
+
+def _parse_markdown_file(filepath: Path) -> dict:
+    """
+    Parse canonical Task 3 markdown format:
+      - Header metadata (## key: value lines) above `---` separator
+      - Body content below `---`
+
+    Returns:
+        {"content": str, "metadata": dict}
+    """
+    raw = filepath.read_text(encoding="utf-8-sig")
+    lines = raw.split("\n")
+
+    # Find the `---` separator
+    sep_index = None
+    for i, line in enumerate(lines):
+        if line.strip() == "---" and i > 0:  # not the first line
+            sep_index = i
+            break
+
+    header_lines = lines[:sep_index] if sep_index is not None else []
+    body_lines = lines[sep_index + 1:] if sep_index is not None else lines
+    body = "\n".join(body_lines).strip()
+
+    # Parse header fields
+    header = {}
+    _title = filepath.stem
+    _document_id = filepath.stem
+    _url = ""
+    _type = "legal" if "legal" in str(filepath) else "news"
+    _language = "vi"
+    _content_hash = ""
+
+    for line in header_lines:
+        line = line.strip()
+        # Match **Key:** value format (bold wraps key AND colon)
+        m = re.match(r"\*\*(\w+(?:\s+\w+)*):\*\*\s*(.*)", line)
+        if not m:
+            # Fallback: **Key:** value
+            m = re.match(r"\*\*(\w+(?:\s+\w+)*)\*\*:\s*(.*)", line)
+        if m:
+            key = m.group(1).strip()
+            val = m.group(2).strip()
+            header[key] = val
+
+    # Extract known fields
+    if "Document ID" in header:
+        _document_id = header["Document ID"]
+    if "Title" in header:
+        _title = header["Title"]
+    if "Source" in header:
+        _url = header["Source"]
+    if "Type" in header:
+        _type = header["Type"].lower()
+    if "Language" in header:
+        _language = header["Language"].lower()
+    if "Content Hash" in header:
+        _content_hash = header["Content Hash"]
+
+    # Fallback: extract title from first H1 in header_lines (before ---) or body
+    if not _title or _title == filepath.stem:
+        for line in header_lines + body_lines:
+            if line.startswith("# ") and not line.startswith("##"):
+                _title = line[2:].strip()
+                break
+    if not _title:
+        _title = filepath.stem
+
+    # If no separator found, body is the whole file content minus empty leading lines
+    if sep_index is None:
+        body = raw.strip()
+
+    return {
+        "content": body,
+        "metadata": {
+            "source": filepath.name,
+            "source_path": str(filepath.relative_to(filepath.parent.parent.parent)),
+            "document_id": _document_id,
+            "type": _type,
+            "title": _title,
+            "url": _url,
+            "language": _language,
+            "section": "",
+            "section_path": "",
+            "content_hash": _content_hash,
+        },
+    }
+
+
+# =============================================================================
+# load_documents
 # =============================================================================
 
 def load_documents() -> list[dict]:
     """
     Đọc toàn bộ markdown files từ data/standardized/.
-
-    Returns:
-        List of dicts, each with:
-            "content": str
-            "metadata": dict with source, document_id, type, title, url, section, language
+    Parse canonical metadata header, chỉ đưa body vào content.
     """
     documents = []
     for md_file in sorted(STANDARDIZED_DIR.rglob("*.md")):
         if md_file.name.startswith("."):
             continue
-        content = md_file.read_text(encoding="utf-8")
-        doc_type = "legal" if "legal" in str(md_file) else "news"
-        document_id = md_file.stem  # filename without extension
-        # Derive title from first H1 or filename stem
-        title = document_id
-        for line in content.split("\n"):
-            if line.startswith("# "):
-                title = line[2:].strip()
-                break
-        documents.append({
-            "content": content,
-            "metadata": {
-                "source": md_file.name,
-                "document_id": document_id,
-                "type": doc_type,
-                "title": title,
-                "url": "",
-                "section": "",
-                "language": "vi",
-            }
-        })
+        doc = _parse_markdown_file(md_file)
+        if not doc["content"]:
+            print(f"⚠ Warning: {md_file.name} has empty body after parsing")
+            continue
+        documents.append(doc)
     return documents
+
+
+# =============================================================================
+# chunk_documents — markdown_section_recursive
+# =============================================================================
+
+def _split_by_headings(content: str) -> list[tuple[str, str, list[str]]]:
+    """
+    Split content by Markdown headings (H1, H2, H3).
+    Returns list of (heading_text, heading_level, section_lines).
+    Pre-heading content gets empty heading.
+
+    Handles content before first heading and content with no headings.
+    """
+    lines = content.split("\n")
+    sections: list[tuple[str, str, list[str]]] = []  # (heading, level, lines)
+
+    current_heading = ""
+    current_level = ""
+    current_lines: list[str] = []
+    has_any_heading = False
+
+    for line in lines:
+        hm = re.match(r"^(#{1,3})\s+(.+)$", line)
+        if hm:
+            has_any_heading = True
+            if current_lines or len(sections) == 0:
+                sections.append((current_heading, current_level, current_lines))
+            current_heading = hm.group(2).strip()
+            current_level = hm.group(1)
+            current_lines = []
+        else:
+            current_lines.append(line)
+
+    if current_lines or not sections:
+        sections.append((current_heading, current_level, current_lines))
+
+    return sections, has_any_heading
+
+
+def _build_section_path(heading: str, title: str, has_any_heading: bool) -> str:
+    """Build section path from heading hierarchy. For flat sections, use title as fallback."""
+    if not heading:
+        return title if has_any_heading else ""
+    return heading
 
 
 def chunk_documents(documents: list[dict]) -> list[dict]:
     """
-    Chunk documents theo strategy đã chọn.
-
-    Returns:
-        List of {'content': str, 'metadata': dict} — mỗi item là 1 chunk
+    Chunk documents theo markdown_section_recursive strategy:
+      1. Tách theo Markdown heading
+      2. RecursiveCharacterTextSplitter cho section dài
     """
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -120,19 +212,61 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
         chunk_overlap=CHUNK_OVERLAP,
         separators=["\n\n", "\n", ". ", " ", ""],
     )
+
     chunks = []
+    chunk_index = 0
+
     for doc in documents:
-        splits = splitter.split_text(doc["content"])
-        for i, chunk_text in enumerate(splits):
-            chunk_id = f"{doc['metadata']['document_id']}_chunk_{i}"
-            chunks.append({
-                "content": chunk_text,
-                "metadata": {
-                    **doc["metadata"],
-                    "chunk_index": i,
-                    "chunk_id": chunk_id,
-                }
-            })
+        meta = doc["metadata"]
+        content = doc["content"]
+        title = meta.get("title", meta.get("document_id", "unknown"))
+
+        sections, has_any_heading = _split_by_headings(content)
+
+        for heading, level, section_lines in sections:
+            section_text = "\n".join(section_lines).strip()
+            if not section_text:
+                continue
+
+            section_path = _build_section_path(heading, title, has_any_heading)
+            section_label = heading if heading else title
+
+            if len(section_text) <= CHUNK_SIZE * 1.1:
+                chunk_id = f"{meta['document_id']}_chunk_{chunk_index}"
+                chunk_hash = hashlib.sha256(section_text.encode()).hexdigest()[:12]
+                chunks.append({
+                    "content": section_text,
+                    "metadata": {
+                        **meta,
+                        "section": section_label,
+                        "section_path": section_path,
+                        "chunk_index": chunk_index,
+                        "chunk_id": chunk_id,
+                        "chunk_hash": chunk_hash,
+                    },
+                })
+                chunk_index += 1
+            else:
+                # Recursive split on long section
+                splits = splitter.split_text(section_text)
+                for i, split_text in enumerate(splits):
+                    if not split_text.strip():
+                        continue
+                    chunk_id = f"{meta['document_id']}_chunk_{chunk_index}"
+                    chunk_hash = hashlib.sha256(split_text.encode()).hexdigest()[:12]
+                    chunks.append({
+                        "content": split_text,
+                        "metadata": {
+                            **meta,
+                            "section": section_label,
+                            "section_path": section_path,
+                            "chunk_index": chunk_index,
+                            "chunk_id": chunk_id,
+                            "chunk_hash": chunk_hash,
+                        },
+                    })
+                    chunk_index += 1
+
     return chunks
 
 
@@ -142,10 +276,10 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
 
 _openai_client = None
 _local_model = None
+_embedding_model = None
 
 
 def _get_openai_client():
-    """Lazy-load và cache OpenAI-compatible client (OpenRouter)."""
     global _openai_client
     if _openai_client is None:
         from openai import OpenAI
@@ -154,7 +288,6 @@ def _get_openai_client():
 
 
 def _get_local_model():
-    """Lazy-load và cache local SentenceTransformer (fallback)."""
     global _local_model
     if _local_model is None:
         from sentence_transformers import SentenceTransformer
@@ -163,23 +296,15 @@ def _get_local_model():
 
 
 def _embed_batch_api(texts: list[str]) -> list[list[float]]:
-    """Embed một batch texts qua OpenRouter API (OpenAI-compatible embeddings endpoint)."""
     if not EMBEDDING_API_KEY:
         raise RuntimeError("OPENROUTER_API_KEY chưa được set trong .env")
     client = _get_openai_client()
-    response = client.embeddings.create(
-        model=EMBEDDING_MODEL,
-        input=texts,
-    )
-    # Sort theo index để giữ thứ tự input
+    response = client.embeddings.create(model=EMBEDDING_MODEL, input=texts)
     ordered = sorted(response.data, key=lambda item: item.index)
     return [item.embedding for item in ordered]
 
 
 def _embed_texts(texts: list[str]) -> list[list[float]]:
-    """
-    Embed texts: ưu tiên OpenRouter API, fallback local SentenceTransformer.
-    """
     try:
         return _embed_batch_api(texts)
     except Exception as api_err:
@@ -191,59 +316,88 @@ def _embed_texts(texts: list[str]) -> list[list[float]]:
 
 def embed_chunks(chunks: list[dict]) -> list[dict]:
     """
-    Embed toàn bộ chunks bằng OpenRouter API (fallback local model).
-
-    Returns:
-        Mỗi chunk dict được thêm key 'embedding': list[float]
+    Embed toàn bộ chunks. Chỉ encode chunk content, không encode metadata.
     """
+    if not chunks:
+        return []
+
     texts = [c["content"] for c in chunks]
-    # Batch embed theo EMBEDDING_BATCH_SIZE
     all_embeddings: list[list[float]] = []
     for i in range(0, len(texts), EMBEDDING_BATCH_SIZE):
         batch = texts[i:i + EMBEDDING_BATCH_SIZE]
         all_embeddings.extend(_embed_texts(batch))
+
     for chunk, emb in zip(chunks, all_embeddings):
         chunk["embedding"] = emb
+
+    # Verify dimension
+    if all_embeddings:
+        actual_dim = len(all_embeddings[0])
+        if actual_dim != EMBEDDING_DIM:
+            raise ValueError(
+                f"Embedding dimension mismatch: expected {EMBEDDING_DIM}, got {actual_dim}. "
+                f"Check model: {EMBEDDING_MODEL}"
+            )
+
     return chunks
 
 
+# =============================================================================
+# index_to_vectorstore — rebuild collection
+# =============================================================================
+
 def index_to_vectorstore(chunks: list[dict]):
     """
-    Lưu chunks vào vector store đã chọn.
+    Lưu chunks vào vector store.
+    Rebuild collection (delete + create) để tránh stale data.
     """
     import chromadb
 
     CHROMA_DIR.mkdir(parents=True, exist_ok=True)
     client = chromadb.PersistentClient(path=str(CHROMA_DIR))
-    collection = client.get_or_create_collection(
+
+    # Delete old collection if exists, then create fresh
+    try:
+        client.delete_collection(COLLECTION_NAME)
+    except Exception:
+        pass
+
+    collection = client.create_collection(
         name=COLLECTION_NAME,
         metadata={"hnsw:space": "cosine"},
     )
 
-    ids = [c["metadata"]["chunk_id"] for c in chunks]
-    collection.upsert(
-        ids=ids,
-        documents=[c["content"] for c in chunks],
-        embeddings=[c["embedding"] for c in chunks],
-        metadatas=[c["metadata"] for c in chunks],
-    )
+    # Upsert in batches
+    batch_size = 50
+    for i in range(0, len(chunks), batch_size):
+        batch = chunks[i:i + batch_size]
+        ids = [c["metadata"]["chunk_id"] for c in batch]
+        documents = [c["content"] for c in batch]
+        embeddings = [c["embedding"] for c in batch]
+        # Only store scalar metadata (str, int, float, bool)
+        metadatas = []
+        for c in batch:
+            m = dict(c["metadata"])
+            # Remove non-scalar fields
+            for k in list(m.keys()):
+                v = m[k]
+                if not isinstance(v, (str, int, float, bool)):
+                    m[k] = str(v) if v is not None else ""
+            metadatas.append(m)
+
+        collection.upsert(ids=ids, documents=documents, embeddings=embeddings, metadatas=metadatas)
 
 
 # =============================================================================
 # SHARED HELPERS (exported for Task 5, 6, 9)
 # =============================================================================
 
-_embedding_model = None
 _chroma_client = None
 _chroma_collection = None
 
 
 class _APIEmbeddingModel:
-    """
-    Wrapper mimic SentenceTransformer.encode() interface, dùng OpenRouter API
-    với fallback local model. Đảm bảo get_embedding_model() trả instance dùng
-    chung cho cả query lẫn document encoding.
-    """
+    """Wrapper mimic SentenceTransformer.encode() interface, dùng OpenRouter API."""
 
     def encode(self, texts, normalize_embeddings=True, show_progress_bar=False, **kwargs):
         single_input = isinstance(texts, str)
@@ -263,10 +417,7 @@ class _APIEmbeddingModel:
 
 
 def get_embedding_model():
-    """
-    Lazy-loads và caches embedding model instance.
-    Returns the same instance on every call within a process.
-    """
+    """Lazy-load và cache embedding model instance."""
     global _embedding_model
     if _embedding_model is None:
         _embedding_model = _APIEmbeddingModel()
@@ -287,7 +438,6 @@ def get_collection():
             name=COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"},
         )
-        # Check dimension if collection has data
         if _chroma_collection.count() > 0:
             sample = _chroma_collection.get(limit=1, include=["embeddings"])
             if sample is not None:
@@ -304,35 +454,62 @@ def get_collection():
 
 
 def prepare_query_for_embedding(query: str) -> str:
-    """
-    Applies EMBEDDING_QUERY_PREFIX if configured.
-    Must be symmetric with doc-side prefix used during indexing.
-    """
+    """Applies EMBEDDING_QUERY_PREFIX if configured."""
     if EMBEDDING_QUERY_PREFIX:
         return f"{EMBEDDING_QUERY_PREFIX}{query}"
     return query
 
 
+def prepare_document_for_embedding(document: str) -> str:
+    """Applies EMBEDDING_DOC_PREFIX if configured (symmetric with query prefix)."""
+    if EMBEDDING_DOC_PREFIX:
+        return f"{EMBEDDING_DOC_PREFIX}{document}"
+    return document
+
+
+# =============================================================================
+# run_pipeline
+# =============================================================================
+
 def run_pipeline():
     """Chạy toàn bộ pipeline: load → chunk → embed → index."""
-    print("=" * 50)
+    print("=" * 60)
     print("Task 4: Chunking & Indexing")
     print(f"  Chunking: {CHUNKING_METHOD} (size={CHUNK_SIZE}, overlap={CHUNK_OVERLAP})")
     print(f"  Embedding: {EMBEDDING_MODEL} (dim={EMBEDDING_DIM})")
     print(f"  Vector Store: {VECTOR_STORE}")
-    print("=" * 50)
+    print("=" * 60)
 
     docs = load_documents()
     print(f"\n✓ Loaded {len(docs)} documents")
 
+    # Stats: count by type
+    type_counts = {}
+    for d in docs:
+        t = d["metadata"]["type"]
+        type_counts[t] = type_counts.get(t, 0) + 1
+    for t, c in type_counts.items():
+        print(f"    - {t}: {c}")
+
     chunks = chunk_documents(docs)
     print(f"✓ Created {len(chunks)} chunks")
+
+    # Stats: min/avg/max chunk length
+    if chunks:
+        lengths = [len(c["content"]) for c in chunks]
+        print(f"    - Length: min={min(lengths)}, avg={sum(lengths)//len(lengths)}, max={max(lengths)}")
 
     chunks = embed_chunks(chunks)
     print(f"✓ Embedded {len(chunks)} chunks")
 
     index_to_vectorstore(chunks)
     print("✓ Indexed to vector store")
+
+    # Verify
+    import chromadb
+    client = chromadb.PersistentClient(path=str(CHROMA_DIR))
+    col = client.get_collection(COLLECTION_NAME)
+    print(f"\n✓ ChromaDB collection '{COLLECTION_NAME}' has {col.count()} chunks")
 
 
 if __name__ == "__main__":

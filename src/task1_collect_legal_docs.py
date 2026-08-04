@@ -6,10 +6,10 @@ Hướng dẫn:
     2. Tải về và lưu vào data/landing/legal/
     3. Đặt tên file rõ ràng, không dấu, mô tả đúng nội dung.
 
-Gợi ý nguồn (ví dụ trang công khai RMIT Vietnam — rmit.edu.vn):
-    - https://www.rmit.edu.vn/study-at-rmit/tuition-fees
-    - https://www.rmit.edu.vn/study-at-rmit/scholarships/...
-    - https://www.rmit.edu.vn/students/my-studies/fees-and-payments
+Gợi ý nguồn (ví dụ trang công khai Trường Đại học Khoa học Xã hội và Nhân văn (USSH) — ussh.vnu.edu.vn):
+    - https://ussh.vnu.edu.vn/vi/news/thong-bao/thong-bao-ke-hoach-thu-hoc-phi-23755.html
+    - https://ussh.vnu.edu.vn/vi/van-ban/detail/Quy-dinh-ve-cong-tac-quan-ly-va-su-dung-hoc-bong-19468/
+    - https://ussh.vnu.edu.vn/vi/news/thong-bao/thong-bao-ke-hoach-thu-hoc-phi-23755.html
 
 Gợi ý văn bản (chủ đề dịch vụ đại học):
     - Học phí & phương thức thanh toán (Tuition Fees)

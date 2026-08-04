@@ -86,7 +86,7 @@ Xem code mẫu (DeepEval/RAGAS/TruLens) chi tiết trong `README.md` gốc mục
            ↓
     Task 1: Legal PDFs  +  Task 2: Crawl News
            ↓
-    RMIT Vietnam (rmit.edu.vn)
+    Trường Đại học Khoa học Xã hội và Nhân văn, ĐHQGHN (ussh.vnu.edu.vn)
 ```
 
 ---

@@ -42,11 +42,11 @@ with st.sidebar:
 
     st.subheader("💡 Câu hỏi gợi ý")
     suggestions = [
-        "Học phí tại RMIT Vietnam là bao nhiêu?",
+        "Học phí tại Trường Đại học Khoa học Xã hội và Nhân văn (USSH) là bao nhiêu?",
         "Làm sao để đặt phòng học nhóm ở thư viện?",
-        "Điều kiện xin học bổng Academic Achievement?",
+        "Điều kiện xin học bổng là gì?",
         "Dịch vụ hỗ trợ chỗ ở cho sinh viên như thế nào?",
-        "Cách đăng ký học phần qua myRMIT?",
+        "Cách đăng ký học phần tại USSH như thế nào?",
     ]
     for s in suggestions:
         if st.button(s, use_container_width=True, key=f"sug_{s[:20]}"):
@@ -87,8 +87,9 @@ for msg in st.session_state.messages:
                     source_name = meta.get("source", "Unknown")
                     doc_type = meta.get("type", "unknown")
                     score = src.get("score", 0)
-                    st.markdown(f"**[{i}] {source_name}** `{doc_type}` | score: `{score:.4f}`")
-                    st.text(src.get("content", "")[:300] + "...")
+                    display_score = src.get("confidence_score") or src.get("score", 0)
+                    st.markdown(f"**[{i}] {source_name}** `{doc_type}` | similarity: `{display_score:.4f}`")
+                    st.text(src.get("content", ""))
                     st.divider()
 
 # =============================================================================
@@ -140,8 +141,9 @@ if query:
                         source_name = meta.get("source", "Unknown")
                         doc_type = meta.get("type", "unknown")
                         score = src.get("score", 0)
-                        st.markdown(f"**[{i}] {source_name}** `{doc_type}` | score: `{score:.4f}`")
-                        st.text(src.get("content", "")[:300] + "...")
+                        display_score = src.get("confidence_score") or src.get("score", 0)
+                        st.markdown(f"**[{i}] {source_name}** `{doc_type}` | similarity: `{display_score:.4f}`")
+                        st.text(src.get("content", ""))
                         st.divider()
 
     st.session_state.messages.append({

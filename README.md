@@ -73,7 +73,7 @@ K3-Day08-RAG-Pipeline-Starter/
 
 Tìm và tải về **tối thiểu 3 văn bản chính sách/quy định** dạng PDF/DOCX về dịch vụ đại học (học phí, học bổng, ký túc xá, đăng ký học phần). Lưu vào `data/landing/`.
 
-**Gợi ý nguồn** (ví dụ trang công khai RMIT Vietnam):
+**Gợi ý nguồn** (ví dụ trang công khai Trường Đại học Khoa học Xã hội và Nhân văn, ĐHQGHN — USSH):
 - Học phí & phương thức thanh toán (Tuition Fees)
 - Chính sách học bổng (Scholarship eligibility)
 - Quy định ký túc xá / hỗ trợ chỗ ở (Accommodation Services)
@@ -81,7 +81,7 @@ Tìm và tải về **tối thiểu 3 văn bản chính sách/quy định** dạ
 
 **Yêu cầu:**
 - Lưu file gốc (PDF/DOCX) vào `data/landing/legal/`
-- Đặt tên file rõ ràng: `tuition-fees-rmit.pdf`, `academic-achievement-scholarship-rmit.pdf`, ...
+- Đặt tên file rõ ràng: `NhanVan_HocPhi.pdf`, `NhanVan_HocBong.pdf`, ...
 
 ---
 
@@ -125,11 +125,11 @@ from markitdown import MarkItDown
 md = MarkItDown()
 
 # Convert PDF
-result = md.convert("data/landing/legal/tuition-fees-rmit.pdf")
+result = md.convert("data/landing/legal/NhanVan_HocPhi.pdf")
 print(result.text_content)
 
 # Convert DOCX
-result = md.convert("data/landing/legal/academic-achievement-scholarship-rmit.docx")
+result = md.convert("data/landing/legal/NhanVan_HocBong.pdf")
 ```
 
 **Lưu ý:** MarkItDown cần cài thêm extra `pip install "markitdown[pdf]"` để convert được file
@@ -138,7 +138,7 @@ PDF — nếu chỉ `pip install markitdown` sẽ báo lỗi `MissingDependencyE
 **Yêu cầu:**
 - Output lưu vào `data/standardized/`
 - Giữ nguyên cấu trúc thư mục con (`legal/`, `news/`)
-- Mỗi file output có tên tương ứng: `tuition-fees-rmit.md`
+- Mỗi file output có tên tương ứng: `NhanVan_HocPhi.md`
 
 ---
 

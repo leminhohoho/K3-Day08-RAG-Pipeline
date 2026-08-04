@@ -552,7 +552,7 @@ class TestTask10(unittest.TestCase):
         """generate_with_citation() trả về dict có 'answer'."""
         generate, _, _ = self._import_task10()
         try:
-            result = generate("What is the tuition fee at RMIT Vietnam?")
+            result = generate("What is the tuition fee at Trường Đại học Khoa học Xã hội và Nhân văn (USSH)?")
             self.assertIsInstance(result, dict)
             self.assertIn("answer", result)
             self.assertIsInstance(result["answer"], str)

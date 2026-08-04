@@ -57,6 +57,7 @@ Quy tắc bắt buộc:
 # DOCUMENT REORDERING (tránh lost in the middle)
 # =============================================================================
 
+
 def reorder_for_llm(chunks: list[dict]) -> list[dict]:
     """
     Sắp xếp chunks để tránh "lost in the middle" effect.
@@ -75,14 +76,15 @@ def reorder_for_llm(chunks: list[dict]) -> list[dict]:
     if len(chunks) <= 2:
         return list(chunks)
 
-    front = chunks[::2]   # indices 0, 2, 4, ...
-    back = chunks[1::2]   # indices 1, 3, ...
+    front = chunks[::2]  # indices 0, 2, 4, ...
+    back = chunks[1::2]  # indices 1, 3, ...
     return front + back[::-1]
 
 
 # =============================================================================
 # CONTEXT FORMATTING
 # =============================================================================
+
 
 def format_context(chunks: list[dict]) -> str:
     """
@@ -101,8 +103,7 @@ def format_context(chunks: list[dict]) -> str:
         source = metadata.get("source", f"Source {i}")
         doc_type = metadata.get("type", "unknown")
         context_parts.append(
-            f"[Document {i} | Source: {source} | Type: {doc_type}]\n"
-            f"{chunk['content']}"
+            f"[Document {i} | Source: {source} | Type: {doc_type}]\n{chunk['content']}"
         )
     return "\n---\n".join(context_parts)
 
@@ -110,6 +111,7 @@ def format_context(chunks: list[dict]) -> str:
 # =============================================================================
 # GENERATION
 # =============================================================================
+
 
 def generate_with_citation(query: str, top_k: int = TOP_K) -> dict:
     """
@@ -156,9 +158,7 @@ def generate_with_citation(query: str, top_k: int = TOP_K) -> dict:
     # Step 5: Call LLM (OpenRouter — OpenAI-compatible API)
     api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise ValueError(
-            "Missing OPENROUTER_API_KEY or OPENAI_API_KEY in .env"
-        )
+        raise ValueError("Missing OPENROUTER_API_KEY or OPENAI_API_KEY in .env")
 
     from openai import OpenAI
 
@@ -187,15 +187,18 @@ def generate_with_citation(query: str, top_k: int = TOP_K) -> dict:
 
 if __name__ == "__main__":
     test_queries = [
-        "Học phí tại trường đại học là bao nhiêu?",
+        "Học phí tại USSH là bao nhiêu?",
         "Làm sao để đặt phòng học nhóm ở thư viện?",
         "Sinh viên quốc tế có những học bổng nào?",
     ]
 
     for q in test_queries:
-        print(f"\n{'='*70}")
+        print(f"\n{'=' * 70}")
         print(f"Q: {q}")
         print("=" * 70)
         result = generate_with_citation(q)
         print(f"\nA: {result['answer']}")
-        print(f"\n[Sources: {len(result['sources'])} chunks | via {result['retrieval_source']}]")
+        print(
+            f"\n[Sources: {len(result['sources'])} chunks | via {result['retrieval_source']}]"
+        )
+

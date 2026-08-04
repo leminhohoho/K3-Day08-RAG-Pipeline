@@ -122,7 +122,7 @@ def retrieve(
 
 if __name__ == "__main__":
     test_queries = [
-        "Học phí tại RMIT Vietnam là bao nhiêu?",
+        "Học phí tại USSH là bao nhiêu?",
         "Làm sao để đặt phòng học nhóm ở thư viện?",
         "Điều kiện xin học bổng là gì?",
         "xyzabc123nonsense",  # Query không có kết quả → test fallback
