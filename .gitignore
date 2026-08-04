@@ -28,3 +28,5 @@ group_project/evaluation/runs/
 # OS
 .DS_Store
 Thumbs.db
+
+chroma_db/*
