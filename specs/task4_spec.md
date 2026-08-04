@@ -1,344 +1,321 @@
 # Task 4 Spec — Chunking & Indexing into Vector Store
 
-## 1. Overview
+## 1. Mục tiêu và trạng thái
 
-Task 4 is the **data indexing layer** of the RAG pipeline. It converts raw markdown documents from `data/standardized/` into searchable vector embeddings stored in a persistent ChromaDB collection.
+Task 4 biến các tài liệu Markdown chuẩn hóa từ Task 3 thành các chunk có thể truy xuất và lưu chúng trong ChromaDB.
 
-**Role in the pipeline:**
+```text
+data/standardized/
+  -> tách metadata và body
+  -> chia theo heading
+  -> chia nhỏ section dài
+  -> embedding phần nội dung
+  -> ChromaDB (vector + metadata)
 ```
-data/standardized/  →  [load_documents]  →  [chunk_documents]  →  [embed_chunks]  →  [index_to_vectorstore]  →  chroma_db/
-     (raw .md)                                                                                                        (vector store)
-```
 
-**Who implements this:** Role 2 (Data & Dense Search Dev) — Checkpoint 2
+File `src/task4_chunking_indexing.py` hiện được giữ ở dạng starter/TODO để thành viên phụ trách Task 4 chủ động triển khai. Tài liệu này là hợp đồng triển khai và bàn giao, không có nghĩa là Task 4 đã hoàn thành.
 
-**How to run:** `python src/task4_chunking_indexing.py`
+- Người phụ trách: Role 2 — Data & Dense Search Dev
+- Lệnh chạy dự kiến: `python src/task4_chunking_indexing.py`
+- Đầu vào: toàn bộ `*.md` trong `data/standardized/legal/` và `data/standardized/news/`
+- Đầu ra: collection ChromaDB persistent tại `chroma_db/`
 
 ---
 
-## 2. Pipeline Flow
+## 2. Thiết kế đề xuất
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                      run_pipeline()                                 │
-│                                                                     │
-│   1. load_documents()                                               │
-│      └─ Scans data/standardized/ for all .md files                  │
-│      └─ Returns list of {content, metadata} dicts                   │
-│                                                                     │
-│   2. chunk_documents(docs)                                          │
-│      └─ Splits each document into smaller chunks                   │
-│      └─ Uses RecursiveCharacterTextSplitter                         │
-│      └─ Returns list of {content, metadata} dicts (one per chunk)   │
-│                                                                     │
-│   3. embed_chunks(chunks)                                           │
-│      └─ Encodes each chunk text into a vector embedding             │
-│      └─ Uses sentence-transformers (BAAI/bge-m3)                    │
-│      └─ Adds key "embedding": list[float] to each chunk dict        │
-│                                                                     │
-│   4. index_to_vectorstore(chunks)                                   │
-│      └─ Creates/opens persistent ChromaDB at chroma_db/             │
-│      └─ Upserts chunks with embeddings, metadata, unique IDs        │
-│                                                                     │
-│   5. Prints summary to console                                      │
-└─────────────────────────────────────────────────────────────────────┘
-```
+### 2.1 Cấu hình
 
-### ⚠️ Critical: Clean Before Reindex
+| Constant | Giá trị đề xuất | Lý do |
+|---|---:|---|
+| `CHUNK_SIZE` | `800` | Đủ ngữ cảnh cho văn bản pháp lý nhưng vẫn giữ retrieval chính xác |
+| `CHUNK_OVERLAP` | `100` | Overlap 12.5% để hạn chế mất ý ở biên chunk |
+| `CHUNKING_METHOD` | `"markdown_section_recursive"` | Giữ cấu trúc heading, sau đó xử lý section dài |
+| `EMBEDDING_MODEL` | `"BAAI/bge-m3"` | Multilingual, phù hợp tiếng Việt và tiếng Anh |
+| `EMBEDDING_DIM` | `1024` | Kích thước output của `BAAI/bge-m3` |
+| `VECTOR_STORE` | `"chromadb"` | Chạy local, persistent, có metadata filtering |
+| `COLLECTION_NAME` | `"university_services_docs"` | Một collection thống nhất cho corpus của lab |
 
-If you later change the corpus (add/remove documents, change topic), **you MUST delete `chroma_db/`** before re-running. Otherwise old and new chunks co-exist in the same collection, producing garbage retrieval results.
+Ràng buộc bắt buộc:
 
-```bash
-rm -rf chroma_db/
-python src/task4_chunking_indexing.py
-```
-
----
-
-## 3. Interface & API Contract
-
-### 3.1 Configuration Constants (module-level)
-
-| Constant | Type | Default | Description |
-|---|---|---|---|
-| `STANDARDIZED_DIR` | `Path` | `data/standardized/` | Input directory for markdown files |
-| `CHROMA_DIR` | `Path` | `chroma_db/` | Output directory for ChromaDB persistence |
-| `CHUNK_SIZE` | `int` | 800 | Max characters per chunk |
-| `CHUNK_OVERLAP` | `int` | 100 | Overlap characters between consecutive chunks |
-| `CHUNKING_METHOD` | `str` | `"recursive"` | Strategy: `"recursive"` | `"markdown_header"` | `"semantic"` |
-| `EMBEDDING_MODEL` | `str` | `"bge-m3"` | embedding model's name |
-| `EMBEDDING_DIM` | `int` | 1024 | Output dimension of the embedding model |
-| `VECTOR_STORE` | `str` | `"chromadb"` | Vector store choice: `"chromadb"` | `"weaviate"` | `"faiss"` |
-| `COLLECTION_NAME` | `str` | `"university_services_docs"` | ChromaDB collection name |
-| `EMBEDDING_QUERY_PREFIX` | `str` | `""` | Optional prefix for query encoding (e.g. `"query: "` for E5 models) |
-| `EMBEDDING_DOC_PREFIX` | `str` | `""` | Optional prefix for document encoding (e.g. `"passage: "` for E5 models) |
-
-**Constraints (enforced by tests):**
 - `CHUNK_SIZE > 0`
-- `CHUNK_OVERLAP > 0`
-- `CHUNK_OVERLAP < CHUNK_SIZE`
+- `0 < CHUNK_OVERLAP < CHUNK_SIZE`
+- Model dùng để index và model dùng để encode query ở Task 5 phải giống nhau.
+- Nếu model cần query/document prefix thì phải cấu hình đối xứng, không tự thêm prefix cho một phía.
 
-### 3.2 Function: `load_documents()`
+### 2.2 Pipeline
+
+```text
+run_pipeline()
+  1. load_documents()
+     - đọc tất cả file Markdown
+     - parse canonical metadata header của Task 3
+     - chỉ trả body làm content
+
+  2. chunk_documents(documents)
+     - chia body theo Markdown heading
+     - recursively split các section dài
+     - gắn section, section_path, chunk_index và chunk_id
+
+  3. embed_chunks(chunks)
+     - chỉ encode chunk content
+     - không encode metadata kỹ thuật
+
+  4. index_to_vectorstore(chunks)
+     - rebuild collection an toàn
+     - upsert vector, content và metadata
+```
+
+---
+
+## 3. Hợp đồng dữ liệu
+
+### 3.1 `load_documents()`
 
 ```python
 def load_documents() -> list[dict]:
-    """
-    Reads all .md files from data/standardized/ recursively.
-
-    Returns:
-        List of dicts, each with:
-            "content": str   — full text of the markdown file
-            "metadata": dict — containing:
-                "source": str      — filename (e.g. "tuition-policy.md")
-                "document_id": str — stem of filename without extension (e.g. "tuition-policy")
-                "type": str        — "legal" if path contains "legal", else "news"
-                "title": str      — document title (derived from filename stem)
-                "url": str        — empty string "" (reserved for future use)
-                "section": str    — empty string "" (reserved for section info)
-                "language": str   — "vi" (default)
-    """
+    ...
 ```
 
-**Behavior:**
-- Iterate recursively through `STANDARDIZED_DIR.rglob("*.md")`
-- Read each file with `utf-8` encoding
-- Derive `document_id` from the filename stem (e.g. `"tuition-policy.md"` → `"tuition-policy"`)
-- Derive `title` from the filename stem (replace hyphens/underscores with spaces, title-case) OR from the first H1 heading in the markdown content
-- Infer `type` from parent directory name: `"legal"` if `"legal"` in `str(md_file)`, else `"news"`
-- Set `url`, `section` to empty string `""` as defaults
-- Set `language` to `"vi"` as default
-- Return empty list if no .md files found (test expects list, not None)
+Mỗi phần tử trả về có dạng:
 
-### 3.3 Function: `chunk_documents(documents: list[dict]) -> list[dict]`
+```python
+{
+    "content": "Nội dung thực của tài liệu sau dòng ---",
+    "metadata": {
+        "source": "article_04.md",
+        "source_path": ".../data/standardized/news/article_04.md",
+        "document_id": "ussh-undergraduate-admissions-2026",
+        "type": "news",
+        "title": "Thông tin tuyển sinh đại học chính quy năm 2026",
+        "url": "https://ussh.vnu.edu.vn/...",
+        "language": "vi",
+        "section": "",
+        "section_path": "",
+        "content_hash": "..."
+    }
+}
+```
+
+Yêu cầu:
+
+- Duyệt đệ quy bằng `STANDARDIZED_DIR.rglob("*.md")` và sắp xếp đường dẫn để kết quả ổn định.
+- Đọc bằng `utf-8-sig` để chấp nhận cả UTF-8 có BOM.
+- Với định dạng canonical của Task 3, parse header phía trên dòng `---`; chỉ body phía dưới mới được đưa vào `content`.
+- Giữ các metadata phục vụ citation và audit: `document_id`, `title`, `url`, `type`, `language`, `organization`, ngày xuất bản, `source_sha256`, `content_hash` nếu có.
+- Có fallback an toàn từ tên file/H1 khi một trường không tồn tại.
+- Có thể hỗ trợ YAML front matter để tương thích dữ liệu ngoài, nhưng canonical header của Task 3 là đường xử lý chính.
+- Trả `[]` khi không có file; không trả `None`.
+- Báo lỗi rõ ràng nếu body canonical rỗng hoặc thiếu separator, thay vì embedding metadata header.
+
+Ví dụ từ corpus hiện tại:
+
+| Nhóm | File | `document_id` | URL |
+|---|---|---|---|
+| legal | `NhanVan_HocPhi.md` | `ussh-tuition-plan-semester-1-2025-2026` | URL thông báo học phí chính thức của USSH |
+| news | `article_04.md` | `ussh-undergraduate-admissions-2026` | URL tuyển sinh 2026 chính thức của USSH |
+
+### 3.2 `chunk_documents(documents)`
 
 ```python
 def chunk_documents(documents: list[dict]) -> list[dict]:
-    """
-    Splits documents into chunks using the configured strategy.
-
-    Args:
-        documents: output from load_documents()
-
-    Returns:
-        List of dicts, each with:
-            "content": str   — chunk text
-            "metadata": dict — inherits parent metadata PLUS:
-                "chunk_index": int  — sequential index within the source document (0-based)
-                "chunk_id": str     — unique ID: f"{document_id}_chunk_{chunk_index}"
-    """
+    ...
 ```
 
-**Behavior:**
-- Use `RecursiveCharacterTextSplitter` from `langchain_text_splitters` with:
-  - `chunk_size=CHUNK_SIZE`
-  - `chunk_overlap=CHUNK_OVERLAP`
-  - `separators=["\n\n", "\n", ". ", " ", ""]`
-- Each chunk content length must not exceed `CHUNK_SIZE * 1.1` (10% tolerance)
-- Preserve parent metadata and add `chunk_index` and `chunk_id` to each chunk
+Chiến lược hai tầng:
 
-### 3.4 Function: `embed_chunks(chunks: list[dict]) -> list[dict]`
+1. Tách theo Markdown heading để không trộn hai mục/điều/chủ đề khác nhau.
+2. Dùng `RecursiveCharacterTextSplitter` cho section dài với thứ tự separator:
+
+```python
+["\n\n", "\n", ". ", " ", ""]
+```
+
+Mỗi chunk phải giữ metadata cha và bổ sung:
+
+```python
+{
+    "section": "Tên heading gần nhất",
+    "section_path": "Heading cha > Heading con",
+    "chunk_index": 0,
+    "chunk_id": "{document_id}_chunk_0",
+    "chunk_hash": "sha256-của-chunk-content"
+}
+```
+
+Quy tắc quan trọng cho corpus hiện tại:
+
+- Một số bài news không có H2/H3 hoặc có nội dung trước heading đầu tiên.
+- Khi đó phải dùng `metadata["title"]` làm fallback cho cả `section` và `section_path`; không tạo chunk có section rỗng.
+- `chunk_index` bắt đầu từ 0 và tăng liên tục trong từng document.
+- `chunk_id` ổn định giữa các lần chạy nếu document và cấu hình chunking không đổi.
+- Nội dung chunk không chứa `Source SHA256`, `Content Hash`, URL hay các dòng metadata kỹ thuật ở header.
+- Mỗi chunk không vượt quá `CHUNK_SIZE * 1.1`, theo tolerance của test lab.
+
+### 3.3 `embed_chunks(chunks)`
 
 ```python
 def embed_chunks(chunks: list[dict]) -> list[dict]:
-    """
-    Encodes chunk texts into vector embeddings.
-
-    Args:
-        chunks: output from chunk_documents()
-
-    Returns:
-        Same list of dicts, each augmented with:
-            "embedding": list[float]  — vector representation of the chunk text
-    """
+    ...
 ```
 
-**Behavior:**
-- Use open router API for embedding (API key is provided)
-- Convert each embedding to `list[float]` via `.tolist()`
-- The model `BAAI/bge-m3` produces 1024-dimensional vectors
+Yêu cầu:
 
-### 3.5 Function: `index_to_vectorstore(chunks: list[dict])`
+- Lazy-load và cache `SentenceTransformer(EMBEDDING_MODEL)` một lần trong mỗi process.
+- Encode theo batch, bật progress bar khi chạy CLI.
+- Chỉ đưa `chunk["content"]` vào model; metadata không tham gia embedding.
+- Nếu sử dụng cosine similarity, nên normalize embedding và ghi rõ lựa chọn.
+- Chuyển từng vector thành `list[float]`.
+- Kiểm tra dimension thực tế bằng `EMBEDDING_DIM`; lỗi sai dimension phải có thông báo rõ.
+- Với input rỗng, trả `[]` mà không tải model.
+
+### 3.4 `index_to_vectorstore(chunks)`
 
 ```python
 def index_to_vectorstore(chunks: list[dict]) -> None:
-    """
-    Upserts chunks with embeddings into the persistent ChromaDB collection.
-
-    Args:
-        chunks: output from embed_chunks() (each dict has content, metadata, embedding)
-
-    Returns:
-        None. Side effect: writes to chroma_db/ directory.
-    """
+    ...
 ```
 
-**Behavior:**
-- Create `CHROMA_DIR` if it doesn't exist: `CHROMA_DIR.mkdir(parents=True, exist_ok=True)`
-- Initialize `chromadb.PersistentClient(path=str(CHROMA_DIR))`
-- Get or create collection with:
-  - `name=COLLECTION_NAME`
-  - `metadata={"hnsw:space": "cosine"}`
-- Generate unique IDs from each chunk's `chunk_id` metadata field (`f"{document_id}_chunk_{chunk_index}"`), falling back to `f"{metadata['source']}_chunk_{chunk_index}"` for legacy chunks
-- Call `collection.upsert(ids=ids, documents=[...], embeddings=[...], metadatas=[...])`
+Yêu cầu:
 
-### 3.7 Shared Helpers (imported by Task 5)
+- Dùng `chromadb.PersistentClient(path=str(CHROMA_DIR))`.
+- Collection dùng cosine distance: `metadata={"hnsw:space": "cosine"}`.
+- ID của Chroma lấy từ `metadata["chunk_id"]`.
+- Upsert theo batch để tránh dùng quá nhiều RAM.
+- Metadata ghi vào Chroma chỉ gồm scalar hợp lệ: `str`, `int`, `float`, `bool`.
+- Không ghi index nếu chunk chưa có embedding.
 
-These helpers are **exported from Task 4** and reused by Task 5/6 — do NOT create a second model/client instance in other tasks. They must be lazy-loaded and cached per process.
+### 3.5 Re-index an toàn
+
+`upsert()` không tự xóa chunk của tài liệu đã bị loại khỏi corpus. Vì vậy full rebuild phải thay thế collection cũ trước khi index, nếu không retrieval có thể trả về dữ liệu stale.
+
+Cách ưu tiên:
 
 ```python
-def get_embedding_model():
-    """
-    Lazy-loads and caches SentenceTransformer(EMBEDDING_MODEL).
-    Returns the same instance on every call within a process.
-    """
+client = chromadb.PersistentClient(path=str(CHROMA_DIR))
+try:
+    client.delete_collection(COLLECTION_NAME)
+except Exception:
+    pass  # chỉ bỏ qua trường hợp collection chưa tồn tại
 
-
-def get_collection():
-    """
-    Opens the persistent ChromaDB collection via PersistentClient(CHROMA_DIR).
-    Creates it if missing. Uses COLLECTION_NAME + hnsw:space=cosine.
-    Raises a clear config error if the embedding dimension mismatches.
-    """
-
-
-def prepare_query_for_embedding(query: str) -> str:
-    """
-    Applies EMBEDDING_QUERY_PREFIX if configured (e.g. "query: " for E5).
-    Must be symmetric with the doc-side prefix used during indexing.
-    """
+collection = client.create_collection(
+    name=COLLECTION_NAME,
+    metadata={"hnsw:space": "cosine"},
+)
 ```
 
-**Consistency requirements:**
-- Query encoding (`prepare_query_for_embedding`) and document encoding during indexing must use the SAME embedding model with symmetric preprocessing.
-- If `EMBEDDING_DOC_PREFIX` is non-empty, `embed_chunks()` must apply it to each chunk text before `model.encode()`.
-- `get_collection()` must be safe to call when the collection has no data (returns the collection object; callers check `collection.count()`).
+Không yêu cầu người dùng xóa thủ công toàn bộ thư mục `chroma_db/` trong luồng chạy bình thường. Bản nâng cao có thể lưu `corpus_hash` và `index_config_hash` để chỉ rebuild khi corpus/model/chunk config thay đổi.
 
-### 3.6 Function: `run_pipeline()`
+### 3.6 Helper dùng chung với Task 5/6
+
+Task 4 nên export các helper sau để Task 5/6 không tạo model hoặc client thứ hai:
 
 ```python
-def run_pipeline() -> None:
-    """
-    Orchestrates the full pipeline: load → chunk → embed → index.
-    Prints progress to stdout.
-    """
+def get_embedding_model(): ...
+def get_collection(): ...
+def prepare_query_for_embedding(query: str) -> str: ...
+def prepare_document_for_embedding(document: str) -> str: ...
 ```
+
+Các import nặng (`sentence_transformers`, `chromadb`, `langchain_text_splitters`) nên đặt trong function. Nhờ đó test config và parse/chunk có thể chạy mà không tải model hoặc mở database.
 
 ---
 
-## 4. Implementation Details
+## 4. Tiêu chí chất lượng và bonus
 
-### 4.1 Chunking Strategy: RecursiveCharacterTextSplitter (Recommended)
+Phần bắt buộc:
 
-**Why:** It's the safest, most general-purpose splitter. It tries to break at paragraph boundaries (`\n\n`) first, then sentence boundaries (`. `), then word boundaries, and finally character-by-character if needed. This preserves semantic units as much as possible.
+- Đọc được toàn bộ legal và news Markdown hiện tại.
+- Metadata header không lọt vào embedding.
+- Chunk đúng giới hạn kích thước và giữ metadata nguồn.
+- Index persistent và Task 5 có thể truy vấn cùng collection.
 
-**Alternatives considered:**
-- **MarkdownHeaderTextSplitter** — Better for documents with consistent heading structure, but our corpus mixes legal docs and news articles with varying heading patterns.
-- **SemanticChunker** — Uses embeddings to find natural breakpoints, which is more accurate but adds latency and is overkill for this lab.
+Các điểm giúp demo nổi bật hơn:
 
-**Configuration:**
-- `CHUNK_SIZE = 800` — Balances between context completeness (LLM needs ~500+ chars for meaningful answers) and retrieval granularity (smaller chunks = more precise matches)
-- `CHUNK_OVERLAP = 100` — 12.5% overlap prevents information loss at chunk boundaries (e.g., a sentence that spans the split point)
+- Section-aware chunking kèm `section_path`, đặc biệt hữu ích cho văn bản legal.
+- Citation-ready metadata: mỗi kết quả có title, URL, document ID và section.
+- Stable `chunk_id` và `chunk_hash` giúp audit/deduplicate.
+- Rebuild idempotent, không còn chunk stale sau khi corpus thay đổi.
+- Thống kê sau index: số document, số chunk theo `type`, min/avg/max length, số section fallback, số chunk trùng.
+- Lưu manifest cấu hình index gồm corpus hash, embedding model, dimension, chunk size và overlap để tái lập kết quả.
+- Kiểm thử retrieval smoke test bằng câu hỏi tiếng Việt cho cả legal và news.
 
-### 4.2 Embedding Model: BAAI/bge-m3 (Recommended)
-
-**Why:** Multilingual model (1024-dim) that handles both Vietnamese and English well. This is critical because the university domain documents may contain both languages.
-
-**Alternatives considered:**
-- `all-MiniLM-L6-v2` (384-dim) — Faster and lighter, but English-only. Would lose Vietnamese semantics.
-- `text-embedding-3-small` (1536-dim) — High quality via API, but requires internet + API key + adds latency/cost.
-
-### 4.3 Vector Store: ChromaDB (Recommended)
-
-**Why:** Persistent, local, zero-Docker-dependency. The `PersistentClient` mode writes to disk so the index survives restarts.
-
-**Alternatives considered:**
-- **Weaviate** — Built-in hybrid search, but requires Docker container.
-- **FAISS** — Fast dense search only, no built-in metadata filtering or persistence.
-
-### 4.4 Document Metadata Mapping
-
-| Source Directory | `type` field | Example metadata (full) |
-|---|---|---|
-| `data/standardized/legal/` | `"legal"` | `{"source": "tuition-policy.md", "document_id": "tuition-policy", "type": "legal", "title": "Tuition Policy", "url": "", "section": "", "language": "vi"}` |
-| `data/standardized/news/` | `"news"` | `{"source": "scholarship-announcement.md", "document_id": "scholarship-announcement", "type": "news", "title": "Scholarship Announcement", "url": "", "section": "", "language": "vi"}` |
+Không nên thêm reranker, hybrid search hoặc RAGAS vào Task 4; các phần đó thuộc Task 5–8 và dễ làm phạm vi Task 4 khó bàn giao.
 
 ---
 
-## 5. Verification
+## 5. Kiểm thử
 
-### 5.1 Run the pipeline
+### 5.1 Test chính thức hiện có
 
-```bash
-python src/task4_chunking_indexing.py
+```powershell
+python -m pytest tests/test_individual.py::TestTask4 -v -rs
 ```
 
-Expected output:
-```
-==================================================
+`TestTask4` hiện có 4 test method:
+
+| Test | Kiểm tra |
+|---|---|
+| `test_config_documented` | Chunk size/overlap hợp lệ |
+| `test_load_documents_returns_list` | Loader trả list và document có `content` |
+| `test_chunk_documents_produces_chunks` | Tạo được chunk từ document |
+| `test_chunks_respect_size_limit` | Chunk không vượt tolerance 10% |
+
+Khi Task 4 còn là starter, các test implementation được skip là đúng trạng thái. Sau khi triển khai, mục tiêu là cả 4 test pass.
+
+### 5.2 Test bổ sung nên viết cùng Task 4
+
+- Header canonical được tách khỏi body.
+- Chuỗi `Source SHA256:` và `Content Hash:` không xuất hiện trong chunk content.
+- News không có heading nhận title làm `section` fallback.
+- Chunk ID không trùng và ổn định qua hai lần chạy.
+- Rebuild lần hai cho cùng corpus không tăng số record.
+- Xóa một document rồi rebuild thì các chunk của document đó biến mất.
+- Metadata Chroma đủ title, URL, type, document ID và section để Task 5 trả citation.
+
+### 5.3 Kết quả CLI dự kiến
+
+```text
+============================================================
 Task 4: Chunking & Indexing
-  Chunking: recursive (size=800, overlap=100)
+  Chunking: markdown_section_recursive (size=800, overlap=100)
   Embedding: BAAI/bge-m3 (dim=1024)
   Vector Store: chromadb
-==================================================
-
-✓ Loaded N documents
-✓ Created M chunks
-✓ Embedded M chunks
-✓ Indexed to vector store
+============================================================
+Loaded 10 documents
+Created M chunks
+Embedded M chunks
+Indexed M chunks to chroma_db/
 ```
 
-### 5.2 Run the tests
-
-```bash
-pytest tests/test_individual.py::TestTask4 -v
-```
-
-Expected: **all 5 tests pass** (7 points total)
-
-| Test | What it checks |
-|---|---|
-| `test_config_documented` | `CHUNK_SIZE > 0`, `CHUNK_OVERLAP > 0`, `CHUNK_OVERLAP < CHUNK_SIZE` |
-| `test_load_documents_returns_list` | `load_documents()` returns a list of dicts with `"content"` key |
-| `test_chunk_documents_produces_chunks` | `chunk_documents()` produces chunks with `"content"` key from 1 document |
-| `test_chunks_respect_size_limit` | Each chunk content ≤ `CHUNK_SIZE * 1.1` |
-| *(implicit)* | `chroma_db/` directory is created and populated |
-
-### 5.3 Manual checks
-
-```bash
-# Verify chroma_db/ was created
-ls -la chroma_db/
-
-# Quick sanity: query the collection
-python -c "
-import chromadb
-client = chromadb.PersistentClient(path='chroma_db')
-col = client.get_collection('university_services_docs')
-print(f'Collection contains {col.count()} chunks')
-"
-```
+Không cố định `M` trong test vì số chunk có thể thay đổi khi nội dung corpus hoặc splitter được cập nhật.
 
 ---
 
-## 6. Edge Cases & Notes
+## 6. Edge cases và troubleshooting
 
-| Scenario | Expected Behavior |
+| Tình huống | Hành vi mong đợi |
 |---|---|
-| `data/standardized/` is empty | `load_documents()` returns `[]`; pipeline prints "Loaded 0 documents" |
-| File encoding is not UTF-8 | Use `utf-8` encoding; if other encoding is suspected, handle with `errors='replace'` |
-| Re-running after data changes | **Must delete `chroma_db/` first** — otherwise old chunks persist |
-| Document shorter than CHUNK_SIZE | Single chunk, no splitting needed |
-| Very long document without paragraph breaks | `RecursiveCharacterTextSplitter` falls back to character-level splitting |
-| Embedding model downloads on first run | First run downloads ~2GB model; subsequent runs use cache |
-| Cross-task: `chunk_id` mismatch | Task 5/6 deduplicate using `chunk_id` from metadata | Ensure `chunk_id` format is `f"{document_id}_chunk_{chunk_index}"` |
-| Cross-task: shared helpers not exported | Task 5 expects `get_embedding_model()`, `get_collection()`, `prepare_query_for_embedding()` | Export these from `src/task4_chunking_indexing.py` |
+| `data/standardized/` rỗng | Trả `[]`, CLI kết thúc sạch và không tải model |
+| Document không có H2/H3 | Split toàn body; dùng title làm section fallback |
+| Nội dung trước heading đầu tiên | Giữ nội dung; dùng title làm section fallback |
+| Document ngắn hơn chunk size | Tạo một chunk |
+| Document dài không có paragraph | Splitter fallback đến word/character boundary |
+| Chạy lại sau khi corpus thay đổi | Rebuild collection hoặc xóa chính xác stale IDs |
+| ChromaDB bị lock | Đóng process đang dùng collection rồi chạy lại |
+| Model tải chậm ở lần đầu | Đây là tải cache ban đầu; các lần sau dùng cache local |
+| Sai embedding dimension | Dừng sớm với lỗi model/config rõ ràng |
+| Task 5 không tìm thấy helper | Export helper dùng chung từ module Task 4 |
 
-### Troubleshooting
+---
 
-| Error | Cause | Fix |
-|---|---|---|
-| `ModuleNotFoundError: No module named 'langchain_text_splitters'` | Missing dependency | `pip install langchain-text-splitters` |
-| `ModuleNotFoundError: No module named 'sentence_transformers'` | Missing dependency | `pip install sentence-transformers` |
-| `ModuleNotFoundError: No module named 'chromadb'` | Missing dependency | `pip install chromadb` |
-| OSError / HF model download failure | Network issue or model not found | Check internet; verify model name `BAAI/bge-m3` |
-| ChromaDB lock error | Another process using chroma_db/ | Close other Python processes, delete chroma_db/, retry |
+## 7. Definition of Done
+
+Task 4 chỉ được coi là hoàn thành khi:
+
+- 4 test chính thức của `TestTask4` pass, không còn skip vì `NotImplementedError`.
+- Test bổ sung về header leakage, section fallback, stable ID và stale cleanup pass.
+- Index chứa đúng số document nguồn của corpus và không có record cũ.
+- Có thể chạy một semantic-search smoke test bằng Task 5 và nhận citation đúng URL/title.
+- Chạy pipeline lần hai cho kết quả nhất quán.
+- README chỉ cập nhật hướng dẫn chạy sau khi implementation Task 4 thực sự hoàn tất.
