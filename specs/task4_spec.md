@@ -66,7 +66,7 @@ python src/task4_chunking_indexing.py
 | `CHUNK_SIZE` | `int` | 800 | Max characters per chunk |
 | `CHUNK_OVERLAP` | `int` | 100 | Overlap characters between consecutive chunks |
 | `CHUNKING_METHOD` | `str` | `"recursive"` | Strategy: `"recursive"` | `"markdown_header"` | `"semantic"` |
-| `EMBEDDING_MODEL` | `str` | `"BAAI/bge-m3"` | Sentence-transformer model name |
+| `EMBEDDING_MODEL` | `str` | `"bge-m3"` | embedding model's name |
 | `EMBEDDING_DIM` | `int` | 1024 | Output dimension of the embedding model |
 | `VECTOR_STORE` | `str` | `"chromadb"` | Vector store choice: `"chromadb"` | `"weaviate"` | `"faiss"` |
 | `COLLECTION_NAME` | `str` | `"university_services_docs"` | ChromaDB collection name |
@@ -153,8 +153,7 @@ def embed_chunks(chunks: list[dict]) -> list[dict]:
 ```
 
 **Behavior:**
-- Use `SentenceTransformer(EMBEDDING_MODEL)` from `sentence_transformers`
-- Call `model.encode(texts, show_progress_bar=True)` on all chunk texts
+- Use open router API for embedding (API key is provided)
 - Convert each embedding to `list[float]` via `.tolist()`
 - The model `BAAI/bge-m3` produces 1024-dimensional vectors
 

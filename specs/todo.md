@@ -31,9 +31,12 @@ Tổng hợp các đầu việc cần triển khai từ tất cả spec files. M
 - [ ] Content length ≤ `CHUNK_SIZE * 1.1` (800 × 1.1 = 880)
 
 ### embed_chunks
-- [ ] Load `SentenceTransformer(EMBEDDING_MODEL)` once (lazy/cached)
-- [ ] Encode all chunk texts with `show_progress_bar=True`
+- [ ] Use OpenRouter API (via OpenAI SDK) for embedding
+- [ ] Load `OPENROUTER_API_KEY` from `.env`
+- [ ] Embedding model: `BAAI/bge-m3` via OpenRouter, dim=1024
+- [ ] Batch embed chunks (max 20 per batch)
 - [ ] Add `"embedding": list[float]` to each chunk dict
+- [ ] Fallback to `SentenceTransformer` if OpenRouter fails
 
 ### index_to_vectorstore
 - [ ] Create `chroma_db/` directory if missing
