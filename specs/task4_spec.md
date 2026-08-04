@@ -206,7 +206,72 @@ collection = client.create_collection(
 
 Không yêu cầu người dùng xóa thủ công toàn bộ thư mục `chroma_db/` trong luồng chạy bình thường. Bản nâng cao có thể lưu `corpus_hash` và `index_config_hash` để chỉ rebuild khi corpus/model/chunk config thay đổi.
 
-### 3.6 Helper dùng chung với Task 5/6
+### 3.6 Cross-Task Contract (shared schema với Task 5/6/7/9/10)
+
+Task 4 định nghĩa schema chunk mà các task downstream phải dùng chung. Các trường sau là **bắt buộc** trong mọi chunk:
+
+| Field | Type | Ví dụ | Dùng bởi |
+|-------|------|-------|----------|
+| `chunk_id` | `str` | `"ussh-tuition-plan-semester-1-2025-2026_chunk_0"` | Task 5/6/7/9: dedup key, retrieval |
+| `document_id` | `str` | `"ussh-tuition-plan-semester-1-2025-2026"` | Task 5/6/9: filter, tie-break |
+| `source` | `str` | `"NhanVan_HocPhi.md"` | Task 10: citation gốc |
+| `title` | `str` | `"Thông báo kế hoạch thu học phí..."` | Task 10: citation label |
+| `url` | `str` | `"https://ussh.vnu.edu.vn/..."` | Task 10: citation link |
+| `type` | `str` | `"legal"` / `"news"` | Task 10: citation doc type |
+| `section` | `str` | `"Điều 1. Phạm vi điều chỉnh"` | Task 10: section citation |
+| `language` | `str` | `"vi"` | — |
+
+### Dedup key thống nhất (Task 7)
+
+**Toàn bộ pipeline dùng `chunk_id` làm dedup key duy nhất.** Không dùng `content` hash, không dùng `content` string. Task 7 (`rerank_rrf`) phải ưu tiên `chunk_id` từ metadata, fallback content hash chỉ khi `chunk_id` thiếu.
+
+Quy tắc dedup trong `rerank_rrf()`:
+
+```python
+def candidate_key(item: dict) -> str:
+    chunk_id = item.get("metadata", {}).get("chunk_id")
+    if chunk_id:
+        return f"chunk:{chunk_id}"
+    # Fallback an toàn (không nên xảy ra với Task 4 data)
+    return "fallback:" + sha256(normalized_content + source)
+```
+
+### Phân biệt RRF score với raw cosine confidence (Task 9)
+
+| Score | Ý nghĩa | Nguồn |
+|-------|---------|-------|
+| `score` | RRF rank-based score (~0.016) — chỉ dùng sắp hạng | `rerank_rrf()` |
+| `confidence_score` | Raw cosine similarity [0, 1] — dùng cho fallback threshold | `raw_scores.dense` |
+
+Không dùng RRF score làm fallback threshold.
+
+### Citation-ready metadata (Task 10)
+
+Task 10 dùng các trường sau để tạo citation:
+
+- `title` → hiển thị tên văn bản
+- `url` → link nguồn gốc
+- `section` → tên section/heading cụ thể
+- `source` → tên file gốc
+- `type` → legal/news
+
+```python
+# format_context() trong Task 10:
+label = f"[Document {i} | Source: {title} | Type: {type}]"
+# Citation inline:
+# "Học phí là 3.300.000đ/tháng [Nguồn: Thông báo thu học phí, Mức thu và phương thức thu]"
+```
+
+### Corpus VNU-USSH — không dùng RMIT
+
+Toàn bộ pipeline dùng corpus VNU-USSH, không phải RMIT. Các document_id theo convention:
+
+- `ussh-{topic}-{year}` cho news
+- `vnu-{regulation}-{year}` cho legal
+
+Task 5/8/9/10 không được dùng RMIT trong test query hoặc ví dụ code.
+
+## 3.7 Helper dùng chung với Task 5/6
 
 Task 4 nên export các helper sau để Task 5/6 không tạo model hoặc client thứ hai:
 

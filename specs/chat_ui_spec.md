@@ -96,11 +96,11 @@ Each button is a `st.button(use_container_width=True)`. When clicked, it sets `s
 
 | # | Question (Vietnamese) |
 |---|---|
-| 1 | `"Học phí tại RMIT Vietnam là bao nhiêu?"` |
+| 1 | `"Học phí tại USSH là bao nhiêu?"` |
 | 2 | `"Làm sao để đặt phòng học nhóm ở thư viện?"` |
 | 3 | `"Điều kiện xin học bổng Academic Achievement?"` |
 | 4 | `"Dịch vụ hỗ trợ chỗ ở cho sinh viên như thế nào?"` |
-| 5 | `"Cách đăng ký học phần qua myRMIT?"` |
+| 5 | `"Cách đăng ký học phần tại USSH như thế nào?"` |
 
 **Section 3 — Settings**
 - `top_k` slider: `st.slider("Số chunks retrieval (top_k)", 3, 10, 5)`

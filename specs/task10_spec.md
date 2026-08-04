@@ -143,7 +143,7 @@ def format_context(chunks: list[dict]) -> str:
 **Output format:**
 ```
 [Document 1 | Source: tuition-policy.md | Type: legal]
-Tuition fees for international students at RMIT Vietnam...
+Tuition fees for international students at Trường Đại học Khoa học Xã hội và Nhân văn (USSH)...
 
 ---
 
@@ -260,7 +260,7 @@ The system prompt instructs the LLM to cite sources inline using `[Source, Secti
 
 Example response:
 ```
-Học phí chương trình Business tại RMIT Vietnam là 350 triệu đồng/năm [Tuition Fees, 2026].
+Học phí chương trình Business tại Trường Đại học Khoa học Xã hội và Nhân văn (USSH) là 350 triệu đồng/năm [Tuition Fees, 2026].
 Sinh viên có thể thanh toán theo kỳ hoặc theo năm [Payment Schedule].
 ```
 
@@ -299,10 +299,10 @@ python src/task10_generation.py
 Expected output:
 ```
 ======================================================================
-Q: Học phí tại RMIT Vietnam là bao nhiêu?
+Q: Học phí tại Trường Đại học Khoa học Xã hội và Nhân văn (USSH) là bao nhiêu?
 ======================================================================
 
-A: Học phí chương trình Business tại RMIT Vietnam là khoảng 350 triệu
+A: Học phí chương trình Business tại Trường Đại học Khoa học Xã hội và Nhân văn (USSH) là khoảng 350 triệu
 đồng mỗi năm [Tuition Policy]. Sinh viên có thể thanh toán theo kỳ
 hoặc theo năm [Payment Schedule]...
 

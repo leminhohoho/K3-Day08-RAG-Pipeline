@@ -191,11 +191,11 @@ Yêu cầu:
   "sdk_version": "0.2.x",
   "updated_at": "ISO-8601",
   "documents": {
-    "rmit-tuition-fees-2026": {
-      "document_id": "rmit-tuition-fees-2026",
+    "ussh-tuition-plan-semester-1-2025-2026": {
+      "document_id": "ussh-tuition-plan-semester-1-2025-2026",
       "pageindex_doc_id": "pi-abc123",
-      "source": "tuition-fees-rmit.pdf",
-      "source_path": "data/landing/legal/tuition-fees-rmit.pdf",
+      "source": "NhanVan_HocPhi.pdf",
+      "source_path": "data/landing/legal/NhanVan_HocPhi.pdf",
       "source_url": "https://...",
       "title": "Tuition Fees",
       "checksum": "sha256:...",
@@ -312,9 +312,9 @@ Output:
     "retrieval_method": "pageindex_legacy_retrieval",
     "metadata": {
         "chunk_id": "pageindex:<doc_id>:<node_id>:<content_hash>",
-        "document_id": "rmit-tuition-fees-2026",
+        "document_id": "ussh-tuition-plan-semester-1-2025-2026",
         "pageindex_doc_id": "pi-abc123",
-        "source": "tuition-fees-rmit.pdf",
+        "source": "NhanVan_HocPhi.pdf",
         "title": "Tuition Fees",
         "url": "https://...",
         "section": "Payment Structure",

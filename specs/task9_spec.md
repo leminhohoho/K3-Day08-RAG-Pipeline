@@ -145,8 +145,8 @@ def retrieve(
     "confidence_score": None,   # PageIndex does not provide cosine confidence
     "metadata": {
         "section": "Payment Structure",
-        "source": "tuition-fees-rmit.pdf",
-        "document_id": "rmit-tuition-fees-2026",
+        "source": "NhanVan_HocPhi.pdf",
+        "document_id": "ussh-tuition-plan-semester-1-2025-2026",
         "chunk_id": "pageindex:pi-abc123:0005:<hash>"
     },
     "source": "pageindex",
@@ -293,9 +293,9 @@ python src/task9_retrieval_pipeline.py
 
 Expected output for each test query:
 ```
-Query: What is the tuition fee at RMIT Vietnam?
+Query: What is the tuition fee at USSH?
 ------------------------------------------------------------
-  1. [0.032] [hybrid] Tuition fees for international students at RMIT Vietnam...
+  1. [0.032] [hybrid] Tuition fees for international students at USSH...
   2. [0.028] [hybrid] Payment schedule for tuition fees...
   ...
 

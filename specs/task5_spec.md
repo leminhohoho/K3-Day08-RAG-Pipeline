@@ -108,7 +108,7 @@ Output:
         "metadata": {
             "chunk_id": "...",
             "document_id": "...",
-            "source": "tuition-fees-rmit.md",
+            "source": "NhanVan_HocPhi.md",
             "title": "Tuition Fees",
             "url": "https://...",
             "type": "legal",
@@ -474,7 +474,7 @@ Task 5 phải có tập retrieval labels trong golden dataset:
 ```json
 {
   "question": "...",
-  "expected_document_ids": ["rmit-tuition-fees-2026"],
+  "expected_document_ids": ["ussh-tuition-plan-semester-1-2025-2026"],
   "expected_sections": ["Payment Structure"]
 }
 ```
