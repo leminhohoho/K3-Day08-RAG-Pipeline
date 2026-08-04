@@ -27,7 +27,7 @@ Xây dựng một RAG pipeline thực tế, end-to-end, từ thu thập dữ li�
 
 **Chính sách/quy định dịch vụ đại học** (học phí, học bổng, ký túc xá, đăng ký học phần) + **Thông tin/thông báo đại học** (sự kiện, dịch vụ thư viện, hỗ trợ sinh viên)
 
-Dữ liệu mẫu trong repo được crawl thật từ trang công khai của **RMIT Vietnam** (rmit.edu.vn) — xem chi tiết URL nguồn trong `src/task1_collect_legal_docs.py` và `src/task2_crawl_news.py`.
+Dữ liệu hiện tại trong repo được thu thập từ các nguồn công khai chính thức của **Trường Đại học Khoa học Xã hội và Nhân văn, ĐHQGHN** và **Đại học Quốc gia Hà Nội** — xem URL, metadata và checksum trong `data/sources_manifest.json`.
 
 ---
 
