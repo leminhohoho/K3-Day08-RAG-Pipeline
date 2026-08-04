@@ -33,15 +33,18 @@ def convert_legal_docs():
 
     md = MarkItDown()
 
-    for filepath in legal_dir.iterdir():
+    for filepath in sorted(legal_dir.iterdir()):
         if filepath.suffix.lower() in (".pdf", ".docx", ".doc"):
             print(f"Converting: {filepath.name}")
-            # TODO: Convert và lưu file
-            # result = md.convert(str(filepath))
-            # output_path = output_dir / f"{filepath.stem}.md"
-            # output_path.write_text(result.text_content, encoding="utf-8")
-            # print(f"  ✓ Saved: {output_path}")
-            raise NotImplementedError("Implement convert_legal_docs")
+            try:
+                result = md.convert(str(filepath))
+            except Exception as e:
+                # Một file lỗi không được làm hỏng cả batch — báo rõ rồi đi tiếp.
+                print(f"  ✗ Failed: {filepath.name} — {type(e).__name__}: {e}")
+                continue
+            output_path = output_dir / f"{filepath.stem}.md"
+            output_path.write_text(result.text_content, encoding="utf-8")
+            print(f"  ✓ Saved: {output_path}")
 
 
 def convert_news_articles():
