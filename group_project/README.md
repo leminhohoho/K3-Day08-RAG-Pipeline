@@ -70,7 +70,23 @@ Xem code mẫu (DeepEval/RAGAS/TruLens) chi tiết trong `README.md` gốc mục
 ## Kiến Trúc Hệ Thống
 
 ```
-[Vẽ diagram kiến trúc ở đây]
+[User] → Streamlit UI (app.py)
+           ↓
+    Task 10: Generation (LLM + Citation)
+           ↓
+    Task 9: Retrieval Pipeline (Hybrid + Fallback)
+           ├── Task 5: Semantic Search (Dense)
+           ├── Task 6: Lexical Search (BM25)
+           ├── Task 7: Reranking (RRF)
+           └── Task 8: PageIndex (Vectorless Fallback)
+           ↓
+    ChromaDB ← Task 4: Chunking & Indexing
+           ↓
+    Task 3: Convert Markdown (MarkItDown)
+           ↓
+    Task 1: Legal PDFs  +  Task 2: Crawl News
+           ↓
+    RMIT Vietnam (rmit.edu.vn)
 ```
 
 ---
@@ -79,10 +95,10 @@ Xem code mẫu (DeepEval/RAGAS/TruLens) chi tiết trong `README.md` gốc mục
 
 | Thành viên | MSSV | Nhiệm vụ | Trạng thái |
 |-----------|------|----------|------------|
-| | | | |
-| | | | |
-| | | | |
-| | | | |
+| **(Role 1) Team Leader & RAG Architect** | | Điều phối, ghép code pipeline (Task 9), supervisor.py | ⏳ |
+| **(Role 2) Data & Retrieval Specialist** | | Task 1-3 (data), Task 4-5 (ChromaDB + Semantic Search) | ⏳ |
+| **(Role 3) Frontend & Chatbot Dev** | | Task 6 (BM25), Task 10 (Generation), app.py (Streamlit UI) | ⏳ |
+| **(Role 4) Evaluation & QA Engineer** | | Task 7 (Reranking), Task 8 (PageIndex), golden dataset, eval pipeline | ⏳ |
 
 ---
 
