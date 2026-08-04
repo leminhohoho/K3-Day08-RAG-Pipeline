@@ -1,7 +1,8 @@
 # Core
 python-dotenv>=1.0.0
 requests>=2.31.0
-numpy>=1.24.0
+# LangChain 0.2.x (required by ragas 0.1.21) requires NumPy <2 on Python 3.12.
+numpy>=1.26.0,<2.0.0
 
 # Task 2 - Crawling
 crawl4ai>=0.3.0
@@ -11,7 +12,9 @@ markitdown[pdf]>=0.1.0
 fpdf2>=2.7.0
 
 # Task 4 - Chunking & Indexing
-langchain-text-splitters>=0.2.0
+# Keep this on the LangChain 0.2.x line: ragas==0.1.21 requires
+# langchain-core<0.3, while text-splitters 0.3+ requires core>=0.3.
+langchain-text-splitters==0.2.4
 sentence-transformers>=2.2.0
 chromadb>=0.5.0
 
@@ -23,15 +26,22 @@ scikit-learn>=1.3.0
 pageindex>=0.1.0
 
 # Task 10 - Generation
-openai>=1.30.0
+# langchain-openai==0.1.25 requires openai>=1.40,<2.
+openai>=1.40.0,<2.0.0
 
 # Group project - UI
 streamlit>=1.35.0
 
 # Group project - Evaluation
+# Compatibility set for the legacy RAGAS API used by eval_pipeline.py.
+# Do not upgrade one LangChain package independently: these versions share
+# the same langchain-core>=0.2.43,<0.3 dependency range.
 ragas==0.1.21
-datasets>=2.14.0
-langchain-openai>=0.1.0
+datasets>=2.14.0,<3.0.0
+langchain==0.2.17
+langchain-core==0.2.43
+langchain-community==0.2.19
+langchain-openai==0.1.25
 
 # Testing (dung de cham diem bai ca nhan)
 pytest>=7.0.0
